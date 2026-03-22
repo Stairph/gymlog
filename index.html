@@ -442,7 +442,25 @@ button,input,select{font-family:var(--font-b)}
 .ex-edit-inline{width:30px;height:30px;border-radius:var(--pill);border:1px solid var(--border-hi);background:transparent;display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;margin-left:6px;transition:background .12s}
 .ex-edit-inline:active{background:var(--card2)}
 
-/* ── HELP ── */
+/* Repeat last session button */
+.home-repeat-btn{display:flex;align-items:center;justify-content:center;gap:8px;margin:8px var(--pad) 0;padding:12px;border-radius:var(--cr);border:1px solid var(--border-hi);background:transparent;color:var(--grey-hi);font-size:13px;font-weight:500;cursor:pointer;transition:background .12s,border-color .12s;width:calc(100% - var(--pad) * 2)}
+.home-repeat-btn:active{background:var(--card);border-color:var(--cyan-border);color:var(--cyan)}
+.home-repeat-btn svg{stroke:var(--grey-mid);flex-shrink:0}
+
+/* BW set display */
+.stp-bw{color:var(--cyan);font-family:var(--font-d);font-size:18px;font-weight:700;letter-spacing:.04em;cursor:pointer;padding:0 12px;min-width:48px;text-align:center}
+.stp-btn-ghost{width:36px;height:36px;flex-shrink:0}
+
+/* BW button in num overlay */
+.num-bw-btn{width:100%;padding:10px;border-radius:var(--sr);border:1px solid var(--cyan-border);background:var(--cyan-dim);color:var(--cyan);font-size:13px;font-weight:600;cursor:pointer;transition:background .12s;text-align:center}
+.num-bw-btn:active{background:var(--cyan-glow)}
+.num-bw-active{background:var(--cyan-glow);border-color:var(--cyan)}
+
+/* Setup modal BW row */
+.setup-bw-row{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:14px 0 4px;border-top:1px solid var(--border);margin-top:10px}
+.setup-bw-info{flex:1;min-width:0}
+.setup-bw-label{font-size:13px;font-weight:500;color:var(--white)}
+.setup-bw-sub{font-size:11px;color:var(--grey-mid);margin-top:2px;line-height:1.4}
 .help-section{margin:0 var(--pad) 8px;background:var(--card);border:1px solid var(--border);border-radius:var(--cr);overflow:hidden;cursor:pointer;transition:border-color .15s}
 .help-section:active{border-color:var(--border-hi)}
 .help-section-header{display:flex;align-items:center;justify-content:space-between;padding:16px;gap:12px}
@@ -500,6 +518,10 @@ button,input,select{font-family:var(--font-b)}
     <div class="home-cta" onclick="startWorkout()">
       <div><div class="cta-label">Start Workout</div><div class="cta-sub">Tap to begin a new session</div></div>
       <div class="cta-icon"><svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>
+    </div>
+    <div class="home-repeat-btn" id="home-repeat-btn" onclick="repeatLastSession()" style="display:none">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M17 1l4 4-4 4"/><path d="M3 11V9a4 4 0 014-4h14"/><path d="M7 23l-4-4 4-4"/><path d="M21 13v2a4 4 0 01-4 4H3"/></svg>
+      Repeat last session
     </div>
 
     <!-- Volume strip — high visual weight -->
@@ -855,6 +877,16 @@ button,input,select{font-family:var(--font-b)}
       </div>
       <div class="muscle-grid" id="muscle-grid"></div>
       <div id="setup-limit-msg" style="font-size:11px;color:var(--danger);margin-top:8px;min-height:16px"></div>
+      <div class="setup-bw-row">
+        <div class="setup-bw-info">
+          <div class="setup-bw-label">Bodyweight exercise</div>
+          <div class="setup-bw-sub">New sets default to BW — you can still add weight per set</div>
+        </div>
+        <div class="seg-control" id="seg-bw">
+          <div class="seg-opt" data-val="false" onclick="setSetupBW(false)">No</div>
+          <div class="seg-opt" data-val="true" onclick="setSetupBW(true)">Yes</div>
+        </div>
+      </div>
       <button class="setup-save-btn" onclick="saveNewExercise()"><span id="setup-save-label">Save Exercise</span></button>
       <button class="setup-cancel-btn" onclick="cancelSetupModal()">Cancel</button>
     </div>
@@ -866,6 +898,7 @@ button,input,select{font-family:var(--font-b)}
   <div class="num-box">
     <div class="num-lbl" id="num-label">Enter value</div>
     <input class="num-field" id="num-field" type="number" inputmode="decimal" step="0.5">
+    <button class="num-bw-btn" id="num-bw-btn" onclick="confirmBWInput()" style="display:none">Set as Bodyweight</button>
     <div class="num-actions">
       <button class="num-cancel" onclick="closeNumInput()">Cancel</button>
       <button class="num-confirm" onclick="confirmNumInput()">OK</button>
@@ -979,6 +1012,7 @@ let editSession = null; // full session object being edited
 
 // Modals
 let numInputCallback = null;
+let numBWCallback    = null;
 let muscleSelections = {};
 let exPickerTarget = 'workout'; // 'workout' | 'edit'
 let recentExercises = []; // top 5 most recently used exercise names
@@ -1155,7 +1189,15 @@ async function calcVol(weekStart) {
 async function renderHomeBars() {
   const el = document.getElementById('home-bars');
   try {
-    const vol = await calcVol(getWeekStart(new Date()));
+    const [vol, sessions] = await Promise.all([
+      calcVol(getWeekStart(new Date())),
+      dbGetAll('sessions')
+    ]);
+
+    // Show/hide repeat button based on whether any sessions exist
+    const repeatBtn = document.getElementById('home-repeat-btn');
+    if (repeatBtn) repeatBtn.style.display = sessions.length ? 'flex' : 'none';
+
     const active = MUSCLES.filter(m => vol[m] > 0);
     const max = Math.max(...Object.values(vol), 1);
     if (!active.length) {
@@ -1170,6 +1212,59 @@ async function renderHomeBars() {
       </div>`).join('');
   } catch(e) {
     el.innerHTML = '<div style="font-size:12px;color:var(--grey-lo);text-align:center">Could not load data</div>';
+  }
+}
+
+async function repeatLastSession() {
+  try {
+    const sessions = await dbGetAll('sessions');
+    if (!sessions.length) return;
+    const last = sessions.sort((a,b) => new Date(b.date) - new Date(a.date))[0];
+    const exLib = await dbGetAll('exercises');
+    const exMap = Object.fromEntries(exLib.map(e => [e.name, e]));
+
+    // Start a fresh workout
+    activeSession = { date: new Date(), exercises: [] };
+    buildDateSelectors('w-day','w-month','w-year', activeSession.date);
+    updateWorkoutDateDisplay();
+
+    // Re-add each exercise from the last session with its sets pre-filled
+    last.exercises.forEach(ex => {
+      const lib = exMap[ex.name];
+      activeSession.exercises.push({
+        name:      ex.name,
+        primary:   lib ? lib.primary   : [],
+        secondary: lib ? lib.secondary : [],
+        bodyweight: lib ? !!lib.bodyweight : false,
+        sets: ex.sets.map(s => ({ weight: s.weight, reps: s.reps, done: false, bw: !!s.bw }))
+      });
+    });
+
+    // Reset screen and navigate
+    const workoutScreen = document.getElementById('s-workout');
+    workoutScreen.classList.remove('active','exit');
+    workoutScreen.style.cssText = '';
+    document.getElementById('exercises-list').innerHTML = '';
+    document.getElementById('finish-btn').style.display = 'none';
+    const counter = document.getElementById('workout-counter');
+    if (counter) counter.style.display = 'none';
+    const scroll = document.getElementById('workout-scroll');
+    if (scroll) scroll.scrollTop = 0;
+    const pickerRow = document.getElementById('date-picker-row');
+    const editToggle = document.getElementById('date-edit-toggle');
+    if (pickerRow) pickerRow.style.display = 'none';
+    if (editToggle) editToggle.style.display = 'inline-block';
+
+    document.querySelectorAll('.screen').forEach(s => { s.classList.remove('active','exit'); s.style.cssText = ''; });
+    document.getElementById('s-home').classList.add('active');
+    currentScreen = 's-home';
+    nav('s-workout');
+
+    // Render exercises after nav
+    setTimeout(() => renderExercises('workout'), 200);
+    showToast(`Repeating ${last.exercises.length} exercise${last.exercises.length !== 1 ? 's' : ''} from last session`);
+  } catch(e) {
+    showToast('Could not load last session');
   }
 }
 
@@ -1433,8 +1528,10 @@ async function loadHistForEx(exName, ei) {
     }
     body.innerHTML = relevant.map(s => {
       const ex = s.exercises.find(e => e.name === exName);
-      const chips = ex.sets.map((st,si) =>
-        `<div class="hist-chip">S${si+1}: ${displayWeight(st.weight)}${weightUnit()}×${st.reps}</div>`).join('');
+      const chips = ex.sets.map((st,si) => {
+        const wLabel = st.bw ? 'BW' : `${displayWeight(st.weight)}${weightUnit()}`;
+        return `<div class="hist-chip">S${si+1}: ${wLabel}×${st.reps}</div>`;
+      }).join('');
       return `
         <div class="hist-sess-item">
           <div class="hist-sess-date">${new Date(s.date).toLocaleDateString('en-GB',{day:'numeric',month:'short'})}</div>
@@ -1447,20 +1544,27 @@ async function loadHistForEx(exName, ei) {
 }
 
 function buildSetRow(s, ei, si, target) {
-  const step = weightStep();
-  const dispW = displayWeight(s.weight);
+  const step  = weightStep();
+  const isBW  = !!s.bw;
+  const dispW = isBW ? 'BW' : displayWeight(s.weight);
   const unit  = weightUnit();
-  return `
-  <div class="set-row${s.done?' done':''}" id="sr-${target}-${ei}-${si}">
-    <div class="set-num">${si+1}</div>
-    <div class="stp-wrap">
-      <div class="stepper">
+  const weightArea = isBW
+    ? `<div class="stepper">
+        <div class="stp-btn stp-btn-ghost"></div>
+        <div class="stp-val stp-bw" onclick="openNumInput(${ei},${si},'weight','${target}')" id="sv-w-${target}-${ei}-${si}">BW</div>
+        <div class="stp-btn stp-btn-ghost"></div>
+      </div>
+      <div class="stp-unit">body</div>`
+    : `<div class="stepper">
         <div class="stp-btn" onclick="stepVal(${ei},${si},'weight',${-step},'${target}')"><svg viewBox="0 0 24 24"><path d="M5 12h14"/></svg></div>
         <div class="stp-val" onclick="openNumInput(${ei},${si},'weight','${target}')" id="sv-w-${target}-${ei}-${si}">${dispW}</div>
         <div class="stp-btn" onclick="stepVal(${ei},${si},'weight',${step},'${target}')"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></div>
       </div>
-      <div class="stp-unit">${unit}</div>
-    </div>
+      <div class="stp-unit">${unit}</div>`;
+  return `
+  <div class="set-row${s.done?' done':''}" id="sr-${target}-${ei}-${si}">
+    <div class="set-num">${si+1}</div>
+    <div class="stp-wrap">${weightArea}</div>
     <div class="set-sep"></div>
     <div class="stp-wrap">
       <div class="stepper">
@@ -1502,12 +1606,17 @@ function toggleDone(ei, si, target) {
 }
 
 function addSet(ei, target) {
-  const ex = getSession(target).exercises[ei];
+  const ex   = getSession(target).exercises[ei];
   const last = ex.sets[ex.sets.length - 1];
-  const newSet = { weight: last ? last.weight : 0, reps: last ? last.reps : 0, done: false };
+  const newSet = {
+    weight: last ? last.weight : 0,
+    reps:   last ? last.reps   : 0,
+    done:   false,
+    bw:     last ? !!last.bw   : false
+  };
   ex.sets.push(newSet);
   const area = document.getElementById(`sets-area-${target}-${ei}`);
-  const si = ex.sets.length - 1;
+  const si   = ex.sets.length - 1;
   area.insertAdjacentHTML('beforeend', buildSetRow(newSet, ei, si, target));
   if (target === 'workout') updateWorkoutCounter();
 }
@@ -1541,10 +1650,8 @@ function editMuscleLibrary() {
   document.getElementById('muscle-edit-sheet').classList.remove('open');
   if (muscleEditIndex === null) return;
   const ex = activeSession.exercises[muscleEditIndex];
-  // Open exercise setup modal in edit mode
   editingExistingName = ex.name;
   muscleSelections = Object.fromEntries(MUSCLES.map(m => [m, null]));
-  // Use library tags (not override) as starting point
   (ex.primary||[]).forEach(m => { if (MUSCLES.includes(m)) muscleSelections[m] = 'primary'; });
   (ex.secondary||[]).forEach(m => { if (MUSCLES.includes(m)) muscleSelections[m] = 'secondary'; });
   document.getElementById('setup-name').value = ex.name;
@@ -1552,6 +1659,7 @@ function editMuscleLibrary() {
   document.getElementById('setup-save-label').textContent = 'Save Changes';
   renderMuscleGrid();
   document.getElementById('setup-limit-msg').textContent = '';
+  syncSeg('seg-bw', String(!!ex.bodyweight));
   document.getElementById('setup-modal').classList.add('open');
 }
 
@@ -1838,6 +1946,7 @@ async function editExerciseFromPicker(name) {
     document.getElementById('setup-limit-msg').textContent = '';
     document.getElementById('setup-modal-title').textContent = 'Edit Exercise';
     document.getElementById('setup-save-label').textContent = 'Save Changes';
+    syncSeg('seg-bw', String(!!lib.bodyweight));
     document.getElementById('setup-modal').classList.add('open');
   } catch(e) { showToast('Could not load exercise'); }
 }
@@ -2057,14 +2166,21 @@ async function pickExercise(name) {
     let prefillSets;
     if (lastSess) {
       const lastEx = lastSess.exercises.find(e => e.name === name);
-      prefillSets = lastEx.sets.map(s => ({ weight: s.weight, reps: s.reps, done: false }));
+      // Carry bw flag from previous session sets
+      prefillSets = lastEx.sets.map(s => ({ weight: s.weight, reps: s.reps, done: false, bw: !!s.bw }));
     } else {
-      prefillSets = [{weight:0,reps:0,done:false},{weight:0,reps:0,done:false},{weight:0,reps:0,done:false}];
+      // Default new sets — use library bodyweight flag
+      const defaultBW = !!lib.bodyweight;
+      prefillSets = [
+        { weight:0, reps:0, done:false, bw:defaultBW },
+        { weight:0, reps:0, done:false, bw:defaultBW },
+        { weight:0, reps:0, done:false, bw:defaultBW }
+      ];
     }
 
     const target = exPickerTarget;
     const session = getSession(target);
-    session.exercises.push({ name: lib.name, primary: lib.primary, secondary: lib.secondary, sets: prefillSets });
+    session.exercises.push({ name: lib.name, primary: lib.primary, secondary: lib.secondary, bodyweight: !!lib.bodyweight, sets: prefillSets });
     renderExercises(target);
 
     // Scroll new card into view within the scroll container — never use scrollIntoView
@@ -2087,7 +2203,6 @@ async function pickExercise(name) {
 // SETUP MODAL
 // ══════════════════════════════════════════════
 function openSetupModal(prefillName = '') {
-  // Close picker but remember we came from it
   document.getElementById('ex-picker-modal').classList.remove('open');
   document.getElementById('ex-search').blur();
   editingExistingName = null;
@@ -2097,8 +2212,14 @@ function openSetupModal(prefillName = '') {
   document.getElementById('setup-save-label').textContent = 'Save Exercise';
   renderMuscleGrid();
   document.getElementById('setup-limit-msg').textContent = '';
+  // Reset BW toggle to No
+  syncSeg('seg-bw', 'false');
   document.getElementById('setup-modal').classList.add('open');
   setTimeout(() => document.getElementById('setup-name').focus(), 300);
+}
+
+function setSetupBW(val) {
+  syncSeg('seg-bw', String(val));
 }
 
 function closeSetupModal() {
@@ -2204,7 +2325,7 @@ async function saveNewExercise() {
     if (isEdit && editingExistingName !== name) {
       await dbDelete('exercises', editingExistingName);
     }
-    await dbPut('exercises', { name, primary, secondary });
+    await dbPut('exercises', { name, primary, secondary, bodyweight: document.querySelector('#seg-bw .seg-opt.active')?.dataset.val === 'true' });
     invalidateVolCache();
     closeSetupModal();
     document.getElementById('ex-picker-modal').classList.remove('open');
@@ -2238,32 +2359,66 @@ async function saveNewExercise() {
 // NUM INPUT
 // ══════════════════════════════════════════════
 function openNumInput(ei, si, field, target) {
-  const s = getSession(target).exercises[ei].sets[si];
+  const s    = getSession(target).exercises[ei].sets[si];
   const unit = weightUnit();
-  // Show current value in display units
-  const displayVal = field === 'weight' ? displayWeight(s.weight) : s.reps;
-  document.getElementById('num-label').textContent = field === 'weight' ? `Enter Weight (${unit})` : 'Enter Reps';
+
+  // If currently BW and tapping the weight area — show input to switch to weighted
+  // Label makes intent clear
+  const isBW = field === 'weight' && !!s.bw;
+  const displayVal = field === 'weight'
+    ? (isBW ? '' : displayWeight(s.weight))
+    : s.reps;
+
+  document.getElementById('num-label').textContent = field === 'weight'
+    ? (isBW ? `Enter weight to switch from BW (${unit})` : `Enter Weight (${unit})`)
+    : 'Enter Reps';
+
   const inp = document.getElementById('num-field');
   inp.value = displayVal;
-  inp.step = field === 'weight' ? (APP_SETTINGS.weightUnit === 'lbs' ? '2.5' : '0.5') : '1';
+  inp.step  = field === 'weight' ? (APP_SETTINGS.weightUnit === 'lbs' ? '2.5' : '0.5') : '1';
+
+  // Show/hide BW button — only on weight field
+  const bwBtn = document.getElementById('num-bw-btn');
+  if (bwBtn) {
+    if (field === 'weight') {
+      bwBtn.style.display = 'block';
+      bwBtn.textContent   = isBW ? 'Currently BW — tap to keep' : 'Set as Bodyweight';
+      bwBtn.className     = isBW ? 'num-bw-btn num-bw-active' : 'num-bw-btn';
+    } else {
+      bwBtn.style.display = 'none';
+    }
+  }
+
   document.getElementById('num-overlay').classList.add('open');
-  setTimeout(() => { inp.focus(); inp.select(); }, 100);
+  setTimeout(() => { inp.focus(); if (!isBW) inp.select(); }, 100);
+
   numInputCallback = val => {
     if (field === 'weight') {
-      // Convert typed value back to kg for storage
+      s.bw     = false;
       s.weight = Math.max(0, toKg(val));
-      document.getElementById(`sv-w-${target}-${ei}-${si}`).textContent = displayWeight(s.weight);
+      renderExercises(target);
     } else {
       s.reps = Math.max(0, Math.round(val));
       document.getElementById(`sv-r-${target}-${ei}-${si}`).textContent = s.reps;
     }
   };
+
+  // BW button callback — stored so num-bw-btn can call it
+  numBWCallback = () => {
+    s.bw     = true;
+    s.weight = 0;
+    document.getElementById('num-overlay').classList.remove('open');
+    numInputCallback = null;
+    numBWCallback    = null;
+    renderExercises(target);
+  };
 }
 
 function closeNumInput(e) {
-  if (!e || e.target===document.getElementById('num-overlay')) {
+  if (!e || e.target === document.getElementById('num-overlay')) {
     document.getElementById('num-overlay').classList.remove('open');
     numInputCallback = null;
+    numBWCallback    = null;
   }
 }
 
@@ -2272,6 +2427,11 @@ function confirmNumInput() {
   if (!isNaN(val) && numInputCallback) numInputCallback(val);
   document.getElementById('num-overlay').classList.remove('open');
   numInputCallback = null;
+  numBWCallback    = null;
+}
+
+function confirmBWInput() {
+  if (numBWCallback) numBWCallback();
 }
 
 // ══════════════════════════════════════════════
