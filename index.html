@@ -442,6 +442,18 @@ button,input,select{font-family:var(--font-b)}
 .ex-edit-inline{width:30px;height:30px;border-radius:var(--pill);border:1px solid var(--border-hi);background:transparent;display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;margin-left:6px;transition:background .12s}
 .ex-edit-inline:active{background:var(--card2)}
 
+/* ── HELP ── */
+.help-section{margin:0 var(--pad) 8px;background:var(--card);border:1px solid var(--border);border-radius:var(--cr);overflow:hidden;cursor:pointer;transition:border-color .15s}
+.help-section:active{border-color:var(--border-hi)}
+.help-section-header{display:flex;align-items:center;justify-content:space-between;padding:16px;gap:12px}
+.help-section-title{font-size:14px;font-weight:600;color:var(--white);flex:1}
+.help-chevron{width:16px;height:16px;stroke:var(--grey-mid);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0;transition:transform .2s ease}
+.help-chevron.open{transform:rotate(90deg)}
+.help-section-body{display:none;flex-direction:column;gap:10px;padding:0 16px 16px}
+.help-section-body.open{display:flex}
+.help-section-body p{font-size:13px;color:var(--grey-hi);line-height:1.7}
+.help-section-body strong{color:var(--white);font-weight:600}
+
 /* ── SETTINGS ── */
 .settings-section-label{font-size:10px;color:var(--grey-mid);text-transform:uppercase;letter-spacing:.09em;font-weight:600;padding:0 var(--pad);margin:20px 0 8px}
 .settings-section-label:first-child{margin-top:4px}
@@ -504,6 +516,9 @@ button,input,select{font-family:var(--font-b)}
 
     <!-- Utility icons — low weight, right-aligned, no labels -->
     <div class="home-util-row">
+      <button class="home-util-btn" onclick="nav('s-help')" aria-label="Help & Instructions">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 015.83 1c0 2-3 3-3 3"/><circle cx="12" cy="17" r=".5" fill="currentColor"/></svg>
+      </button>
       <button class="home-util-btn" onclick="nav('s-history')" aria-label="Session History">
         <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
       </button>
@@ -648,6 +663,103 @@ button,input,select{font-family:var(--font-b)}
       </button>
       <input type="file" id="import-input" accept=".json" style="display:none" onchange="importData(this)">
     </div>
+    <div class="safe-b"></div>
+  </div>
+</div>
+
+<!-- ══ HELP ════════════════════════════════════════════════ -->
+<div class="screen" id="s-help">
+  <div class="topbar">
+    <div class="tb-back" onclick="nav('s-home')"><svg viewBox="0 0 24 24"><path d="M19 12H5M12 19l-7-7 7-7"/></svg></div>
+    <div class="tb-titles"><div class="tb-title">Help</div><div class="tb-sub">How GymLog works</div></div>
+  </div>
+  <div class="scroll">
+
+    <div class="help-section" onclick="toggleHelp('h-install')">
+      <div class="help-section-header">
+        <span class="help-section-title">Installing the app</span>
+        <svg class="help-chevron" id="hc-install" viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg>
+      </div>
+      <div class="help-section-body" id="h-install">
+        <p>Open the link in your phone browser. Tap <strong>Share → Add to Home Screen</strong> on iPhone, or <strong>Install App</strong> on Android. GymLog will appear on your home screen and works offline.</p>
+      </div>
+    </div>
+
+    <div class="help-section" onclick="toggleHelp('h-logging')">
+      <div class="help-section-header">
+        <span class="help-section-title">Logging a workout</span>
+        <svg class="help-chevron" id="hc-logging" viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg>
+      </div>
+      <div class="help-section-body" id="h-logging">
+        <p>Tap <strong>Start Workout</strong> — today's date is set automatically. Tap <strong>Add Exercise</strong> and search by name or browse the preset library. The first time you use an exercise, select which muscles it trains — you'll never need to do this again.</p>
+        <p>Use <strong>+/−</strong> to adjust weight and reps, or tap the number to type directly. Tap <strong>✓</strong> to mark a set done. Tap <strong>Finish Workout</strong> when you're done.</p>
+      </div>
+    </div>
+
+    <div class="help-section" onclick="toggleHelp('h-progress')">
+      <div class="help-section-header">
+        <span class="help-section-title">Tracking progress</span>
+        <svg class="help-chevron" id="hc-progress" viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg>
+      </div>
+      <div class="help-section-body" id="h-progress">
+        <p>Previous weights and reps auto-fill from your last session for each exercise. Tap <strong>▸ Previous 3 sessions</strong> on any exercise to see your recent history. The <strong>Weekly Summary</strong> shows how many sets you did per muscle group this week vs last week.</p>
+      </div>
+    </div>
+
+    <div class="help-section" onclick="toggleHelp('h-history')">
+      <div class="help-section-header">
+        <span class="help-section-title">Editing past sessions</span>
+        <svg class="help-chevron" id="hc-history" viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg>
+      </div>
+      <div class="help-section-body" id="h-history">
+        <p>Tap the clock icon on the home screen to view your session history. Tap any session to edit sets, exercises, or the date. Useful if you forgot to log on the day.</p>
+      </div>
+    </div>
+
+    <div class="help-section" onclick="toggleHelp('h-data')">
+      <div class="help-section-header">
+        <span class="help-section-title">How your data is stored</span>
+        <svg class="help-chevron" id="hc-data" viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg>
+      </div>
+      <div class="help-section-body" id="h-data">
+        <p>Everything is stored directly on your device — nothing is sent to a server or third party. GymLog has no account, no login, and no internet connection required after the first load.</p>
+        <p>Your exercise library and sessions are stored separately. If you edit a muscle tag on an exercise, your full history recalculates automatically. Sessions older than 6 months are removed automatically to keep storage lean.</p>
+        <p><strong>Warning:</strong> clearing your browser's cache will permanently delete your data. Export a backup regularly.</p>
+      </div>
+    </div>
+
+    <div class="help-section" onclick="toggleHelp('h-backup')">
+      <div class="help-section-header">
+        <span class="help-section-title">Backing up &amp; switching phones</span>
+        <svg class="help-chevron" id="hc-backup" viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg>
+      </div>
+      <div class="help-section-body" id="h-backup">
+        <p>Go to <strong>⚙ → Export &amp; Import → Export JSON</strong> and save the file to iCloud, Google Drive, or Files. To restore, open GymLog on any phone and tap <strong>Import JSON</strong>. Your sessions, exercise library, and settings are all included.</p>
+      </div>
+    </div>
+
+    <div class="help-section" onclick="toggleHelp('h-security')">
+      <div class="help-section-header">
+        <span class="help-section-title">Security &amp; privacy</span>
+        <svg class="help-chevron" id="hc-security" viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg>
+      </div>
+      <div class="help-section-body" id="h-security">
+        <p>GymLog cannot access your contacts, camera, location, or any other device feature. It stores only your workout history, exercise names, and settings — nothing sensitive.</p>
+        <p>Because all data is local, conventional risks like data breaches or password leaks do not apply. The only practical risk is someone with physical access to your unlocked phone — your phone's screen lock is the appropriate safeguard.</p>
+        <p>Your export file is a plain readable file. Store it somewhere only you can access.</p>
+      </div>
+    </div>
+
+    <div class="help-section" onclick="toggleHelp('h-performance')">
+      <div class="help-section-header">
+        <span class="help-section-title">Performance &amp; battery</span>
+        <svg class="help-chevron" id="hc-performance" viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg>
+      </div>
+      <div class="help-section-body" id="h-performance">
+        <p>GymLog is a single file — roughly 130KB, smaller than most webpage images. It runs entirely in your browser with no background processes. It will not drain your battery or slow your phone. A full year of training data is under 130KB of storage.</p>
+      </div>
+    </div>
+
     <div class="safe-b"></div>
   </div>
 </div>
@@ -985,6 +1097,15 @@ function onEnter(id) {
   if (id === 's-export')   renderExport();
   if (id === 's-home')     renderHomeBars();
   if (id === 's-settings') renderSettings();
+}
+
+function toggleHelp(bodyId) {
+  const body    = document.getElementById(bodyId);
+  const chevron = document.getElementById('hc-' + bodyId.replace('h-', ''));
+  if (!body || !chevron) return;
+  const isOpen = body.classList.contains('open');
+  body.classList.toggle('open', !isOpen);
+  chevron.classList.toggle('open', !isOpen);
 }
 
 // ══════════════════════════════════════════════
