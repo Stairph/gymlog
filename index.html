@@ -6,13 +6,13 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <meta name="author" content="Steph">
 <meta name="created" content="2026">
-<meta name="description" content="GymLog — Track your workouts. Built by Steph.">
+<meta name="description" content="GymLog — Track your workouts. Train smarter. Built by Steph.">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="GymLog">
 <meta name="application-name" content="GymLog">
 <meta name="theme-color" content="#000000">
-<meta name="description" content="Track your workouts. Own your progress.">
+<meta name="description" content="Track your workouts. Volume by Sets.">
 <title>GymLog</title>
 
 <!-- ── FAVICON ── -->
@@ -338,6 +338,27 @@ button,input,select{font-family:var(--font-b)}
 
 /* Empty state */
 .picker-empty-state{display:flex;flex-direction:column;align-items:center;gap:10px;padding:24px 20px 16px}
+
+/* Muscle group filter chips — pinned below search in picker */
+.muscle-chips-row{flex-shrink:0;border-bottom:1px solid var(--border);padding:6px 0 8px}
+.muscle-chips-scroll{display:flex;gap:6px;overflow-x:auto;padding:0 var(--pad);scrollbar-width:none}
+.muscle-chips-scroll::-webkit-scrollbar{display:none}
+.muscle-filter-chip{padding:5px 13px;border-radius:var(--pill);border:1px solid var(--border-hi);background:var(--card);color:var(--grey-hi);font-size:12px;font-weight:500;cursor:pointer;white-space:nowrap;flex-shrink:0;transition:background .12s,border-color .12s,color .12s;font-family:var(--font-b)}
+.muscle-filter-chip:active{background:var(--cyan-dim);border-color:var(--cyan-border);color:var(--cyan)}
+.muscle-filter-chip.active{background:var(--cyan-dim);border-color:var(--cyan-border);color:var(--cyan)}
+.browse-group{border-bottom:1px solid var(--border)}
+.browse-group:last-child{border-bottom:none}
+.browse-group-header{display:flex;align-items:center;gap:8px;padding:13px var(--pad);cursor:pointer;transition:background .12s;-webkit-user-select:none;user-select:none}
+.browse-group-header:active{background:var(--card2)}
+.browse-group-label{font-family:var(--font-d);font-size:15px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:var(--white);flex:1}
+.browse-group-count{font-family:var(--font-m);font-size:11px;color:var(--grey-mid);flex-shrink:0}
+.browse-chevron{width:15px;height:15px;stroke:var(--grey-mid);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0;transition:transform .2s ease}
+.browse-chevron.open{transform:rotate(90deg)}
+.browse-group-body{padding-bottom:4px}
+.browse-ex-item{padding:10px var(--pad);border-top:1px solid var(--border)}
+.browse-ex-item:active{background:var(--card2)}
+.browse-ex-name{font-size:13px;font-weight:500;color:var(--white);display:flex;align-items:center;gap:7px}
+.browse-saved-dot{width:6px;height:6px;border-radius:50%;background:var(--cyan);flex-shrink:0;opacity:.7}
 
 /* Naming nudge */
 .nudge-item{display:flex;align-items:center;gap:8px;padding:11px 12px;background:rgba(91,191,181,.06);border:1px solid rgba(91,191,181,.2);border-radius:var(--sr);margin-bottom:7px}
@@ -859,6 +880,16 @@ button,input,select{font-family:var(--font-b)}
       <button onclick="closeExPicker()" style="padding:6px 14px;border-radius:var(--pill);border:1px solid var(--border-hi);background:transparent;color:var(--grey-mid);font-size:13px;font-weight:500;cursor:pointer">Cancel</button>
     </div>
     <input class="modal-search" id="ex-search" type="text" placeholder="Search or type new exercise…" oninput="filterExList(this.value)" autocomplete="off" autocorrect="off" spellcheck="false">
+    <div class="muscle-chips-row" id="muscle-chips-row">
+      <div class="muscle-chips-scroll">
+        <button class="muscle-filter-chip" data-group="Chest" onclick="jumpToGroup('Chest')">Chest</button>
+        <button class="muscle-filter-chip" data-group="Back" onclick="jumpToGroup('Back')">Back</button>
+        <button class="muscle-filter-chip" data-group="Shoulders" onclick="jumpToGroup('Shoulders')">Shoulders</button>
+        <button class="muscle-filter-chip" data-group="Legs" onclick="jumpToGroup('Legs')">Legs</button>
+        <button class="muscle-filter-chip" data-group="Arms" onclick="jumpToGroup('Arms')">Arms</button>
+        <button class="muscle-filter-chip" data-group="Core" onclick="jumpToGroup('Core')">Core</button>
+      </div>
+    </div>
     <div class="modal-list" id="ex-list"></div>
     <div class="modal-safe"></div>
   </div>
@@ -2079,16 +2110,77 @@ function closeExPicker() {
   document.getElementById('ex-search').blur();
   exPickerTarget = 'workout';
   nudgePreset = null;
+  // Reset chips and browse state for next open
+  PRESET_GROUPS.forEach(g => { _browseOpen[g.label] = false; });
+  updateChipLabels(null);
 }
 
 function closeExPickerOverlay(e) {
   if (e.target === document.getElementById('ex-picker-modal')) closeExPicker();
 }
 
+// Group labels for browse view — order and membership matches PRESETS array sections
+const PRESET_GROUPS = [
+  { label: 'Chest',     names: ['Bench Press','Incline Bench Press','Decline Bench Press','Dumbbell Bench Press','Incline Dumbbell Press','Cable Fly','Dumbbell Fly','Push Up','Chest Dip'] },
+  { label: 'Back',      names: ['Deadlift','Romanian Deadlift','Barbell Row','Dumbbell Row','Cable Row','Lat Pulldown','Pull Up','T-Bar Row','Face Pull','Straight Arm Pulldown'] },
+  { label: 'Shoulders', names: ['Overhead Press','Dumbbell Shoulder Press','Lateral Raise','Front Raise','Rear Delt Fly','Upright Row'] },
+  { label: 'Legs',      names: ['Squat','Front Squat','Leg Press','Hack Squat','Bulgarian Split Squat','Leg Extension','Leg Curl','Hip Thrust','Glute Bridge','Calf Raise','Lunge'] },
+  { label: 'Arms',      names: ['Barbell Curl','Dumbbell Curl','Cable Curl','Preacher Curl','Tricep Pushdown','Skull Crusher','Overhead Tricep Extension','Tricep Dip','Wrist Curl','Reverse Wrist Curl'] },
+  { label: 'Core',      names: ['Plank','Crunch','Leg Raise','Ab Wheel Rollout','Cable Crunch'] },
+];
+
+// Track which browse groups are open
+const _browseOpen = {};
+
+function toggleBrowseGroup(label) {
+  _browseOpen[label] = !_browseOpen[label];
+  renderExPickerEmpty();
+}
+
+function jumpToGroup(label) {
+  const searchEl = document.getElementById('ex-search');
+  if (searchEl && searchEl.value.trim()) searchEl.value = '';
+
+  // Check if this chip is already active — if so, clear the filter
+  const isAlreadyActive = !!_browseOpen[label];
+  if (isAlreadyActive) {
+    // Collapse all groups, clear active chip, scroll list to top
+    PRESET_GROUPS.forEach(g => { _browseOpen[g.label] = false; });
+    renderExPickerEmpty();
+    updateChipLabels(null);
+    const list = document.getElementById('ex-list');
+    if (list) list.scrollTop = 0;
+    return;
+  }
+
+  // Expand the target group, collapse others
+  PRESET_GROUPS.forEach(g => { _browseOpen[g.label] = (g.label === label); });
+  renderExPickerEmpty();
+  updateChipLabels(label);
+
+  // Scroll list to the group header
+  setTimeout(() => {
+    const list = document.getElementById('ex-list');
+    const groupEl = document.getElementById(`browse-group-${label}`);
+    if (list && groupEl) list.scrollTop = groupEl.offsetTop - 8;
+  }, 50);
+}
+
+function updateChipLabels(activeLabel) {
+  document.querySelectorAll('.muscle-filter-chip').forEach(c => {
+    const base = c.dataset.group;
+    const isActive = base === activeLabel;
+    c.classList.toggle('active', isActive);
+    c.textContent = isActive ? `${base} ×` : base;
+  });
+}
+
 function renderExPickerEmpty() {
   const list = document.getElementById('ex-list');
+  const libraryNames = new Set(allExercises.map(e => e.name));
   let html = '';
 
+  // ── Recently Used ──
   if (recentExercises.length > 0) {
     html += `<div class="modal-sec">Recently Used</div>
       <div class="recent-chips">
@@ -2099,12 +2191,56 @@ function renderExPickerEmpty() {
       </div>`;
   }
 
-  html += `<div class="picker-empty-state">
-    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="var(--grey-lo)" stroke-width="1.5" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
-    <div style="font-size:13px;color:var(--grey-lo);text-align:center;line-height:1.6">
-      Type to search your library<br>and ${PRESETS.length} preset exercises
-    </div>
-  </div>`;
+  // ── Your Library ──
+  if (allExercises.length > 0) {
+    html += `<div class="modal-sec">Your Library</div>`;
+    const sorted = [...allExercises].sort((a,b) => a.name.localeCompare(b.name));
+    sorted.forEach(e => {
+      const safe = e.name.replace(/'/g,"\\'");
+      const tagLabel = [...(e.primary||[]), ...(e.secondary||[]).map(s=>s+'*')].join(', ');
+      html += `<div class="ex-item">
+        <div class="flex-1-click" onclick="pickExercise('${safe}')">
+          <div class="ex-item-name">${e.name}</div>
+          <div class="tag-sub">${tagLabel}</div>
+        </div>
+        <button class="ex-edit-inline" onclick="editExerciseFromPicker('${safe}')" title="Edit" onmousedown="event.stopPropagation()">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="var(--grey-mid)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+        </button>
+      </div>`;
+    });
+  }
+
+  // ── Browse Presets ──
+  html += `<div class="modal-sec" style="margin-top:18px">Browse All Exercises</div>`;
+  PRESET_GROUPS.forEach(group => {
+    const isOpen = !!_browseOpen[group.label];
+    const safeLabel = group.label.replace(/'/g,"\\'");
+    html += `<div class="browse-group" id="browse-group-${group.label}">
+      <div class="browse-group-header" onclick="toggleBrowseGroup('${safeLabel}')">
+        <span class="browse-group-label">${group.label}</span>
+        <span class="browse-group-count">${group.names.length}</span>
+        <svg class="browse-chevron${isOpen?' open':''}" viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg>
+      </div>
+      ${isOpen ? `<div class="browse-group-body">
+        ${group.names.map(name => {
+          const preset = PRESET_MAP[name.toLowerCase()];
+          if (!preset) return '';
+          const safe = name.replace(/'/g,"\\'");
+          const tagLabel = [...preset.primary, ...preset.secondary.map(s=>s+'*')].join(', ');
+          const inLibrary = libraryNames.has(name);
+          return `<div class="ex-item browse-ex-item" onclick="pickExercise('${safe}')">
+            <div class="flex-1">
+              <div class="browse-ex-name">
+                ${name}
+                ${inLibrary ? '<span class="browse-saved-dot" title="In your library"></span>' : ''}
+              </div>
+              <div class="tag-sub">${tagLabel}</div>
+            </div>
+          </div>`;
+        }).join('')}
+      </div>` : ''}
+    </div>`;
+  });
 
   list.innerHTML = html;
 }
@@ -2113,8 +2249,19 @@ function filterExList(q) {
   q = q.trim();
   const list = document.getElementById('ex-list');
 
-  // Empty query — show recent + empty state
-  if (!q) { renderExPickerEmpty(); return; }
+  // Show/hide chip row based on whether search is active
+  const chipRow = document.getElementById('muscle-chips-row');
+
+  // Empty query — show browse view, restore chips
+  if (!q) {
+    if (chipRow) chipRow.style.display = '';
+    updateChipLabels(null);
+    renderExPickerEmpty();
+    return;
+  }
+
+  // Searching — hide chip row to maximise results space
+  if (chipRow) chipRow.style.display = 'none';
 
   const qLow = q.toLowerCase();
   const tokens = qLow.split(/\s+/).filter(Boolean);
