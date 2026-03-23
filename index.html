@@ -512,7 +512,7 @@ button,input,select{font-family:var(--font-b)}
 <div class="screen active" id="s-home">
   <div class="home-hero">
     <div class="logo">Gym<span>Log</span></div>
-    <div class="tagline">the east coast plan</div>
+    <div class="tagline">the east coast plan project</div>
   </div>
   <div class="scroll">
     <div class="home-cta" onclick="startWorkout()">
@@ -704,6 +704,8 @@ button,input,select{font-family:var(--font-b)}
       </div>
       <div class="help-section-body" id="h-install">
         <p>Open the link in your phone browser. Tap <strong>Share → Add to Home Screen</strong> on iPhone, or <strong>Install App</strong> on Android. GymLog will appear on your home screen and works offline.</p>
+        <p><strong>Tip:</strong> when returning to GymLog mid-workout, use the <strong>app switcher</strong> (swipe up from the bottom or press the recent apps button) to return to your existing session. Tapping the home screen icon opens a fresh instance of the app.</p>
+        <p>If you do accidentally tap the home screen icon mid-workout, GymLog will detect your unfinished session and offer to <strong>Resume</strong> it when it reopens. Your data is saved automatically as you log.</p>
       </div>
     </div>
 
@@ -960,12 +962,104 @@ const DB_NAME = 'gymlog_v1';
 const RETENTION_DAYS = 183;
 
 // ── APP SETTINGS — loaded from localStorage, defaults applied ──
-const SETTINGS_KEY = 'gymlog_settings';
+const SETTINGS_KEY        = 'gymlog_settings';
+const ACTIVE_SESSION_KEY  = 'gymlog_active_session';
 const SETTING_DEFAULTS = { weekStartDay: 1, weightUnit: 'kg' }; // 0=Sun, 1=Mon
 let APP_SETTINGS = { ...SETTING_DEFAULTS, ...JSON.parse(localStorage.getItem(SETTINGS_KEY) || '{}') };
 
 function saveSettings() {
   localStorage.setItem(SETTINGS_KEY, JSON.stringify(APP_SETTINGS));
+}
+
+// ── SESSION AUTOSAVE ──
+// Debounced write — saves activeSession to localStorage max once per 2s
+let _autosaveTimer = null;
+function autosaveSession() {
+  if (_autosaveTimer) clearTimeout(_autosaveTimer);
+  _autosaveTimer = setTimeout(() => {
+    if (activeSession.exercises.length === 0) return;
+    try {
+      localStorage.setItem(ACTIVE_SESSION_KEY, JSON.stringify({
+        savedAt: Date.now(),
+        session: {
+          date: activeSession.date.toISOString(),
+          exercises: activeSession.exercises.map(ex => ({
+            name: ex.name,
+            primary: ex.primary,
+            secondary: ex.secondary,
+            bodyweight: !!ex.bodyweight,
+            sets: ex.sets.map(s => ({ weight: s.weight, reps: s.reps, bw: !!s.bw }))
+          }))
+        }
+      }));
+    } catch(e) { /* localStorage full or unavailable — silently skip */ }
+  }, 2000);
+}
+
+function clearAutosave() {
+  if (_autosaveTimer) { clearTimeout(_autosaveTimer); _autosaveTimer = null; }
+  try { localStorage.removeItem(ACTIVE_SESSION_KEY); } catch(e) {}
+}
+
+// Check for a saved session on app open — offer recovery if found and < 24hrs old
+async function checkSessionRecovery() {
+  try {
+    const raw = localStorage.getItem(ACTIVE_SESSION_KEY);
+    if (!raw) return;
+    const { savedAt, session } = JSON.parse(raw);
+    // Discard if older than 24 hours
+    if (!savedAt || Date.now() - savedAt > 24 * 60 * 60 * 1000) {
+      clearAutosave(); return;
+    }
+    if (!session || !Array.isArray(session.exercises) || session.exercises.length === 0) {
+      clearAutosave(); return;
+    }
+    // Load exercise library to restore muscle tags
+    const exLib = await dbGetAll('exercises');
+    const exMap = Object.fromEntries(exLib.map(e => [e.name, e]));
+    const savedDate = new Date(session.date);
+    const dateStr = savedDate.toLocaleDateString('en-GB', { weekday:'short', day:'numeric', month:'short' });
+    const exCount = session.exercises.length;
+    const setCount = session.exercises.reduce((a, ex) => a + ex.sets.length, 0);
+
+    showConfirm(
+      'Resume Workout?',
+      `You have an unfinished session from ${dateStr} — ${exCount} exercise${exCount !== 1 ? 's' : ''}, ${setCount} set${setCount !== 1 ? 's' : ''}.`,
+      'Resume',
+      true,
+      () => {
+        // Restore session into activeSession
+        activeSession = {
+          date: savedDate,
+          exercises: session.exercises.map(ex => {
+            const lib = exMap[ex.name];
+            return {
+              name:       ex.name,
+              primary:    lib ? lib.primary   : (ex.primary   || []),
+              secondary:  lib ? lib.secondary : (ex.secondary || []),
+              bodyweight: !!ex.bodyweight,
+              sets: ex.sets.map(s => ({ weight: s.weight, reps: s.reps, done: false, bw: !!s.bw }))
+            };
+          })
+        };
+        buildDateSelectors('w-day','w-month','w-year', activeSession.date);
+        updateWorkoutDateDisplay();
+        // Navigate to workout screen
+        document.querySelectorAll('.screen').forEach(s => { s.classList.remove('active','exit'); s.style.cssText = ''; });
+        document.getElementById('s-home').classList.add('active');
+        currentScreen = 's-home';
+        nav('s-workout');
+        setTimeout(() => renderExercises('workout'), 200);
+      }
+    );
+    // If user taps Cancel on the confirm, discard the saved session
+    // We hook into resolveConfirm's false path via a one-time wrapper
+    const original = confirmResolve;
+    const _origResolve = window._recoveryResolve;
+    window._recoveryCleanup = () => clearAutosave();
+  } catch(e) {
+    clearAutosave(); // malformed data — wipe it
+  }
 }
 
 // ══════════════════════════════════════════════
@@ -1374,6 +1468,7 @@ function cancelWorkout() {
   const doCancel = () => {
     // Reset all state
     activeSession = { date: new Date(), exercises: [] };
+    clearAutosave(); // discard draft — user chose to cancel
     sessionOverrideIndex = null;
     muscleEditIndex = null;
     editingExistingName = null;
@@ -1436,6 +1531,7 @@ function renderExercises(target = 'workout') {
   if (!isEdit) {
     document.getElementById('finish-btn').style.display = session.exercises.length > 0 ? 'flex' : 'none';
     updateWorkoutCounter();
+    autosaveSession();
   }
 }
 
@@ -1588,7 +1684,6 @@ function getSession(target) { return target === 'edit' ? editSession : activeSes
 function stepVal(ei, si, field, delta, target) {
   const s = getSession(target).exercises[ei].sets[si];
   if (field === 'weight') {
-    // delta arrives in display units — convert to kg for storage
     const deltaKg = APP_SETTINGS.weightUnit === 'lbs' ? delta / KG_TO_LBS : delta;
     s.weight = Math.max(0, Math.round((s.weight + deltaKg) * 100) / 100);
     document.getElementById(`sv-w-${target}-${ei}-${si}`).textContent = displayWeight(s.weight);
@@ -1596,6 +1691,7 @@ function stepVal(ei, si, field, delta, target) {
     s.reps = Math.max(0, s.reps + delta);
     document.getElementById(`sv-r-${target}-${ei}-${si}`).textContent = s.reps;
   }
+  if (target === 'workout') autosaveSession();
 }
 
 function toggleDone(ei, si, target) {
@@ -1603,6 +1699,7 @@ function toggleDone(ei, si, target) {
   s.done = !s.done;
   document.getElementById(`sr-${target}-${ei}-${si}`).classList.toggle('done', s.done);
   document.getElementById(`db-${target}-${ei}-${si}`).classList.toggle('done', s.done);
+  if (target === 'workout') autosaveSession();
 }
 
 function addSet(ei, target) {
@@ -1618,7 +1715,7 @@ function addSet(ei, target) {
   const area = document.getElementById(`sets-area-${target}-${ei}`);
   const si   = ex.sets.length - 1;
   area.insertAdjacentHTML('beforeend', buildSetRow(newSet, ei, si, target));
-  if (target === 'workout') updateWorkoutCounter();
+  if (target === 'workout') { updateWorkoutCounter(); autosaveSession(); }
 }
 
 function removeSet(ei, si, target) {
@@ -1705,6 +1802,7 @@ async function finishWorkout() {
     await dbPut('sessions', session);
     await pruneOldSessions();
     invalidateVolCache();
+    clearAutosave(); // session is saved to DB — remove localStorage draft
 
     // Reset workout screen for next use
     activeSession = { date: new Date(), exercises: [] };
@@ -2169,11 +2267,10 @@ async function pickExercise(name) {
       // Carry bw flag from previous session sets
       prefillSets = lastEx.sets.map(s => ({ weight: s.weight, reps: s.reps, done: false, bw: !!s.bw }));
     } else {
-      // Default new sets — use library bodyweight flag
+      // First time using this exercise — start with 1 empty set, not 3
+      // Users add sets as needed rather than deleting unwanted defaults
       const defaultBW = !!lib.bodyweight;
       prefillSets = [
-        { weight:0, reps:0, done:false, bw:defaultBW },
-        { weight:0, reps:0, done:false, bw:defaultBW },
         { weight:0, reps:0, done:false, bw:defaultBW }
       ];
     }
@@ -2705,8 +2802,14 @@ function showConfirm(title, msg, okLabel, safe, onOk) {
 
 function resolveConfirm(confirmed) {
   document.getElementById('confirm-overlay').classList.remove('open');
-  if (confirmed && confirmResolve) confirmResolve();
+  if (confirmed && confirmResolve) {
+    confirmResolve();
+  } else if (!confirmed && window._recoveryCleanup) {
+    // User dismissed the recovery prompt — discard the saved session
+    window._recoveryCleanup();
+  }
   confirmResolve = null;
+  window._recoveryCleanup = null;
 }
 
 // ══════════════════════════════════════════════
@@ -2746,6 +2849,8 @@ function showToast(msg) {
 initDB().then(async () => {
   await pruneOldSessions();
   renderHomeBars();
+  // Check for an unfinished session saved before app was closed
+  await checkSessionRecovery();
 }).catch(() => {
   showToast('Storage unavailable — data will not persist');
   renderHomeBars();
