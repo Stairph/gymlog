@@ -6,13 +6,13 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <meta name="author" content="Steph">
 <meta name="created" content="2026">
-<meta name="description" content="GymLog — Track your workouts. Train smarter. Built by Steph.">
+<meta name="description" content="GymLog — Track your workouts. Built by Steph.">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="GymLog">
 <meta name="application-name" content="GymLog">
 <meta name="theme-color" content="#000000">
-<meta name="description" content="Track your workouts. Volume by Sets.">
+<meta name="description" content="Track your workouts. Volume by sets.">
 <title>GymLog</title>
 
 <!-- ── FAVICON ── -->
@@ -768,8 +768,10 @@ button,input,select{font-family:var(--font-b)}
       </div>
       <div class="help-section-body" id="h-data">
         <p>Everything is stored directly on your device — nothing is sent to a server or third party. GymLog has no account, no login, and no internet connection required after the first load.</p>
-        <p>Your exercise library and sessions are stored separately. If you edit a muscle tag on an exercise, your full history recalculates automatically. Sessions older than 6 months are removed automatically to keep storage lean.</p>
-        <p><strong>Warning:</strong> clearing your browser's cache will permanently delete your data. Export a backup regularly.</p>
+        <p>Your exercise library and sessions are stored in an on-device database (IndexedDB). If you edit a muscle tag on an exercise, your full history recalculates automatically. Sessions older than 6 months are removed automatically to keep storage lean.</p>
+        <p>Unfinished sessions are automatically saved as a draft in the same database as your sessions. If the app closes mid-workout, you'll be offered the option to resume when it reopens. The draft is cleared automatically as soon as you finish or discard the workout.</p>
+        <p>Your settings (week start day, weight unit) are stored separately in your browser's localStorage.</p>
+        <p><strong>Warning:</strong> clearing your browser's cache or website data will permanently delete your sessions, exercise library, and draft. Export a backup regularly.</p>
       </div>
     </div>
 
@@ -993,8 +995,7 @@ const DB_NAME = 'gymlog_v1';
 const RETENTION_DAYS = 183;
 
 // ── APP SETTINGS — loaded from localStorage, defaults applied ──
-const SETTINGS_KEY        = 'gymlog_settings';
-const ACTIVE_SESSION_KEY  = 'gymlog_active_session';
+const SETTINGS_KEY     = 'gymlog_settings';
 const SETTING_DEFAULTS = { weekStartDay: 1, weightUnit: 'kg' }; // 0=Sun, 1=Mon
 let APP_SETTINGS = { ...SETTING_DEFAULTS, ...JSON.parse(localStorage.getItem(SETTINGS_KEY) || '{}') };
 
@@ -1003,47 +1004,48 @@ function saveSettings() {
 }
 
 // ── SESSION AUTOSAVE ──
-// Debounced write — saves activeSession to localStorage max once per 2s
+// Debounced write to IndexedDB drafts store — durable, survives cache clears
 let _autosaveTimer = null;
 function autosaveSession() {
   if (_autosaveTimer) clearTimeout(_autosaveTimer);
-  _autosaveTimer = setTimeout(() => {
+  _autosaveTimer = setTimeout(async () => {
     if (activeSession.exercises.length === 0) return;
     try {
-      localStorage.setItem(ACTIVE_SESSION_KEY, JSON.stringify({
+      await dbPut('drafts', {
+        id: 'active',
         savedAt: Date.now(),
         session: {
           date: activeSession.date.toISOString(),
           exercises: activeSession.exercises.map(ex => ({
-            name: ex.name,
-            primary: ex.primary,
-            secondary: ex.secondary,
+            name:       ex.name,
+            primary:    ex.primary,
+            secondary:  ex.secondary,
             bodyweight: !!ex.bodyweight,
             sets: ex.sets.map(s => ({ weight: s.weight, reps: s.reps, bw: !!s.bw }))
           }))
         }
-      }));
-    } catch(e) { /* localStorage full or unavailable — silently skip */ }
+      });
+    } catch(e) { /* DB unavailable — silently skip */ }
   }, 2000);
 }
 
-function clearAutosave() {
+async function clearAutosave() {
   if (_autosaveTimer) { clearTimeout(_autosaveTimer); _autosaveTimer = null; }
-  try { localStorage.removeItem(ACTIVE_SESSION_KEY); } catch(e) {}
+  try { await dbDelete('drafts', 'active'); } catch(e) {}
 }
 
-// Check for a saved session on app open — offer recovery if found and < 24hrs old
+// Check for a saved draft on app open — offer recovery if found and < 24hrs old
 async function checkSessionRecovery() {
   try {
-    const raw = localStorage.getItem(ACTIVE_SESSION_KEY);
-    if (!raw) return;
-    const { savedAt, session } = JSON.parse(raw);
+    const draft = await dbGet('drafts', 'active');
+    if (!draft) return;
+    const { savedAt, session } = draft;
     // Discard if older than 24 hours
     if (!savedAt || Date.now() - savedAt > 24 * 60 * 60 * 1000) {
-      clearAutosave(); return;
+      await clearAutosave(); return;
     }
     if (!session || !Array.isArray(session.exercises) || session.exercises.length === 0) {
-      clearAutosave(); return;
+      await clearAutosave(); return;
     }
     // Load exercise library to restore muscle tags
     const exLib = await dbGetAll('exercises');
@@ -1059,7 +1061,6 @@ async function checkSessionRecovery() {
       'Resume',
       true,
       () => {
-        // Restore session into activeSession
         activeSession = {
           date: savedDate,
           exercises: session.exercises.map(ex => {
@@ -1075,7 +1076,6 @@ async function checkSessionRecovery() {
         };
         buildDateSelectors('w-day','w-month','w-year', activeSession.date);
         updateWorkoutDateDisplay();
-        // Navigate to workout screen
         document.querySelectorAll('.screen').forEach(s => { s.classList.remove('active','exit'); s.style.cssText = ''; });
         document.getElementById('s-home').classList.add('active');
         currentScreen = 's-home';
@@ -1083,13 +1083,9 @@ async function checkSessionRecovery() {
         setTimeout(() => renderExercises('workout'), 200);
       }
     );
-    // If user taps Cancel on the confirm, discard the saved session
-    // We hook into resolveConfirm's false path via a one-time wrapper
-    const original = confirmResolve;
-    const _origResolve = window._recoveryResolve;
     window._recoveryCleanup = () => clearAutosave();
   } catch(e) {
-    clearAutosave(); // malformed data — wipe it
+    await clearAutosave(); // malformed data — wipe it
   }
 }
 
@@ -1149,7 +1145,7 @@ let confirmResolve = null;
 // ══════════════════════════════════════════════
 function initDB() {
   return new Promise((res, rej) => {
-    const req = indexedDB.open(DB_NAME, 1);
+    const req = indexedDB.open(DB_NAME, 2);
     req.onupgradeneeded = e => {
       const d = e.target.result;
       if (!d.objectStoreNames.contains('sessions')) {
@@ -1158,6 +1154,10 @@ function initDB() {
       }
       if (!d.objectStoreNames.contains('exercises')) {
         d.createObjectStore('exercises', { keyPath: 'name' });
+      }
+      // v2: draft store for mid-workout autosave
+      if (!d.objectStoreNames.contains('drafts')) {
+        d.createObjectStore('drafts', { keyPath: 'id' });
       }
     };
     req.onsuccess = e => { db = e.target.result; res(db); };
@@ -1499,7 +1499,7 @@ function cancelWorkout() {
   const doCancel = () => {
     // Reset all state
     activeSession = { date: new Date(), exercises: [] };
-    clearAutosave(); // discard draft — user chose to cancel
+    clearAutosave(); // discard draft — fire and forget, timer cancel is synchronous
     sessionOverrideIndex = null;
     muscleEditIndex = null;
     editingExistingName = null;
@@ -1833,7 +1833,7 @@ async function finishWorkout() {
     await dbPut('sessions', session);
     await pruneOldSessions();
     invalidateVolCache();
-    clearAutosave(); // session is saved to DB — remove localStorage draft
+    await clearAutosave(); // session is saved to DB — remove draft
 
     // Reset workout screen for next use
     activeSession = { date: new Date(), exercises: [] };
