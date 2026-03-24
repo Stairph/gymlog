@@ -88,7 +88,19 @@ button,input,select{font-family:var(--font-b)}
 }
 
 /* ── SCREENS ── */
-.screen{position:absolute;inset:0;display:flex;flex-direction:column;opacity:0;pointer-events:none;transform:translateX(28px);transition:opacity .22s ease,transform .22s ease;visibility:hidden;overflow:hidden}
+.screen{
+  position:absolute;
+  inset:0;
+  display:flex;
+  flex-direction:column;
+  opacity:0;
+  pointer-events:none;
+  transform:translateX(28px);
+  transition:opacity .22s ease,transform .22s ease;
+  visibility:hidden;
+  overflow:hidden;
+  background:var(--black); /* FIX: Prevents visual bleed-through when screens stack */
+}
 .screen.active{opacity:1;pointer-events:all;transform:translateX(0);visibility:visible}
 .screen.exit{opacity:0;transform:translateX(-28px);transition:opacity .18s ease,transform .18s ease;visibility:visible}
 .screen.slide-up{transform:translateY(100%);opacity:0;visibility:hidden}
@@ -1291,6 +1303,9 @@ function nav(id) {
   const to   = document.getElementById(id);
   if (!from || !to) return;
 
+  // FIX 1: Update currentScreen immediately to prevent rapid-tap race conditions
+  currentScreen = id;
+
   // Clear any stale inline styles on ALL screens before transitioning
   document.querySelectorAll('.screen').forEach(s => {
     s.style.visibility = '';
@@ -1300,9 +1315,10 @@ function nav(id) {
 
   from.classList.add('exit');
   setTimeout(() => {
-    from.classList.remove('active', 'exit');
+    // FIX 2: Aggressively scrub all screens of active/exit classes before applying the new one
+    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active', 'exit'));
+    
     to.classList.add('active');
-    currentScreen = id;
     onEnter(id);
   }, 180);
 }
