@@ -533,7 +533,7 @@ button,input,select{font-family:var(--font-b)}
 <div class="screen active" id="s-home">
   <div class="home-hero">
     <div class="logo">Gym<span>Log</span></div>
-    <div class="tagline">an east coast plan project</div>
+    <div class="tagline">butter chicken</div>
   </div>
   <div class="scroll">
     <div class="home-cta" onclick="startWorkout()">
@@ -2633,8 +2633,14 @@ function openNumInput(ei, si, field, target) {
     }
   }
 
-  document.getElementById('num-overlay').classList.add('open');
-  setTimeout(() => { inp.focus(); if (!isBW) inp.select(); }, 100);
+  // Focus input synchronously — must happen within the gesture call stack
+  // for iOS Safari to trigger the keyboard automatically.
+  // Opening the overlay on the next frame keeps the transition intact on Android.
+  inp.focus();
+  if (!isBW) inp.select();
+  requestAnimationFrame(() => {
+    document.getElementById('num-overlay').classList.add('open');
+  });
 
   numInputCallback = val => {
     if (field === 'weight') {
