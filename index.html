@@ -60,6 +60,14 @@
   --pad: clamp(14px, 4vw, 22px);
 }
 
+/* ── THEMES ── */
+body.theme-purple {
+  --cyan:        #BA79E3; /* Purple */
+  --cyan-dim:    rgba(186, 121, 227, .10);
+  --cyan-glow:   rgba(186, 121, 227, .20);
+  --cyan-border: rgba(186, 121, 227, .25);
+}
+
 /* ── RESET ── */
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
 html,body{height:100%;overflow:hidden;background:var(--black);color:var(--white);font-family:var(--font-b);-webkit-font-smoothing:antialiased}
@@ -510,6 +518,14 @@ button,input,select{font-family:var(--font-b)}
 .seg-opt.active{background:var(--cyan);color:var(--black)}
 .seg-opt:not(.active):active{background:var(--border)}
 
+/* Theme toggle pill */
+.theme-toggle-pill{position:relative;display:flex;background:var(--card2);border:1px solid var(--border-hi);border-radius:var(--pill);padding:4px;gap:6px;flex-shrink:0}
+.theme-slider-ring{position:absolute;top:2px;left:2px;width:26px;height:26px;border:2px solid var(--grey-hi);border-radius:50%;transition:transform .25s cubic-bezier(.32,1,.28,1);box-sizing:border-box;pointer-events:none}
+.theme-toggle-pill[data-active="purple"] .theme-slider-ring{transform:translateX(28px)}
+.theme-dot{width:22px;height:22px;border-radius:50%;cursor:pointer;transition:opacity .2s ease}
+.theme-dot[data-val="cyan"]{background:#5BBFB5}
+.theme-dot[data-val="purple"]{background:#BA79E3}
+
 /* Export device switching card */
 .exp-device-card{margin:12px var(--pad) 0;background:var(--cyan-dim);border:1px solid var(--cyan-border);border-radius:var(--cr);padding:16px}
 .exp-device-title{font-family:var(--font-d);font-size:15px;font-weight:700;letter-spacing:.03em;text-transform:uppercase;color:var(--cyan);margin-bottom:12px}
@@ -819,6 +835,21 @@ button,input,select{font-family:var(--font-b)}
   </div>
   <div class="scroll">
 
+    <div class="settings-section-label">Appearance</div>
+    <div class="settings-card">
+      <div class="settings-row">
+        <div class="settings-row-info">
+          <div class="settings-row-label">Accent Color</div>
+          <div class="settings-row-sub">Choose your vibe</div>
+        </div>
+        <div class="theme-toggle-pill" id="seg-theme" data-active="cyan">
+          <div class="theme-slider-ring"></div>
+          <div class="theme-dot" data-val="cyan" onclick="setSetting('theme','cyan')"></div>
+          <div class="theme-dot" data-val="purple" onclick="setSetting('theme','purple')"></div>
+        </div>
+      </div>
+    </div>
+
     <div class="settings-section-label">Training</div>
     <div class="settings-card">
       <div class="settings-row">
@@ -996,8 +1027,17 @@ const RETENTION_DAYS = 183;
 
 // ── APP SETTINGS — loaded from localStorage, defaults applied ──
 const SETTINGS_KEY     = 'gymlog_settings';
-const SETTING_DEFAULTS = { weekStartDay: 1, weightUnit: 'kg' }; // 0=Sun, 1=Mon
+const SETTING_DEFAULTS = { weekStartDay: 1, weightUnit: 'kg', theme: 'cyan' }; // 0=Sun, 1=Mon
 let APP_SETTINGS = { ...SETTING_DEFAULTS, ...JSON.parse(localStorage.getItem(SETTINGS_KEY) || '{}') };
+
+function applyTheme(theme) {
+  if (theme === 'purple') {
+    document.body.classList.add('theme-purple');
+  } else {
+    document.body.classList.remove('theme-purple');
+  }
+}
+applyTheme(APP_SETTINGS.theme);
 
 function saveSettings() {
   localStorage.setItem(SETTINGS_KEY, JSON.stringify(APP_SETTINGS));
@@ -1096,11 +1136,21 @@ function renderSettings() {
   // Sync segmented controls to current settings
   syncSeg('seg-weekstart', String(APP_SETTINGS.weekStartDay));
   syncSeg('seg-unit', APP_SETTINGS.weightUnit);
+  syncSeg('seg-theme', APP_SETTINGS.theme || 'cyan');
 }
 
 function syncSeg(segId, activeVal) {
   const seg = document.getElementById(segId);
   if (!seg) return;
+  
+  if (segId === 'seg-theme') {
+    seg.dataset.active = activeVal;
+    seg.querySelectorAll('.theme-dot').forEach(opt => {
+      opt.style.opacity = opt.dataset.val === activeVal ? '1' : '0.3';
+    });
+    return;
+  }
+
   seg.querySelectorAll('.seg-opt').forEach(opt => {
     opt.classList.toggle('active', opt.dataset.val === activeVal);
   });
@@ -1109,6 +1159,13 @@ function syncSeg(segId, activeVal) {
 function setSetting(key, value) {
   APP_SETTINGS[key] = value;
   saveSettings();
+
+  if (key === 'theme') {
+    applyTheme(value);
+    syncSeg('seg-theme', value);
+    return;
+  }
+
   syncSeg(key === 'weekStartDay' ? 'seg-weekstart' : 'seg-unit', String(value));
   // Invalidate volume cache when week start changes — affects all calculations
   if (key === 'weekStartDay') {
