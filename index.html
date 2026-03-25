@@ -883,7 +883,7 @@ button,input,select{font-family:var(--font-b)}
       <div class="modal-title" style="padding:0;flex:1">Add Exercise</div>
       <button onclick="closeExPicker()" style="padding:6px 14px;border-radius:var(--pill);border:1px solid var(--border-hi);background:transparent;color:var(--grey-mid);font-size:13px;font-weight:500;cursor:pointer">Cancel</button>
     </div>
-    <input class="modal-search" id="ex-search" type="text" placeholder="Search or type new exercise…" oninput="filterExList(this.value)" autocomplete="off" autocorrect="off" spellcheck="false">
+    <input class="modal-search" id="ex-search" type="text" placeholder="Search or type new exercise…" oninput="filterExList(this.value)" autocomplete="off" autocorrect="off" spellcheck="false" enterkeyhint="search" onkeydown="if(event.key === 'Enter') this.blur();">
     <div class="muscle-chips-row" id="muscle-chips-row">
       <div class="muscle-chips-scroll">
         <button class="muscle-filter-chip" data-group="Chest" onclick="jumpToGroup('Chest')">Chest</button>
@@ -913,7 +913,7 @@ button,input,select{font-family:var(--font-b)}
       </div>
 
       <div class="setup-lbl">Exercise Name</div>
-      <input class="setup-input" id="setup-name" type="text" placeholder="e.g. Bench Press" autocomplete="off">
+      <input class="setup-input" id="setup-name" type="text" placeholder="e.g. Bench Press" autocomplete="off" enterkeyhint="done" onkeydown="if(event.key === 'Enter') { event.preventDefault(); saveNewExercise(); }">
       
       <div id="strength-setup-zone">
         <div class="setup-lbl" style="margin-top:16px">Muscle Groups <span style="font-size:10px;color:var(--grey-mid);font-weight:400;text-transform:none;letter-spacing:0">— tap to add, then set P or S</span></div>
@@ -945,7 +945,7 @@ button,input,select{font-family:var(--font-b)}
 <div class="num-overlay" id="num-overlay" onclick="closeNumInput(event)">
   <div class="num-box">
     <div class="num-lbl" id="num-label">Enter value</div>
-    <input class="num-field" id="num-field" type="number" inputmode="decimal" step="0.5">
+    <input class="num-field" id="num-field" type="number" inputmode="decimal" step="0.5" enterkeyhint="done" onkeydown="if(event.key === 'Enter') { event.preventDefault(); confirmNumInput(); }">
     <button class="num-bw-btn" id="num-bw-btn" onclick="confirmBWInput()" style="display:none">Set as Bodyweight</button>
     <div class="num-actions">
       <button class="num-cancel" onclick="closeNumInput()">Cancel</button>
