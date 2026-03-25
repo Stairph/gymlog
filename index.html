@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- GymLog v1.1 — Designed & built by Steph, 2026 -->
+<!-- GymLog v1.2 — Designed & built by Steph, 2026 -->
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -749,7 +749,8 @@ button,input,select{font-family:var(--font-b)}
         <svg class="help-chevron" id="hc-logging" viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg>
       </div>
       <div class="help-section-body" id="h-logging">
-        <p>Tap <strong>Start Workout</strong>. Tap <strong>Add Exercise</strong> to add either strength training or cardio. For strength, log weight and reps. For cardio, log distance and time.</p>
+        <p>Tap <strong>Start Workout</strong> — today's date is set automatically. Tap <strong>Add Exercise</strong> and search by name or browse the preset library. The first time you use an exercise, select which muscles it trains — you'll never need to do this again.</p>
+        <p>Use <strong>+/−</strong> to adjust weight and reps, or tap the number to type directly. Tap <strong>✓</strong> to mark a set done. Tap <strong>Finish Workout</strong> when you're done.</p>
       </div>
     </div>
 
@@ -759,7 +760,17 @@ button,input,select{font-family:var(--font-b)}
         <svg class="help-chevron" id="hc-progress" viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg>
       </div>
       <div class="help-section-body" id="h-progress">
-        <p>Previous values auto-fill from your last session for each exercise. Tap <strong>▸ Previous 3 sessions</strong> on any exercise to see your recent history. The <strong>Weekly Summary</strong> shows cardio output and sets per muscle group this week vs last week.</p>
+        <p>Previous weights and reps auto-fill from your last session for each exercise. Tap <strong>▸ Previous 3 sessions</strong> on any exercise to see your recent history. The <strong>Weekly Summary</strong> shows how many sets you did per muscle group this week vs last week.</p>
+      </div>
+    </div>
+
+    <div class="help-section" onclick="toggleHelp('h-history')">
+      <div class="help-section-header">
+        <span class="help-section-title">Editing past sessions</span>
+        <svg class="help-chevron" id="hc-history" viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg>
+      </div>
+      <div class="help-section-body" id="h-history">
+        <p>Tap the clock icon on the home screen to view your session history. Tap any session to edit sets, exercises, or the date. Useful if you forgot to log on the day.</p>
       </div>
     </div>
 
@@ -769,8 +780,43 @@ button,input,select{font-family:var(--font-b)}
         <svg class="help-chevron" id="hc-data" viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg>
       </div>
       <div class="help-section-body" id="h-data">
-        <p>Everything is stored directly on your device — nothing is sent to a server. GymLog uses an on-device database (IndexedDB) for workouts and localStorage for settings.</p>
+        <p>Everything is stored directly on your device — nothing is sent to a server or third party. GymLog has no account, no login, and no internet connection required after the first load.</p>
+        <p>Your exercise library and sessions are stored in an on-device database (IndexedDB). If you edit a muscle tag on an exercise, your full history recalculates automatically. Sessions older than 6 months are removed automatically to keep storage lean.</p>
+        <p>Unfinished sessions are automatically saved as a draft in the same database as your sessions. If the app closes mid-workout, you'll be offered the option to resume when it reopens. The draft is cleared automatically as soon as you finish or discard the workout.</p>
+        <p>Your settings (week start day, weight unit) are stored separately in your browser's localStorage.</p>
         <p><strong>iPhone:</strong> tapping <strong>Clear History and Website Data</strong> in Safari settings will permanently erase all GymLog data. <strong>Android:</strong> only <strong>Clear Site Data</strong> affects GymLog — clearing the cache alone does not. Export a backup regularly to protect against accidental data loss.</p>
+      </div>
+    </div>
+
+    <div class="help-section" onclick="toggleHelp('h-backup')">
+      <div class="help-section-header">
+        <span class="help-section-title">Backing up &amp; switching phones</span>
+        <svg class="help-chevron" id="hc-backup" viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg>
+      </div>
+      <div class="help-section-body" id="h-backup">
+        <p>Go to <strong>⚙ → Export &amp; Import → Export JSON</strong> and save the file to iCloud, Google Drive, or Files. To restore, open GymLog on any phone and tap <strong>Import JSON</strong>. Your sessions, exercise library, and settings are all included.</p>
+      </div>
+    </div>
+
+    <div class="help-section" onclick="toggleHelp('h-security')">
+      <div class="help-section-header">
+        <span class="help-section-title">Security &amp; privacy</span>
+        <svg class="help-chevron" id="hc-security" viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg>
+      </div>
+      <div class="help-section-body" id="h-security">
+        <p>GymLog cannot access your contacts, camera, location, or any other device feature. It stores only your workout history, exercise names, and settings — nothing sensitive.</p>
+        <p>Because all data is local, conventional risks like data breaches or password leaks do not apply. The only practical risk is someone with physical access to your unlocked phone — your phone's screen lock is the appropriate safeguard.</p>
+        <p>Your export file is a plain readable file. Store it somewhere only you can access.</p>
+      </div>
+    </div>
+
+    <div class="help-section" onclick="toggleHelp('h-performance')">
+      <div class="help-section-header">
+        <span class="help-section-title">Performance &amp; battery</span>
+        <svg class="help-chevron" id="hc-performance" viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg>
+      </div>
+      <div class="help-section-body" id="h-performance">
+        <p>GymLog is a single file — roughly 130KB, smaller than most webpage images. It runs entirely in your browser with no background processes. It will not drain your battery or slow your phone. A full year of training data is under 130KB of storage.</p>
       </div>
     </div>
 
@@ -867,7 +913,7 @@ button,input,select{font-family:var(--font-b)}
           <div class="settings-row-label">GymLog</div>
           <div class="settings-row-sub">Designed &amp; built by Steph · 2026 · All data stored on this device only</div>
         </div>
-        <span class="settings-version">v1.1</span>
+        <span class="settings-version">v1.2</span>
       </div>
     </div>
 
@@ -887,7 +933,8 @@ button,input,select{font-family:var(--font-b)}
     <div class="muscle-chips-row" id="muscle-chips-row">
       <div class="muscle-chips-scroll">
         <button class="muscle-filter-chip" data-group="Chest" onclick="jumpToGroup('Chest')">Chest</button>
-        <button class="muscle-filter-chip" data-group="Back" onclick="jumpToGroup('Back')">Back</button>
+        <button class="muscle-filter-chip" data-group="Upper Back" onclick="jumpToGroup('Upper Back')">Upper Back</button>
+        <button class="muscle-filter-chip" data-group="Lower Back" onclick="jumpToGroup('Lower Back')">Lower Back</button>
         <button class="muscle-filter-chip" data-group="Shoulders" onclick="jumpToGroup('Shoulders')">Shoulders</button>
         <button class="muscle-filter-chip" data-group="Legs" onclick="jumpToGroup('Legs')">Legs</button>
         <button class="muscle-filter-chip" data-group="Arms" onclick="jumpToGroup('Arms')">Arms</button>
@@ -1002,7 +1049,17 @@ button,input,select{font-family:var(--font-b)}
 // ══════════════════════════════════════════════
 // CONSTANTS
 // ══════════════════════════════════════════════
-const MUSCLES = ['Chest','Back','Lower Back','Anterior Deltoid','Lateral Deltoid','Posterior Deltoid','Quads','Hamstrings','Glutes','Adductors','Abductors','Biceps','Triceps','Wrist Flexors','Wrist Extensors','Calves','Abs'];
+const MUSCLES = ['Chest','Upper Back','Lower Back','Front Delt','Side Delt','Rear Delt','Quads','Hamstrings','Glutes','Adductors','Abductors','Biceps','Triceps','Wrist Flexors','Wrist Extensors','Calves','Abs'];
+
+// Safely map legacy muscle names to new names without altering database records
+const MUSCLE_ALIASES = {
+  'Anterior Deltoid': 'Front Delt',
+  'Lateral Deltoid': 'Side Delt',
+  'Posterior Deltoid': 'Rear Delt',
+  'Back': 'Upper Back'
+};
+const mMap = m => MUSCLE_ALIASES[m] || m;
+
 const MONTHS = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
 const DB_NAME = 'gymlog_v1';
 const RETENTION_DAYS = 183;
@@ -1346,8 +1403,8 @@ async function calcVol(weekStart) {
           }
         } else {
           const n = ex.sets.length;
-          (lib.primary||[]).forEach(m   => { if (m in res.muscles) res.muscles[m] += n; });
-          (lib.secondary||[]).forEach(m => { if (m in res.muscles) res.muscles[m] += n * 0.5; });
+          (lib.primary||[]).forEach(m   => { const mapped = mMap(m); if (mapped in res.muscles) res.muscles[mapped] += n; });
+          (lib.secondary||[]).forEach(m => { const mapped = mMap(m); if (mapped in res.muscles) res.muscles[mapped] += n * 0.5; });
         }
       }
     }
@@ -1624,8 +1681,8 @@ function renderExercises(target = 'workout') {
 
 function buildExCard(ex, ei, target) {
   const isCardio = !!ex.isCardio;
-  const primary   = (ex.overridePrimary   || ex.primary   || []);
-  const secondary = (ex.overrideSecondary || ex.secondary || []);
+  const primary   = (ex.overridePrimary   || ex.primary   || []).map(mMap);
+  const secondary = (ex.overrideSecondary || ex.secondary || []).map(mMap);
 
   let dotsRow = '';
   if (isCardio) {
@@ -1858,7 +1915,7 @@ function openMuscleEditSheet(ei) {
   document.getElementById('muscle-sheet-title').textContent = ex.name;
   const hasOverride = ex.overridePrimary ? ' (session override active)' : '';
   document.getElementById('muscle-sheet-sub').textContent =
-    `Current: ${[...(ex.overridePrimary||ex.primary||[])].join(', ')}${hasOverride}`;
+    `Current: ${[...(ex.overridePrimary||ex.primary||[])].map(mMap).join(', ')}${hasOverride}`;
   document.getElementById('muscle-edit-sheet').classList.add('open');
 }
 
@@ -1875,8 +1932,8 @@ function editMuscleLibrary() {
   const ex = activeSession.exercises[muscleEditIndex];
   editingExistingName = ex.name;
   muscleSelections = Object.fromEntries(MUSCLES.map(m => [m, null]));
-  (ex.primary||[]).forEach(m => { if (MUSCLES.includes(m)) muscleSelections[m] = 'primary'; });
-  (ex.secondary||[]).forEach(m => { if (MUSCLES.includes(m)) muscleSelections[m] = 'secondary'; });
+  (ex.primary||[]).forEach(m => { const mapped = mMap(m); if (MUSCLES.includes(mapped)) muscleSelections[mapped] = 'primary'; });
+  (ex.secondary||[]).forEach(m => { const mapped = mMap(m); if (MUSCLES.includes(mapped)) muscleSelections[mapped] = 'secondary'; });
   document.getElementById('setup-name').value = ex.name;
   document.getElementById('setup-modal-title').textContent = 'Edit Exercise';
   document.getElementById('setup-save-label').textContent = 'Save Changes';
@@ -1895,8 +1952,8 @@ function editMuscleSessionOnly() {
   muscleSelections = Object.fromEntries(MUSCLES.map(m => [m, null]));
   const curPrimary   = ex.overridePrimary   || ex.primary   || [];
   const curSecondary = ex.overrideSecondary || ex.secondary || [];
-  curPrimary.forEach(m   => { if (MUSCLES.includes(m)) muscleSelections[m] = 'primary'; });
-  curSecondary.forEach(m => { if (MUSCLES.includes(m)) muscleSelections[m] = 'secondary'; });
+  curPrimary.forEach(m   => { const mapped = mMap(m); if (MUSCLES.includes(mapped)) muscleSelections[mapped] = 'primary'; });
+  curSecondary.forEach(m => { const mapped = mMap(m); if (MUSCLES.includes(mapped)) muscleSelections[mapped] = 'secondary'; });
   document.getElementById('setup-name').value = ex.name;
   document.getElementById('setup-modal-title').textContent = 'Session Override';
   document.getElementById('setup-save-label').textContent = 'Apply to Session';
@@ -2046,36 +2103,36 @@ function openExPickerForEdit() {
 // ══════════════════════════════════════════════
 const PRESETS = [
   // ── CHEST ──
-  { name:'Bench Press',            primary:['Chest'],              secondary:['Anterior Deltoid','Triceps'],    aliases:['flat bench','bb bench','barbell press'] },
-  { name:'Incline Bench Press',    primary:['Chest'],              secondary:['Anterior Deltoid','Triceps'],    aliases:['incline press','incline bb'] },
+  { name:'Bench Press',            primary:['Chest'],              secondary:['Front Delt','Triceps'],          aliases:['flat bench','bb bench','barbell press'] },
+  { name:'Incline Bench Press',    primary:['Chest'],              secondary:['Front Delt','Triceps'],          aliases:['incline press','incline bb'] },
   { name:'Decline Bench Press',    primary:['Chest'],              secondary:['Triceps'],                       aliases:['decline press','decline bb'] },
-  { name:'Dumbbell Bench Press',   primary:['Chest'],              secondary:['Anterior Deltoid','Triceps'],    aliases:['db bench','dumbbell press','db press'] },
-  { name:'Incline Dumbbell Press', primary:['Chest'],              secondary:['Anterior Deltoid'],              aliases:['incline db','incline dumbbell'] },
+  { name:'Dumbbell Bench Press',   primary:['Chest'],              secondary:['Front Delt','Triceps'],          aliases:['db bench','dumbbell press','db press'] },
+  { name:'Incline Dumbbell Press', primary:['Chest'],              secondary:['Front Delt'],                    aliases:['incline db','incline dumbbell'] },
   { name:'Cable Fly',              primary:['Chest'],              secondary:[],                                aliases:['cable crossover','cable flye','pec fly'] },
   { name:'Dumbbell Fly',           primary:['Chest'],              secondary:[],                                aliases:['db fly','dumbbell flye','pec deck'] },
-  { name:'Push Up',                primary:['Chest'],              secondary:['Anterior Deltoid','Triceps'],    aliases:['pushup','press up'] },
-  { name:'Chest Dip',              primary:['Chest'],              secondary:['Triceps','Anterior Deltoid'],    aliases:['dips','weighted dip'] },
+  { name:'Push Up',                primary:['Chest'],              secondary:['Front Delt','Triceps'],          aliases:['pushup','press up'] },
+  { name:'Chest Dip',              primary:['Chest'],              secondary:['Triceps','Front Delt'],          aliases:['dips','weighted dip'] },
 
-  // ── BACK ──
+  // ── UPPER BACK & LOWER BACK ──
   { name:'Deadlift',               primary:['Lower Back'],         secondary:['Hamstrings','Glutes'],           aliases:['conventional deadlift','dl'] },
   { name:'Romanian Deadlift',      primary:['Hamstrings'],         secondary:['Lower Back','Glutes'],           aliases:['rdl','romanian dl','stiff leg deadlift'] },
-  { name:'Barbell Row',            primary:['Back'],               secondary:['Biceps','Posterior Deltoid'],    aliases:['bent over row','bb row','barbell bent over row'] },
-  { name:'Dumbbell Row',           primary:['Back'],               secondary:['Biceps'],                        aliases:['db row','single arm row','one arm row'] },
-  { name:'Cable Row',              primary:['Back'],               secondary:['Biceps','Posterior Deltoid'],    aliases:['seated cable row','low row','seated row'] },
-  { name:'Lat Pulldown',           primary:['Back'],               secondary:['Biceps'],                        aliases:['pull down','cable pulldown','wide grip pulldown'] },
-  { name:'Pull Up',                primary:['Back'],               secondary:['Biceps'],                        aliases:['pullup','chin up','chinup','weighted pull up'] },
-  { name:'T-Bar Row',              primary:['Back'],               secondary:['Biceps','Posterior Deltoid'],    aliases:['tbar','t bar','chest supported row'] },
-  { name:'Face Pull',              primary:['Posterior Deltoid'],  secondary:['Back'],                          aliases:['face pulls','cable face pull','rear delt pull'] },
-  { name:'Straight Arm Pulldown',  primary:['Back'],               secondary:[],                                aliases:['straight arm pull','cable pullover'] },
+  { name:'Barbell Row',            primary:['Upper Back'],         secondary:['Biceps','Rear Delt'],            aliases:['bent over row','bb row','barbell bent over row'] },
+  { name:'Dumbbell Row',           primary:['Upper Back'],         secondary:['Biceps'],                        aliases:['db row','single arm row','one arm row'] },
+  { name:'Cable Row',              primary:['Upper Back'],         secondary:['Biceps','Rear Delt'],            aliases:['seated cable row','low row','seated row'] },
+  { name:'Lat Pulldown',           primary:['Upper Back'],         secondary:['Biceps'],                        aliases:['pull down','cable pulldown','wide grip pulldown'] },
+  { name:'Pull Up',                primary:['Upper Back'],         secondary:['Biceps'],                        aliases:['pullup','chin up','chinup','weighted pull up'] },
+  { name:'T-Bar Row',              primary:['Upper Back'],         secondary:['Biceps','Rear Delt'],            aliases:['tbar','t bar','chest supported row'] },
+  { name:'Face Pull',              primary:['Rear Delt'],          secondary:['Upper Back'],                    aliases:['face pulls','cable face pull','rear delt pull'] },
+  { name:'Straight Arm Pulldown',  primary:['Upper Back'],         secondary:[],                                aliases:['straight arm pull','cable pullover'] },
   { name:'Back Extension',         primary:['Lower Back'],         secondary:['Hamstrings','Glutes'],           aliases:['hyperextension'] },
 
   // ── SHOULDERS ──
-  { name:'Overhead Press',         primary:['Anterior Deltoid'],   secondary:['Lateral Deltoid','Triceps'],     aliases:['ohp','shoulder press','military press','bb ohp','barbell press'] },
-  { name:'Dumbbell Shoulder Press',primary:['Anterior Deltoid'],   secondary:['Lateral Deltoid','Triceps'],     aliases:['db ohp','db shoulder press','seated db press','arnold press'] },
-  { name:'Lateral Raise',          primary:['Lateral Deltoid'],    secondary:[],                                aliases:['side raise','side lateral','db lateral raise','cable lateral'] },
-  { name:'Front Raise',            primary:['Anterior Deltoid'],   secondary:[],                                aliases:['db front raise','plate front raise','cable front raise'] },
-  { name:'Rear Delt Fly',          primary:['Posterior Deltoid'],  secondary:[],                                aliases:['reverse fly','reverse pec deck','bent over lateral','rear fly'] },
-  { name:'Upright Row',            primary:['Lateral Deltoid'],    secondary:['Anterior Deltoid','Biceps'],     aliases:['upright rows','bb upright row','cable upright row'] },
+  { name:'Overhead Press',         primary:['Front Delt'],         secondary:['Side Delt','Triceps'],           aliases:['ohp','shoulder press','military press','bb ohp','barbell press'] },
+  { name:'Dumbbell Shoulder Press',primary:['Front Delt'],         secondary:['Side Delt','Triceps'],           aliases:['db ohp','db shoulder press','seated db press','arnold press'] },
+  { name:'Lateral Raise',          primary:['Side Delt'],          secondary:[],                                aliases:['side raise','side lateral','db lateral raise','cable lateral'] },
+  { name:'Front Raise',            primary:['Front Delt'],         secondary:[],                                aliases:['db front raise','plate front raise','cable front raise'] },
+  { name:'Rear Delt Fly',          primary:['Rear Delt'],          secondary:[],                                aliases:['reverse fly','reverse pec deck','bent over lateral','rear fly'] },
+  { name:'Upright Row',            primary:['Side Delt'],          secondary:['Front Delt','Biceps'],           aliases:['upright rows','bb upright row','cable upright row'] },
 
   // ── LEGS ──
   { name:'Squat',                  primary:['Quads'],              secondary:['Glutes','Hamstrings'],           aliases:['back squat','barbell squat','bb squat'] },
@@ -2164,8 +2221,8 @@ async function editExerciseFromPicker(name) {
     if (!lib) { openSetupModal(name); return; }
     editingExistingName = name;
     muscleSelections = Object.fromEntries(MUSCLES.map(m => [m, null]));
-    (lib.primary||[]).forEach(m => { muscleSelections[m] = 'primary'; });
-    (lib.secondary||[]).forEach(m => { muscleSelections[m] = 'secondary'; });
+    (lib.primary||[]).forEach(m => { const mapped = mMap(m); muscleSelections[mapped] = 'primary'; });
+    (lib.secondary||[]).forEach(m => { const mapped = mMap(m); muscleSelections[mapped] = 'secondary'; });
     document.getElementById('setup-name').value = lib.name;
     setSetupType(lib.isCardio ? 'cardio' : 'strength');
     renderMuscleGrid();
@@ -2213,13 +2270,14 @@ function closeExPickerOverlay(e) {
 }
 
 const PRESET_GROUPS = [
-  { label: 'Chest',     names: ['Bench Press','Incline Bench Press','Decline Bench Press','Dumbbell Bench Press','Incline Dumbbell Press','Cable Fly','Dumbbell Fly','Push Up','Chest Dip'] },
-  { label: 'Back',      names: ['Deadlift','Romanian Deadlift','Barbell Row','Dumbbell Row','Cable Row','Lat Pulldown','Pull Up','T-Bar Row','Face Pull','Straight Arm Pulldown','Back Extension'] },
-  { label: 'Shoulders', names: ['Overhead Press','Dumbbell Shoulder Press','Lateral Raise','Front Raise','Rear Delt Fly','Upright Row'] },
-  { label: 'Legs',      names: ['Squat','Front Squat','Leg Press','Hack Squat','Bulgarian Split Squat','Leg Extension','Leg Curl','Hip Thrust','Glute Bridge','Calf Raise','Lunge','Hip Adductor Machine','Hip Abductor Machine'] },
-  { label: 'Arms',      names: ['Barbell Curl','Dumbbell Curl','Cable Curl','Preacher Curl','Tricep Pushdown','Skull Crusher','Overhead Tricep Extension','Tricep Dip','Wrist Curl','Reverse Wrist Curl'] },
-  { label: 'Core',      names: ['Plank','Crunch','Leg Raise','Ab Wheel Rollout','Cable Crunch'] },
-  { label: 'Cardio',    names: ['Treadmill','Stairmaster','Rowing Machine','Cycling','Elliptical'] },
+  { label: 'Chest',      names: ['Bench Press','Incline Bench Press','Decline Bench Press','Dumbbell Bench Press','Incline Dumbbell Press','Cable Fly','Dumbbell Fly','Push Up','Chest Dip'] },
+  { label: 'Upper Back', names: ['Barbell Row','Dumbbell Row','Cable Row','Lat Pulldown','Pull Up','T-Bar Row','Face Pull','Straight Arm Pulldown'] },
+  { label: 'Lower Back', names: ['Deadlift','Back Extension'] },
+  { label: 'Shoulders',  names: ['Overhead Press','Dumbbell Shoulder Press','Lateral Raise','Front Raise','Rear Delt Fly','Upright Row'] },
+  { label: 'Legs',       names: ['Squat','Front Squat','Leg Press','Hack Squat','Bulgarian Split Squat','Romanian Deadlift','Leg Extension','Leg Curl','Hip Thrust','Glute Bridge','Calf Raise','Lunge','Hip Adductor Machine','Hip Abductor Machine'] },
+  { label: 'Arms',       names: ['Barbell Curl','Dumbbell Curl','Cable Curl','Preacher Curl','Tricep Pushdown','Skull Crusher','Overhead Tricep Extension','Tricep Dip','Wrist Curl','Reverse Wrist Curl'] },
+  { label: 'Core',       names: ['Plank','Crunch','Leg Raise','Ab Wheel Rollout','Cable Crunch'] },
+  { label: 'Cardio',     names: ['Treadmill','Stairmaster','Rowing Machine','Cycling','Elliptical'] },
 ];
 
 const _browseOpen = {};
@@ -2283,7 +2341,7 @@ function renderExPickerEmpty() {
     const sorted = [...allExercises].sort((a,b) => a.name.localeCompare(b.name));
     sorted.forEach(e => {
       const safe = e.name.replace(/'/g,"\\'");
-      const tagLabel = e.isCardio ? 'Cardio' : [...(e.primary||[]), ...(e.secondary||[]).map(s=>s+'*')].join(', ');
+      const tagLabel = e.isCardio ? 'Cardio' : [...(e.primary||[]).map(mMap), ...(e.secondary||[]).map(m=>mMap(m)+'*')].join(', ');
       html += `<div class="ex-item">
         <div class="flex-1-click" onclick="pickExercise('${safe}')">
           <div class="ex-item-name">${e.name}</div>
@@ -2311,7 +2369,7 @@ function renderExPickerEmpty() {
           const preset = PRESET_MAP[name.toLowerCase()];
           if (!preset) return '';
           const safe = name.replace(/'/g,"\\'");
-          const tagLabel = preset.isCardio ? 'Cardio' : [...preset.primary, ...preset.secondary.map(s=>s+'*')].join(', ');
+          const tagLabel = preset.isCardio ? 'Cardio' : [...preset.primary.map(mMap), ...preset.secondary.map(m=>mMap(m)+'*')].join(', ');
           const inLibrary = libraryNames.has(name);
           return `<div class="ex-item browse-ex-item" onclick="pickExercise('${safe}')">
             <div class="flex-1">
@@ -2330,6 +2388,7 @@ function renderExPickerEmpty() {
   list.innerHTML = html;
 }
 
+// If you are reading this, you have gone too far. Pls go back to the gym.
 function filterExList(q) {
   q = q.trim();
   const list = document.getElementById('ex-list');
@@ -2367,7 +2426,7 @@ function filterExList(q) {
       <span class="modal-sec-hint">tap to review &amp; add</span>
     </div>`;
     presetMatches.slice(0,5).map(p => {
-      const tagLabel = p.isCardio ? 'Cardio' : [...p.primary, ...p.secondary.map(s=>s+'*')].join(', ');
+      const tagLabel = p.isCardio ? 'Cardio' : [...p.primary.map(mMap), ...p.secondary.map(m=>mMap(m)+'*')].join(', ');
       const safeName = p.name.replace(/'/g,"\\'");
       html += `<div class="ex-item preset-item" onclick="pickPreset('${safeName}')">
         <div class="flex-1-click">
@@ -2385,7 +2444,7 @@ function filterExList(q) {
   if (userMatches.length > 0) {
     html += `<div class="modal-sec">Your Library</div>`;
     userMatches.slice(0,6).forEach(e => {
-      const tagLabel = e.isCardio ? 'Cardio' : [...(e.primary||[]), ...(e.secondary||[]).map(s=>s+'*')].join(', ');
+      const tagLabel = e.isCardio ? 'Cardio' : [...(e.primary||[]).map(mMap), ...(e.secondary||[]).map(m=>mMap(m)+'*')].join(', ');
       const safeName = e.name.replace(/'/g,"\\'");
       html += `<div class="ex-item">
         <div class="flex-1-click" onclick="pickExercise('${safeName}')">
@@ -2406,11 +2465,12 @@ function filterExList(q) {
   const nudgeAlreadyShown = presetMatches.slice(0,5).find(p => p.name === nudge?.name);
   if (nudge && !nudgeAlreadyShown) {
     nudgePreset = nudge;
+    const tagLabel = nudge.isCardio ? 'Cardio' : [...nudge.primary.map(mMap),...nudge.secondary.map(m=>mMap(m)+'*')].join(', ');
     html += `<div class="modal-sec">Did you mean?</div>
       <div class="nudge-item">
         <div class="flex-1">
           <div class="nudge-name">${nudge.name}</div>
-          <div class="tag-sub">${nudge.isCardio ? 'Cardio' : [...nudge.primary,...nudge.secondary.map(s=>s+'*')].join(', ')}</div>
+          <div class="tag-sub">${tagLabel}</div>
         </div>
         <button class="nudge-yes" onclick="pickPreset('${nudge.name.replace(/'/g,"\\'")}')">Use this</button>
         <button class="nudge-no" onclick="dismissNudge()">No</button>
@@ -2448,8 +2508,8 @@ async function pickPreset(name) {
 
   editingExistingName = existing ? name : null;
   muscleSelections = Object.fromEntries(MUSCLES.map(m => [m, null]));
-  (source.primary||[]).forEach(m => { if (MUSCLES.includes(m)) muscleSelections[m] = 'primary'; });
-  (source.secondary||[]).forEach(m => { if (MUSCLES.includes(m)) muscleSelections[m] = 'secondary'; });
+  (source.primary||[]).forEach(m => { const mapped = mMap(m); if (MUSCLES.includes(mapped)) muscleSelections[mapped] = 'primary'; });
+  (source.secondary||[]).forEach(m => { const mapped = mMap(m); if (MUSCLES.includes(mapped)) muscleSelections[mapped] = 'secondary'; });
   
   document.getElementById('setup-name').value = source.name;
   document.getElementById('setup-modal-title').textContent = 'Confirm Exercise';
