@@ -142,6 +142,7 @@ button,input,select{font-family:var(--font-b)}
 .cta-sub{font-size:12px;font-weight:500;color:rgba(0,0,0,.45);margin-top:3px}
 .cta-icon{width:46px;height:46px;background:rgba(0,0,0,.12);border-radius:var(--pill);display:flex;align-items:center;justify-content:center;flex-shrink:0}
 .cta-icon svg{width:20px;height:20px;stroke:var(--black);fill:none;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round}
+
 /* Volume strip */
 .home-week{margin:12px var(--pad) 0;background:var(--card);border:1px solid var(--border);border-radius:var(--cr);padding:20px 18px}
 .sec-label{font-size:10px;color:var(--grey-mid);text-transform:uppercase;letter-spacing:.09em;font-weight:600;margin-bottom:14px}
@@ -312,6 +313,9 @@ button,input,select{font-family:var(--font-b)}
 .modal-overlay.open{opacity:1;pointer-events:all}
 .modal-sheet{background:var(--surface);border-radius:20px 20px 0 0;border-top:1px solid var(--border-hi);max-height:85%;display:flex;flex-direction:column;transform:translateY(100%);transition:transform .25s cubic-bezier(.32,1,.28,1)}
 .modal-overlay.open .modal-sheet{transform:translateY(0)}
+/* FIX: Lock the exercise picker height so the search bar doesn't jump while filtering */
+#ex-picker-modal .modal-sheet { height: 85%; } 
+
 .modal-handle{width:36px;height:4px;background:var(--border-hi);border-radius:2px;margin:10px auto 0;flex-shrink:0}
 .modal-title{font-family:var(--font-d);font-size:20px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;padding:12px var(--pad) 8px;flex-shrink:0}
 .modal-search{margin:0 var(--pad) 8px;padding:11px 14px;background:var(--card);border:1px solid var(--border-hi);border-radius:var(--sr);color:var(--white);font-size:14px;outline:none;width:calc(100% - var(--pad) * 2);flex-shrink:0}
@@ -576,7 +580,7 @@ button,input,select{font-family:var(--font-b)}
         <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
       </button>
       <button class="home-util-btn" onclick="nav('s-settings')" aria-label="Settings">
-        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
       </button>
     </div>
     <div class="safe-b"></div>
@@ -1022,7 +1026,6 @@ function saveSettings() {
 }
 
 // ── SESSION AUTOSAVE ──
-// Debounced write to IndexedDB drafts store — durable, survives cache clears
 let _autosaveTimer = null;
 function autosaveSession() {
   if (_autosaveTimer) clearTimeout(_autosaveTimer);
@@ -1053,20 +1056,17 @@ async function clearAutosave() {
   try { await dbDelete('drafts', 'active'); } catch(e) {}
 }
 
-// Check for a saved draft on app open — offer recovery if found and < 24hrs old
 async function checkSessionRecovery() {
   try {
     const draft = await dbGet('drafts', 'active');
     if (!draft) return;
     const { savedAt, session } = draft;
-    // Discard if older than 24 hours
     if (!savedAt || Date.now() - savedAt > 24 * 60 * 60 * 1000) {
       await clearAutosave(); return;
     }
     if (!session || !Array.isArray(session.exercises) || session.exercises.length === 0) {
       await clearAutosave(); return;
     }
-    // Load exercise library to restore muscle tags
     const exLib = await dbGetAll('exercises');
     const exMap = Object.fromEntries(exLib.map(e => [e.name, e]));
     const savedDate = new Date(session.date);
@@ -1105,7 +1105,7 @@ async function checkSessionRecovery() {
     );
     window._recoveryCleanup = () => clearAutosave();
   } catch(e) {
-    await clearAutosave(); // malformed data — wipe it
+    await clearAutosave();
   }
 }
 
@@ -1274,10 +1274,8 @@ function nav(id) {
   const to   = document.getElementById(id);
   if (!from || !to) return;
 
-  // FIX 1: Update currentScreen immediately to prevent rapid-tap race conditions
   currentScreen = id;
 
-  // Clear any stale inline styles on ALL screens before transitioning
   document.querySelectorAll('.screen').forEach(s => {
     s.style.visibility = '';
     s.style.transform  = '';
@@ -1286,7 +1284,6 @@ function nav(id) {
 
   from.classList.add('exit');
   setTimeout(() => {
-    // FIX 2: Aggressively scrub all screens of active/exit classes before applying the new one
     document.querySelectorAll('.screen').forEach(s => s.classList.remove('active', 'exit'));
     
     to.classList.add('active');
@@ -1382,7 +1379,6 @@ async function renderHomeBars() {
     
     let html = '';
 
-    // Add cardio pin row
     if (volData.cardioTime > 0 || volData.cardioDist > 0) {
         const cVal = APP_SETTINGS.cardioDisplay === 'time'
             ? `${volData.cardioTime} min`
@@ -1422,12 +1418,10 @@ async function repeatLastSession() {
     const exLib = await dbGetAll('exercises');
     const exMap = Object.fromEntries(exLib.map(e => [e.name, e]));
 
-    // Start a fresh workout
     activeSession = { date: new Date(), exercises: [] };
     buildDateSelectors('w-day','w-month','w-year', activeSession.date);
     updateWorkoutDateDisplay();
 
-    // Re-add each exercise from the last session with its sets pre-filled
     last.exercises.forEach(ex => {
       const lib = exMap[ex.name];
       const isCardio = lib ? !!lib.isCardio : !!ex.isCardio;
@@ -1441,7 +1435,6 @@ async function repeatLastSession() {
       });
     });
 
-    // Reset screen and navigate
     const workoutScreen = document.getElementById('s-workout');
     workoutScreen.classList.remove('active','exit');
     workoutScreen.style.cssText = '';
@@ -1461,7 +1454,6 @@ async function repeatLastSession() {
     currentScreen = 's-home';
     nav('s-workout');
 
-    // Render exercises after nav
     setTimeout(() => renderExercises('workout'), 200);
     showToast(`Repeating ${last.exercises.length} exercise${last.exercises.length !== 1 ? 's' : ''} from last session`);
   } catch(e) {
@@ -1615,7 +1607,6 @@ function cancelWorkout() {
   }
 }
 
-// ── Exercise cards ──
 function renderExercises(target = 'workout') {
   const isEdit = target === 'edit';
   const session = isEdit ? editSession : activeSession;
