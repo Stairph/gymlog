@@ -1002,7 +1002,7 @@ button,input,select{font-family:var(--font-b)}
 // ══════════════════════════════════════════════
 // CONSTANTS
 // ══════════════════════════════════════════════
-const MUSCLES = ['Chest','Back','Anterior Deltoid','Lateral Deltoid','Posterior Deltoid','Quads','Hamstrings','Glutes','Biceps','Triceps','Wrist Flexors','Wrist Extensors','Calves','Abs'];
+const MUSCLES = ['Chest','Back','Lower Back','Anterior Deltoid','Lateral Deltoid','Posterior Deltoid','Quads','Hamstrings','Glutes','Adductors','Abductors','Biceps','Triceps','Wrist Flexors','Wrist Extensors','Calves','Abs'];
 const MONTHS = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
 const DB_NAME = 'gymlog_v1';
 const RETENTION_DAYS = 183;
@@ -2057,8 +2057,8 @@ const PRESETS = [
   { name:'Chest Dip',              primary:['Chest'],              secondary:['Triceps','Anterior Deltoid'],    aliases:['dips','weighted dip'] },
 
   // ── BACK ──
-  { name:'Deadlift',               primary:['Back'],               secondary:['Hamstrings','Glutes'],           aliases:['conventional deadlift','dl'] },
-  { name:'Romanian Deadlift',      primary:['Hamstrings'],         secondary:['Back','Glutes'],                 aliases:['rdl','romanian dl','stiff leg deadlift'] },
+  { name:'Deadlift',               primary:['Lower Back'],         secondary:['Hamstrings','Glutes'],           aliases:['conventional deadlift','dl'] },
+  { name:'Romanian Deadlift',      primary:['Hamstrings'],         secondary:['Lower Back','Glutes'],           aliases:['rdl','romanian dl','stiff leg deadlift'] },
   { name:'Barbell Row',            primary:['Back'],               secondary:['Biceps','Posterior Deltoid'],    aliases:['bent over row','bb row','barbell bent over row'] },
   { name:'Dumbbell Row',           primary:['Back'],               secondary:['Biceps'],                        aliases:['db row','single arm row','one arm row'] },
   { name:'Cable Row',              primary:['Back'],               secondary:['Biceps','Posterior Deltoid'],    aliases:['seated cable row','low row','seated row'] },
@@ -2067,6 +2067,7 @@ const PRESETS = [
   { name:'T-Bar Row',              primary:['Back'],               secondary:['Biceps','Posterior Deltoid'],    aliases:['tbar','t bar','chest supported row'] },
   { name:'Face Pull',              primary:['Posterior Deltoid'],  secondary:['Back'],                          aliases:['face pulls','cable face pull','rear delt pull'] },
   { name:'Straight Arm Pulldown',  primary:['Back'],               secondary:[],                                aliases:['straight arm pull','cable pullover'] },
+  { name:'Back Extension',         primary:['Lower Back'],         secondary:['Hamstrings','Glutes'],           aliases:['hyperextension'] },
 
   // ── SHOULDERS ──
   { name:'Overhead Press',         primary:['Anterior Deltoid'],   secondary:['Lateral Deltoid','Triceps'],     aliases:['ohp','shoulder press','military press','bb ohp','barbell press'] },
@@ -2088,6 +2089,8 @@ const PRESETS = [
   { name:'Glute Bridge',           primary:['Glutes'],             secondary:['Hamstrings'],                    aliases:['barbell glute bridge','single leg glute bridge'] },
   { name:'Calf Raise',             primary:['Calves'],             secondary:[],                                aliases:['standing calf raise','seated calf raise','calf raises'] },
   { name:'Lunge',                  primary:['Quads'],              secondary:['Glutes','Hamstrings'],           aliases:['walking lunge','reverse lunge','dumbbell lunge'] },
+  { name:'Hip Adductor Machine',   primary:['Adductors'],          secondary:[],                                aliases:['hip adduction','inner thigh machine','adductor machine'] },
+  { name:'Hip Abductor Machine',   primary:['Abductors'],          secondary:['Glutes'],                        aliases:['hip abduction','outer thigh machine','abductor machine'] },
 
   // ── ARMS ──
   { name:'Barbell Curl',           primary:['Biceps'],             secondary:[],                                aliases:['bb curl','bicep curl','barbell bicep curl','ez bar curl'] },
@@ -2102,10 +2105,10 @@ const PRESETS = [
   { name:'Reverse Wrist Curl',     primary:['Wrist Extensors'],    secondary:[],                                aliases:['reverse curl','wrist extension','extensor curl'] },
 
   // ── CORE ──
-  { name:'Plank',                  primary:['Abs'],                secondary:['Back'],                          aliases:['forearm plank','plank hold'] },
+  { name:'Plank',                  primary:['Abs'],                secondary:['Lower Back'],                    aliases:['forearm plank','plank hold'] },
   { name:'Crunch',                 primary:['Abs'],                secondary:[],                                aliases:['crunches','ab crunch','cable crunch','weighted crunch'] },
   { name:'Leg Raise',              primary:['Abs'],                secondary:[],                                aliases:['hanging leg raise','lying leg raise','knee raise'] },
-  { name:'Ab Wheel Rollout',       primary:['Abs'],                secondary:['Back'],                          aliases:['ab wheel','rollout','ab rollout'] },
+  { name:'Ab Wheel Rollout',       primary:['Abs'],                secondary:['Lower Back'],                    aliases:['ab wheel','rollout','ab rollout'] },
   { name:'Cable Crunch',           primary:['Abs'],                secondary:[],                                aliases:['rope crunch','kneeling cable crunch'] },
 
   // ── CARDIO ──
@@ -2211,9 +2214,9 @@ function closeExPickerOverlay(e) {
 
 const PRESET_GROUPS = [
   { label: 'Chest',     names: ['Bench Press','Incline Bench Press','Decline Bench Press','Dumbbell Bench Press','Incline Dumbbell Press','Cable Fly','Dumbbell Fly','Push Up','Chest Dip'] },
-  { label: 'Back',      names: ['Deadlift','Romanian Deadlift','Barbell Row','Dumbbell Row','Cable Row','Lat Pulldown','Pull Up','T-Bar Row','Face Pull','Straight Arm Pulldown'] },
+  { label: 'Back',      names: ['Deadlift','Romanian Deadlift','Barbell Row','Dumbbell Row','Cable Row','Lat Pulldown','Pull Up','T-Bar Row','Face Pull','Straight Arm Pulldown','Back Extension'] },
   { label: 'Shoulders', names: ['Overhead Press','Dumbbell Shoulder Press','Lateral Raise','Front Raise','Rear Delt Fly','Upright Row'] },
-  { label: 'Legs',      names: ['Squat','Front Squat','Leg Press','Hack Squat','Bulgarian Split Squat','Leg Extension','Leg Curl','Hip Thrust','Glute Bridge','Calf Raise','Lunge'] },
+  { label: 'Legs',      names: ['Squat','Front Squat','Leg Press','Hack Squat','Bulgarian Split Squat','Leg Extension','Leg Curl','Hip Thrust','Glute Bridge','Calf Raise','Lunge','Hip Adductor Machine','Hip Abductor Machine'] },
   { label: 'Arms',      names: ['Barbell Curl','Dumbbell Curl','Cable Curl','Preacher Curl','Tricep Pushdown','Skull Crusher','Overhead Tricep Extension','Tricep Dip','Wrist Curl','Reverse Wrist Curl'] },
   { label: 'Core',      names: ['Plank','Crunch','Leg Raise','Ab Wheel Rollout','Cable Crunch'] },
   { label: 'Cardio',    names: ['Treadmill','Stairmaster','Rowing Machine','Cycling','Elliptical'] },
