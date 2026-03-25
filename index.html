@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- GymLog — Designed & built by Steph, 2026 -->
+<!-- GymLog v1.1 — Designed & built by Steph, 2026 -->
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -56,13 +56,12 @@
   --font-m: 'JetBrains Mono', monospace;
   --safe-b: env(safe-area-inset-bottom, 0px);
   --safe-t: env(safe-area-inset-top, 0px);
-  /* responsive container */
   --pad: clamp(14px, 4vw, 22px);
 }
 
 /* ── THEMES ── */
 body.theme-purple {
-  --cyan:        #BA79E3; /* Purple */
+  --cyan:        #BA79E3;
   --cyan-dim:    rgba(186, 121, 227, .10);
   --cyan-glow:   rgba(186, 121, 227, .20);
   --cyan-border: rgba(186, 121, 227, .25);
@@ -99,7 +98,7 @@ button,input,select{font-family:var(--font-b)}
   transition:opacity .22s ease,transform .22s ease;
   visibility:hidden;
   overflow:hidden;
-  background:var(--black); /* FIX: Prevents visual bleed-through when screens stack */
+  background:var(--black); /* FIX: Prevents visual bleed-through */
 }
 .screen.active{opacity:1;pointer-events:all;transform:translateX(0);visibility:visible}
 .screen.exit{opacity:0;transform:translateX(-28px);transition:opacity .18s ease,transform .18s ease;visibility:visible}
@@ -143,7 +142,7 @@ button,input,select{font-family:var(--font-b)}
 .cta-sub{font-size:12px;font-weight:500;color:rgba(0,0,0,.45);margin-top:3px}
 .cta-icon{width:46px;height:46px;background:rgba(0,0,0,.12);border-radius:var(--pill);display:flex;align-items:center;justify-content:center;flex-shrink:0}
 .cta-icon svg{width:20px;height:20px;stroke:var(--black);fill:none;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round}
-/* Volume strip — high visual weight */
+/* Volume strip */
 .home-week{margin:12px var(--pad) 0;background:var(--card);border:1px solid var(--border);border-radius:var(--cr);padding:20px 18px}
 .sec-label{font-size:10px;color:var(--grey-mid);text-transform:uppercase;letter-spacing:.09em;font-weight:600;margin-bottom:14px}
 .vol-row{display:flex;align-items:center;gap:10px;margin-bottom:10px}
@@ -151,14 +150,14 @@ button,input,select{font-family:var(--font-b)}
 .vol-name{font-size:12px;color:var(--grey-hi);width:clamp(80px,24vw,110px);flex-shrink:0;font-weight:500;line-height:1.3}
 .vol-track{flex:1;height:5px;background:var(--border);border-radius:3px;overflow:hidden}
 .vol-fill{height:100%;background:var(--cyan);border-radius:3px;transition:width .5s ease}
-.vol-val{font-family:var(--font-m);font-size:12px;color:var(--cyan);width:32px;text-align:right;flex-shrink:0}
+.vol-val{font-family:var(--font-m);font-size:12px;color:var(--cyan);width:42px;text-align:right;flex-shrink:0}
 
-/* Weekly Summary — slim text row, medium weight */
+/* Weekly Summary */
 .home-summary-row{display:flex;align-items:center;justify-content:space-between;margin:8px var(--pad) 0;padding:14px 16px;background:var(--card);border:1px solid var(--border);border-radius:var(--cr);cursor:pointer;transition:background .12s;color:var(--grey-hi)}
 .home-summary-row:active{background:var(--card2)}
 .home-summary-label{font-family:var(--font-d);font-size:16px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;color:var(--grey-hi)}
 
-/* History + Settings utility icons — low weight, right-aligned */
+/* History + Settings */
 .home-util-row{display:flex;justify-content:flex-end;gap:4px;padding:10px var(--pad) 0}
 .home-util-btn{width:40px;height:40px;border-radius:var(--pill);border:none;background:transparent;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:background .12s;-webkit-tap-highlight-color:transparent}
 .home-util-btn:active{background:var(--card)}
@@ -179,14 +178,8 @@ button,input,select{font-family:var(--font-b)}
 .date-sel{background:var(--card);border:1px solid var(--border-hi);border-radius:6px;color:var(--white);font-size:12px;padding:4px 6px;cursor:pointer;appearance:none;-webkit-appearance:none;outline:none}.date-sel:focus{border-color:var(--cyan-border)}
 .date-sel:focus{border-color:var(--cyan-border)}
 .ex-card{margin:0 var(--pad) 10px;background:var(--card);border:1px solid var(--border);border-radius:var(--cr);transition:border-color .2s}
-.ex-card-header{
-  display:flex;align-items:center;gap:10px;padding:12px 14px;
-  border-bottom:1px solid var(--border);
-  border-radius:var(--cr) var(--cr) 0 0; /* top corners match card */
-  background:var(--card);
-}
+.ex-card-header{display:flex;align-items:center;gap:10px;padding:12px 14px;border-bottom:1px solid var(--border);border-radius:var(--cr) var(--cr) 0 0;background:var(--card);}
 .ex-name{font-family:var(--font-d);font-size:clamp(16px,5vw,19px);font-weight:700;letter-spacing:.04em;text-transform:uppercase;flex:1;min-width:0;line-height:1.1}
-.ex-tag{font-size:10px;font-weight:600;color:var(--cyan);background:var(--cyan-dim);border:1px solid var(--cyan-border);padding:3px 7px;border-radius:var(--pill);white-space:nowrap;flex-shrink:0;max-width:100px;overflow:hidden;text-overflow:ellipsis}
 .ex-delete{width:28px;height:28px;border-radius:var(--pill);border:none;background:transparent;display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;transition:background .12s}
 .ex-delete:active{background:var(--danger-dim)}
 .ex-delete svg{width:14px;height:14px;stroke:var(--grey-lo);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
@@ -359,7 +352,7 @@ button,input,select{font-family:var(--font-b)}
 /* Empty state */
 .picker-empty-state{display:flex;flex-direction:column;align-items:center;gap:10px;padding:24px 20px 16px}
 
-/* Muscle group filter chips — pinned below search in picker */
+/* Muscle group filter chips */
 .muscle-chips-row{flex-shrink:0;border-bottom:1px solid var(--border);padding:6px 0 8px}
 .muscle-chips-scroll{display:flex;gap:6px;overflow-x:auto;padding:0 var(--pad);scrollbar-width:none}
 .muscle-chips-scroll::-webkit-scrollbar{display:none}
@@ -462,7 +455,7 @@ button,input,select{font-family:var(--font-b)}
 .btn-full.outline{background:transparent;color:var(--grey-hi);border:1px solid var(--border-hi)}
 .btn-full svg{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round}
 
-/* ── UTILITY CLASSES (replacing inline styles) ── */
+/* ── UTILITY CLASSES ── */
 .flex-row{display:flex;align-items:center}
 .flex-row-between{display:flex;align-items:center;justify-content:space-between;gap:8px}
 .flex-col{display:flex;flex-direction:column}
@@ -476,7 +469,6 @@ button,input,select{font-family:var(--font-b)}
 .sheet-actions{padding:10px var(--pad) calc(16px + var(--safe-b));display:flex;flex-direction:column;gap:8px}
 .sum-total-right{display:flex;align-items:center;gap:8px}
 .workout-date-top{display:flex;align-items:center;justify-content:space-between;gap:8px}
-/* Picker-specific */
 .modal-sec-hint{font-size:9px;color:var(--grey-lo);margin-left:6px;font-weight:400;text-transform:none;letter-spacing:0}
 .preset-badge{font-size:9px;color:var(--cyan);background:var(--cyan-dim);border:1px solid var(--cyan-border);padding:2px 6px;border-radius:var(--pill);white-space:nowrap;flex-shrink:0}
 .list-overflow-hint{font-size:11px;color:var(--grey-lo);text-align:center;padding:3px 0 6px}
@@ -491,8 +483,6 @@ button,input,select{font-family:var(--font-b)}
 /* BW set display */
 .stp-bw{color:var(--cyan);font-family:var(--font-d);font-size:18px;font-weight:700;letter-spacing:.04em;cursor:pointer;padding:0 12px;min-width:48px;text-align:center}
 .stp-btn-ghost{width:36px;height:36px;flex-shrink:0}
-
-/* BW button in num overlay */
 .num-bw-btn{width:100%;padding:10px;border-radius:var(--sr);border:1px solid var(--cyan-border);background:var(--cyan-dim);color:var(--cyan);font-size:13px;font-weight:600;cursor:pointer;transition:background .12s;text-align:center}
 .num-bw-btn:active{background:var(--cyan-glow)}
 .num-bw-active{background:var(--cyan-glow);border-color:var(--cyan)}
@@ -538,14 +528,6 @@ button,input,select{font-family:var(--font-b)}
 .theme-dot[data-val="cyan"]{background:#5BBFB5}
 .theme-dot[data-val="purple"]{background:#BA79E3}
 
-/* Export device switching card */
-.exp-device-card{margin:12px var(--pad) 0;background:var(--cyan-dim);border:1px solid var(--cyan-border);border-radius:var(--cr);padding:16px}
-.exp-device-title{font-family:var(--font-d);font-size:15px;font-weight:700;letter-spacing:.03em;text-transform:uppercase;color:var(--cyan);margin-bottom:12px}
-.exp-device-steps{display:flex;flex-direction:column;gap:10px}
-.exp-device-step{display:flex;align-items:flex-start;gap:10px;font-size:12px;color:var(--grey-hi);line-height:1.5}
-.exp-step-num{width:20px;height:20px;border-radius:50%;background:var(--cyan);color:var(--black);font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px}
-
-/* ── TOAST ── */
 #toast{position:absolute;bottom:calc(26px + var(--safe-b));left:50%;transform:translateX(-50%) translateY(14px);background:var(--card2);border:1px solid var(--border-hi);border-radius:var(--pill);padding:9px 18px;font-size:13px;color:var(--white);white-space:nowrap;opacity:0;transition:opacity .18s,transform .18s;pointer-events:none;z-index:999}
 #toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
 
@@ -573,19 +555,19 @@ button,input,select{font-family:var(--font-b)}
       Repeat last session
     </div>
 
-    <!-- Volume strip — high visual weight -->
+    <!-- Volume strip -->
     <div class="home-week">
       <div class="sec-label">This Week's Volume</div>
       <div id="home-bars"><div class="loading-state"><div class="spinner"></div>Loading…</div></div>
     </div>
 
-    <!-- Weekly Summary — slim text row, medium weight -->
+    <!-- Weekly Summary -->
     <div class="home-summary-row" onclick="nav('s-summary')">
       <span class="home-summary-label">Weekly Summary</span>
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
     </div>
 
-    <!-- Utility icons — low weight, right-aligned, no labels -->
+    <!-- Utility icons -->
     <div class="home-util-row">
       <button class="home-util-btn" onclick="nav('s-help')" aria-label="Help & Instructions">
         <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 015.83 1c0 2-3 3-3 3"/><circle cx="12" cy="17" r=".5" fill="currentColor"/></svg>
@@ -597,7 +579,6 @@ button,input,select{font-family:var(--font-b)}
         <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
       </button>
     </div>
-
     <div class="safe-b"></div>
   </div>
 </div>
@@ -764,8 +745,7 @@ button,input,select{font-family:var(--font-b)}
         <svg class="help-chevron" id="hc-logging" viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg>
       </div>
       <div class="help-section-body" id="h-logging">
-        <p>Tap <strong>Start Workout</strong> — today's date is set automatically. Tap <strong>Add Exercise</strong> and search by name or browse the preset library. The first time you use an exercise, select which muscles it trains — you'll never need to do this again.</p>
-        <p>Use <strong>+/−</strong> to adjust weight and reps, or tap the number to type directly. Tap <strong>✓</strong> to mark a set done. Tap <strong>Finish Workout</strong> when you're done.</p>
+        <p>Tap <strong>Start Workout</strong>. Tap <strong>Add Exercise</strong> to add either strength training or cardio. For strength, log weight and reps. For cardio, log distance and time.</p>
       </div>
     </div>
 
@@ -775,17 +755,7 @@ button,input,select{font-family:var(--font-b)}
         <svg class="help-chevron" id="hc-progress" viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg>
       </div>
       <div class="help-section-body" id="h-progress">
-        <p>Previous weights and reps auto-fill from your last session for each exercise. Tap <strong>▸ Previous 3 sessions</strong> on any exercise to see your recent history. The <strong>Weekly Summary</strong> shows how many sets you did per muscle group this week vs last week.</p>
-      </div>
-    </div>
-
-    <div class="help-section" onclick="toggleHelp('h-history')">
-      <div class="help-section-header">
-        <span class="help-section-title">Editing past sessions</span>
-        <svg class="help-chevron" id="hc-history" viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg>
-      </div>
-      <div class="help-section-body" id="h-history">
-        <p>Tap the clock icon on the home screen to view your session history. Tap any session to edit sets, exercises, or the date. Useful if you forgot to log on the day.</p>
+        <p>Previous values auto-fill from your last session for each exercise. Tap <strong>▸ Previous 3 sessions</strong> on any exercise to see your recent history. The <strong>Weekly Summary</strong> shows cardio output and sets per muscle group this week vs last week.</p>
       </div>
     </div>
 
@@ -795,43 +765,8 @@ button,input,select{font-family:var(--font-b)}
         <svg class="help-chevron" id="hc-data" viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg>
       </div>
       <div class="help-section-body" id="h-data">
-        <p>Everything is stored directly on your device — nothing is sent to a server or third party. GymLog has no account, no login, and no internet connection required after the first load.</p>
-        <p>Your exercise library and sessions are stored in an on-device database (IndexedDB). If you edit a muscle tag on an exercise, your full history recalculates automatically. Sessions older than 6 months are removed automatically to keep storage lean.</p>
-        <p>Unfinished sessions are automatically saved as a draft in the same database as your sessions. If the app closes mid-workout, you'll be offered the option to resume when it reopens. The draft is cleared automatically as soon as you finish or discard the workout.</p>
-        <p>Your settings (week start day, weight unit) are stored separately in your browser's localStorage.</p>
+        <p>Everything is stored directly on your device — nothing is sent to a server. GymLog uses an on-device database (IndexedDB) for workouts and localStorage for settings.</p>
         <p><strong>iPhone:</strong> tapping <strong>Clear History and Website Data</strong> in Safari settings will permanently erase all GymLog data. <strong>Android:</strong> only <strong>Clear Site Data</strong> affects GymLog — clearing the cache alone does not. Export a backup regularly to protect against accidental data loss.</p>
-      </div>
-    </div>
-
-    <div class="help-section" onclick="toggleHelp('h-backup')">
-      <div class="help-section-header">
-        <span class="help-section-title">Backing up &amp; switching phones</span>
-        <svg class="help-chevron" id="hc-backup" viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg>
-      </div>
-      <div class="help-section-body" id="h-backup">
-        <p>Go to <strong>⚙ → Export &amp; Import → Export JSON</strong> and save the file to iCloud, Google Drive, or Files. To restore, open GymLog on any phone and tap <strong>Import JSON</strong>. Your sessions, exercise library, and settings are all included.</p>
-      </div>
-    </div>
-
-    <div class="help-section" onclick="toggleHelp('h-security')">
-      <div class="help-section-header">
-        <span class="help-section-title">Security &amp; privacy</span>
-        <svg class="help-chevron" id="hc-security" viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg>
-      </div>
-      <div class="help-section-body" id="h-security">
-        <p>GymLog cannot access your contacts, camera, location, or any other device feature. It stores only your workout history, exercise names, and settings — nothing sensitive.</p>
-        <p>Because all data is local, conventional risks like data breaches or password leaks do not apply. The only practical risk is someone with physical access to your unlocked phone — your phone's screen lock is the appropriate safeguard.</p>
-        <p>Your export file is a plain readable file. Store it somewhere only you can access.</p>
-      </div>
-    </div>
-
-    <div class="help-section" onclick="toggleHelp('h-performance')">
-      <div class="help-section-header">
-        <span class="help-section-title">Performance &amp; battery</span>
-        <svg class="help-chevron" id="hc-performance" viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg>
-      </div>
-      <div class="help-section-body" id="h-performance">
-        <p>GymLog is a single file — roughly 130KB, smaller than most webpage images. It runs entirely in your browser with no background processes. It will not drain your battery or slow your phone. A full year of training data is under 130KB of storage.</p>
       </div>
     </div>
 
@@ -862,6 +797,30 @@ button,input,select{font-family:var(--font-b)}
       </div>
     </div>
 
+    <div class="settings-section-label">Cardio</div>
+    <div class="settings-card">
+      <div class="settings-row">
+        <div class="settings-row-info">
+          <div class="settings-row-label">Distance unit</div>
+          <div class="settings-row-sub">All data stored in km · display only</div>
+        </div>
+        <div class="seg-control" id="seg-cardio-unit">
+          <div class="seg-opt active" data-val="km" onclick="setSetting('cardioUnit','km')">km</div>
+          <div class="seg-opt" data-val="mi" onclick="setSetting('cardioUnit','mi')">miles</div>
+        </div>
+      </div>
+      <div class="settings-row">
+        <div class="settings-row-info">
+          <div class="settings-row-label">Dashboard display</div>
+          <div class="settings-row-sub">Main metric shown on home screen</div>
+        </div>
+        <div class="seg-control" id="seg-cardio-display">
+          <div class="seg-opt active" data-val="time" onclick="setSetting('cardioDisplay','time')">Time</div>
+          <div class="seg-opt" data-val="distance" onclick="setSetting('cardioDisplay','distance')">Distance</div>
+        </div>
+      </div>
+    </div>
+
     <div class="settings-section-label">Training</div>
     <div class="settings-card">
       <div class="settings-row">
@@ -874,10 +833,6 @@ button,input,select{font-family:var(--font-b)}
           <div class="seg-opt" data-val="0" onclick="setSetting('weekStartDay',0)">Sun</div>
         </div>
       </div>
-    </div>
-
-    <div class="settings-section-label">Display</div>
-    <div class="settings-card">
       <div class="settings-row">
         <div class="settings-row-info">
           <div class="settings-row-label">Weight unit</div>
@@ -908,7 +863,7 @@ button,input,select{font-family:var(--font-b)}
           <div class="settings-row-label">GymLog</div>
           <div class="settings-row-sub">Designed &amp; built by Steph · 2026 · All data stored on this device only</div>
         </div>
-        <span class="settings-version">v1.0</span>
+        <span class="settings-version">v1.1</span>
       </div>
     </div>
 
@@ -933,6 +888,7 @@ button,input,select{font-family:var(--font-b)}
         <button class="muscle-filter-chip" data-group="Legs" onclick="jumpToGroup('Legs')">Legs</button>
         <button class="muscle-filter-chip" data-group="Arms" onclick="jumpToGroup('Arms')">Arms</button>
         <button class="muscle-filter-chip" data-group="Core" onclick="jumpToGroup('Core')">Core</button>
+        <button class="muscle-filter-chip" data-group="Cardio" onclick="jumpToGroup('Cardio')">Cardio</button>
       </div>
     </div>
     <div class="modal-list" id="ex-list"></div>
@@ -946,25 +902,35 @@ button,input,select{font-family:var(--font-b)}
     <div class="modal-handle"></div>
     <div class="setup-body">
       <div class="setup-lbl" id="setup-modal-title" style="font-size:18px;color:var(--white);text-transform:uppercase;letter-spacing:.04em;font-weight:700;margin-bottom:14px">New Exercise</div>
+      
+      <div class="seg-control" id="seg-ex-type" style="margin-bottom: 16px; align-self: flex-start;">
+        <div class="seg-opt active" data-val="strength" onclick="setSetupType('strength')">Strength</div>
+        <div class="seg-opt" data-val="cardio" onclick="setSetupType('cardio')">Cardio</div>
+      </div>
+
       <div class="setup-lbl">Exercise Name</div>
       <input class="setup-input" id="setup-name" type="text" placeholder="e.g. Bench Press" autocomplete="off">
-      <div class="setup-lbl" style="margin-top:16px">Muscle Groups <span style="font-size:10px;color:var(--grey-mid);font-weight:400;text-transform:none;letter-spacing:0">— tap to add, then set P or S</span></div>
-      <div class="muscle-legend">
-        <div class="legend-item"><div class="legend-dot p"></div><span>P = Primary (+1.0/set)</span></div>
-        <div class="legend-item"><div class="legend-dot s"></div><span>S = Secondary (+0.5/set)</span></div>
-      </div>
-      <div class="muscle-grid" id="muscle-grid"></div>
-      <div id="setup-limit-msg" style="font-size:11px;color:var(--danger);margin-top:8px;min-height:16px"></div>
-      <div class="setup-bw-row">
-        <div class="setup-bw-info">
-          <div class="setup-bw-label">Bodyweight exercise</div>
-          <div class="setup-bw-sub">New sets default to BW — you can still add weight per set</div>
+      
+      <div id="strength-setup-zone">
+        <div class="setup-lbl" style="margin-top:16px">Muscle Groups <span style="font-size:10px;color:var(--grey-mid);font-weight:400;text-transform:none;letter-spacing:0">— tap to add, then set P or S</span></div>
+        <div class="muscle-legend">
+          <div class="legend-item"><div class="legend-dot p"></div><span>P = Primary (+1.0/set)</span></div>
+          <div class="legend-item"><div class="legend-dot s"></div><span>S = Secondary (+0.5/set)</span></div>
         </div>
-        <div class="seg-control" id="seg-bw">
-          <div class="seg-opt" data-val="false" onclick="setSetupBW(false)">No</div>
-          <div class="seg-opt" data-val="true" onclick="setSetupBW(true)">Yes</div>
+        <div class="muscle-grid" id="muscle-grid"></div>
+        <div id="setup-limit-msg" style="font-size:11px;color:var(--danger);margin-top:8px;min-height:16px"></div>
+        <div class="setup-bw-row">
+          <div class="setup-bw-info">
+            <div class="setup-bw-label">Bodyweight exercise</div>
+            <div class="setup-bw-sub">New sets default to BW — you can still add weight per set</div>
+          </div>
+          <div class="seg-control" id="seg-bw">
+            <div class="seg-opt" data-val="false" onclick="setSetupBW(false)">No</div>
+            <div class="seg-opt" data-val="true" onclick="setSetupBW(true)">Yes</div>
+          </div>
         </div>
       </div>
+      
       <button class="setup-save-btn" onclick="saveNewExercise()"><span id="setup-save-label">Save Exercise</span></button>
       <button class="setup-cancel-btn" onclick="cancelSetupModal()">Cancel</button>
     </div>
@@ -1039,7 +1005,7 @@ const RETENTION_DAYS = 183;
 
 // ── APP SETTINGS — loaded from localStorage, defaults applied ──
 const SETTINGS_KEY     = 'gymlog_settings';
-const SETTING_DEFAULTS = { weekStartDay: 1, weightUnit: 'kg', theme: 'cyan' }; // 0=Sun, 1=Mon
+const SETTING_DEFAULTS = { weekStartDay: 1, weightUnit: 'kg', theme: 'cyan', cardioUnit: 'km', cardioDisplay: 'time' };
 let APP_SETTINGS = { ...SETTING_DEFAULTS, ...JSON.parse(localStorage.getItem(SETTINGS_KEY) || '{}') };
 
 function applyTheme(theme) {
@@ -1070,10 +1036,11 @@ function autosaveSession() {
           date: activeSession.date.toISOString(),
           exercises: activeSession.exercises.map(ex => ({
             name:       ex.name,
+            isCardio:   !!ex.isCardio,
             primary:    ex.primary,
             secondary:  ex.secondary,
             bodyweight: !!ex.bodyweight,
-            sets: ex.sets.map(s => ({ weight: s.weight, reps: s.reps, bw: !!s.bw }))
+            sets: ex.sets.map(s => ({ weight: s.weight, reps: s.reps, bw: !!s.bw, distance: s.distance, time: s.time }))
           }))
         }
       });
@@ -1119,10 +1086,11 @@ async function checkSessionRecovery() {
             const lib = exMap[ex.name];
             return {
               name:       ex.name,
+              isCardio:   lib ? !!lib.isCardio : !!ex.isCardio,
               primary:    lib ? lib.primary   : (ex.primary   || []),
               secondary:  lib ? lib.secondary : (ex.secondary || []),
               bodyweight: !!ex.bodyweight,
-              sets: ex.sets.map(s => ({ weight: s.weight, reps: s.reps, done: false, bw: !!s.bw }))
+              sets: ex.sets.map(s => ({ weight: s.weight, reps: s.reps, done: false, bw: !!s.bw, distance: s.distance, time: s.time }))
             };
           })
         };
@@ -1145,10 +1113,11 @@ async function checkSessionRecovery() {
 // SETTINGS
 // ══════════════════════════════════════════════
 function renderSettings() {
-  // Sync segmented controls to current settings
   syncSeg('seg-weekstart', String(APP_SETTINGS.weekStartDay));
   syncSeg('seg-unit', APP_SETTINGS.weightUnit);
   syncSeg('seg-theme', APP_SETTINGS.theme || 'cyan');
+  syncSeg('seg-cardio-unit', APP_SETTINGS.cardioUnit || 'km');
+  syncSeg('seg-cardio-display', APP_SETTINGS.cardioDisplay || 'time');
 }
 
 function syncSeg(segId, activeVal) {
@@ -1178,11 +1147,18 @@ function setSetting(key, value) {
     return;
   }
 
-  syncSeg(key === 'weekStartDay' ? 'seg-weekstart' : 'seg-unit', String(value));
-  // Invalidate volume cache when week start changes — affects all calculations
-  if (key === 'weekStartDay') {
+  const map = {
+    'weekStartDay': 'seg-weekstart',
+    'weightUnit': 'seg-unit',
+    'cardioUnit': 'seg-cardio-unit',
+    'cardioDisplay': 'seg-cardio-display'
+  };
+  syncSeg(map[key], String(value));
+  
+  if (key === 'weekStartDay' || key === 'cardioUnit' || key === 'cardioDisplay') {
     volCache.clear();
     weekOffset = 0;
+    if (currentScreen === 's-home') renderHomeBars();
   }
 }
 
@@ -1192,21 +1168,17 @@ function setSetting(key, value) {
 let db = null;
 let currentScreen = 's-home';
 let weekOffset = 0;
-let volCache = new Map(); // weekTimestamp(string) → volData object
+let volCache = new Map();
 
-// Active workout
 let activeSession = { date: new Date(), exercises: [] };
+let editSession = null; 
 
-// Edit session
-let editSession = null; // full session object being edited
-
-// Modals
 let numInputCallback = null;
 let numBWCallback    = null;
 let muscleSelections = {};
-let exPickerTarget = 'workout'; // 'workout' | 'edit'
-let recentExercises = []; // top 5 most recently used exercise names
-let sessionOverrideIndex = null; // exercise index for session-only muscle override
+let exPickerTarget = 'workout';
+let recentExercises = [];
+let sessionOverrideIndex = null;
 let confirmResolve = null;
 
 // ══════════════════════════════════════════════
@@ -1224,7 +1196,6 @@ function initDB() {
       if (!d.objectStoreNames.contains('exercises')) {
         d.createObjectStore('exercises', { keyPath: 'name' });
       }
-      // v2: draft store for mid-workout autosave
       if (!d.objectStoreNames.contains('drafts')) {
         d.createObjectStore('drafts', { keyPath: 'id' });
       }
@@ -1361,23 +1332,33 @@ async function calcVol(weekStart) {
     const end = new Date(weekStart); end.setDate(end.getDate() + 7);
     const [sessions, exercises] = await Promise.all([dbGetAll('sessions'), dbGetAll('exercises')]);
     const exMap = Object.fromEntries(exercises.map(e => [e.name, e]));
-    const vol = Object.fromEntries(MUSCLES.map(m => [m, 0]));
+    
+    const res = { muscles: Object.fromEntries(MUSCLES.map(m => [m, 0])), cardioTime: 0, cardioDist: 0 };
+
     for (const s of sessions) {
       const d = new Date(s.date);
       if (d < weekStart || d >= end) continue;
       for (const ex of s.exercises) {
         const lib = exMap[ex.name];
-        if (!lib) continue;
-        const n = ex.sets.length;
-        lib.primary.forEach(m   => { if (m in vol) vol[m] += n; });
-        lib.secondary.forEach(m => { if (m in vol) vol[m] += n * 0.5; });
+        if (!lib && !ex.isCardio) continue;
+
+        if (ex.isCardio || (lib && lib.isCardio)) {
+          for (const st of ex.sets) {
+            res.cardioTime += (Number(st.time) || 0);
+            res.cardioDist += (Number(st.distance) || 0); // Stored in KM
+          }
+        } else {
+          const n = ex.sets.length;
+          (lib.primary||[]).forEach(m   => { if (m in res.muscles) res.muscles[m] += n; });
+          (lib.secondary||[]).forEach(m => { if (m in res.muscles) res.muscles[m] += n * 0.5; });
+        }
       }
     }
-    volCache.set(cacheKey, vol);
-    return vol;
+    volCache.set(cacheKey, res);
+    return res;
   } catch(e) {
     showToast('Could not load volume data');
-    return Object.fromEntries(MUSCLES.map(m => [m, 0]));
+    return { muscles: Object.fromEntries(MUSCLES.map(m => [m, 0])), cardioTime: 0, cardioDist: 0 };
   }
 }
 
@@ -1387,27 +1368,47 @@ async function calcVol(weekStart) {
 async function renderHomeBars() {
   const el = document.getElementById('home-bars');
   try {
-    const [vol, sessions] = await Promise.all([
+    const [volData, sessions] = await Promise.all([
       calcVol(getWeekStart(new Date())),
       dbGetAll('sessions')
     ]);
 
-    // Show/hide repeat button based on whether any sessions exist
     const repeatBtn = document.getElementById('home-repeat-btn');
     if (repeatBtn) repeatBtn.style.display = sessions.length ? 'flex' : 'none';
 
+    const vol = volData.muscles;
     const active = MUSCLES.filter(m => vol[m] > 0);
     const max = Math.max(...Object.values(vol), 1);
-    if (!active.length) {
+    
+    let html = '';
+
+    // Add cardio pin row
+    if (volData.cardioTime > 0 || volData.cardioDist > 0) {
+        const cVal = APP_SETTINGS.cardioDisplay === 'time'
+            ? `${volData.cardioTime} min`
+            : `${fmt(displayDistance(volData.cardioDist))} ${APP_SETTINGS.cardioUnit}`;
+
+        html += `
+          <div class="vol-row" style="margin-bottom: 12px; padding-bottom: 12px; border-bottom: 1px dashed var(--border-hi);">
+            <div class="vol-name" style="color:var(--cyan)">Cardio</div>
+            <div class="vol-track" style="background:transparent"><div class="vol-fill" style="width:0"></div></div>
+            <div class="vol-val" style="width:auto;color:var(--white)">${cVal}</div>
+          </div>`;
+    }
+
+    if (!active.length && volData.cardioTime === 0 && volData.cardioDist === 0) {
       el.innerHTML = '<div style="font-size:12px;color:var(--grey-lo);text-align:center;padding:4px 0">No sessions logged this week yet</div>';
       return;
     }
-    el.innerHTML = active.map(m => `
+
+    html += active.map(m => `
       <div class="vol-row">
         <div class="vol-name">${m}</div>
         <div class="vol-track"><div class="vol-fill" style="width:${(vol[m]/max*100).toFixed(1)}%"></div></div>
         <div class="vol-val">${fmt(vol[m])}</div>
       </div>`).join('');
+
+    el.innerHTML = html;
   } catch(e) {
     el.innerHTML = '<div style="font-size:12px;color:var(--grey-lo);text-align:center">Could not load data</div>';
   }
@@ -1429,12 +1430,14 @@ async function repeatLastSession() {
     // Re-add each exercise from the last session with its sets pre-filled
     last.exercises.forEach(ex => {
       const lib = exMap[ex.name];
+      const isCardio = lib ? !!lib.isCardio : !!ex.isCardio;
       activeSession.exercises.push({
         name:      ex.name,
+        isCardio:  isCardio,
         primary:   lib ? lib.primary   : [],
         secondary: lib ? lib.secondary : [],
         bodyweight: lib ? !!lib.bodyweight : false,
-        sets: ex.sets.map(s => ({ weight: s.weight, reps: s.reps, done: false, bw: !!s.bw }))
+        sets: ex.sets.map(s => ({ weight: s.weight, reps: s.reps, done: false, bw: !!s.bw, distance: s.distance, time: s.time }))
       });
     });
 
@@ -1467,9 +1470,8 @@ async function repeatLastSession() {
 }
 
 // ══════════════════════════════════════════════
-// DATE SELECTORS (universal — works iOS & Android)
+// DATE SELECTORS
 // ══════════════════════════════════════════════
-// ── DATE SELECTOR OPTIONS — built once at init ──
 let _dateOptsBuilt = false;
 function ensureDateOpts() {
   if (_dateOptsBuilt) return;
@@ -1478,7 +1480,6 @@ function ensureDateOpts() {
   const monthOpts = MONTHS.map((m,i) => `<option value="${i}">${m}</option>`).join('');
   const startY    = new Date().getFullYear() - 5;
   const yearOpts  = Array.from({length:7}, (_,i) => `<option value="${startY+i}">${startY+i}</option>`).join('');
-  // Apply to all date selectors
   ['w-day','edit-day'].forEach(id => { const el=document.getElementById(id); if(el) el.innerHTML=dayOpts; });
   ['w-month','edit-month'].forEach(id => { const el=document.getElementById(id); if(el) el.innerHTML=monthOpts; });
   ['w-year','edit-year'].forEach(id => { const el=document.getElementById(id); if(el) el.innerHTML=yearOpts; });
@@ -1506,7 +1507,6 @@ function startWorkout() {
   activeSession = { date: new Date(), exercises: [] };
   buildDateSelectors('w-day','w-month','w-year', activeSession.date);
   updateWorkoutDateDisplay();
-  // Ensure date picker starts collapsed
   const pickerRow = document.getElementById('date-picker-row');
   const editToggle = document.getElementById('date-edit-toggle');
   if (pickerRow) pickerRow.style.display = 'none';
@@ -1516,7 +1516,6 @@ function startWorkout() {
   const counter = document.getElementById('workout-counter');
   if (counter) counter.style.display = 'none';
 
-  // Fully reset the workout screen — clear any residual inline styles or class state
   const workoutScreen = document.getElementById('s-workout');
   workoutScreen.classList.remove('active', 'exit');
   workoutScreen.style.visibility = '';
@@ -1525,7 +1524,6 @@ function startWorkout() {
   const scroll = document.getElementById('workout-scroll');
   if (scroll) scroll.scrollTop = 0;
 
-  // Ensure we always nav FROM s-home so transition is clean
   if (currentScreen !== 's-home') {
     document.querySelectorAll('.screen').forEach(s => {
       s.classList.remove('active', 'exit');
@@ -1570,26 +1568,22 @@ function updateWorkoutCounter() {
 
 function cancelWorkout() {
   const doCancel = () => {
-    // Reset all state
     activeSession = { date: new Date(), exercises: [] };
-    clearAutosave(); // discard draft — fire and forget, timer cancel is synchronous
+    clearAutosave();
     sessionOverrideIndex = null;
     muscleEditIndex = null;
     editingExistingName = null;
     nudgePreset = null;
     exPickerTarget = 'workout';
 
-    // Close all modals
     ['ex-picker-modal','setup-modal','num-overlay','confirm-overlay','muscle-edit-sheet']
       .forEach(id => document.getElementById(id)?.classList.remove('open'));
 
-    // Reset workout DOM
     document.getElementById('exercises-list').innerHTML = '';
     document.getElementById('finish-btn').style.display = 'none';
     const counter = document.getElementById('workout-counter');
     if (counter) counter.style.display = 'none';
 
-    // Reset both scroll areas to top
     const workoutScroll = document.getElementById('workout-scroll');
     if (workoutScroll) workoutScroll.scrollTop = 0;
     const homeScreen = document.getElementById('s-home');
@@ -1598,13 +1592,11 @@ function cancelWorkout() {
       if (homeScroll) homeScroll.scrollTop = 0;
     }
 
-    // Reset date picker to collapsed state
     const pickerRow = document.getElementById('date-picker-row');
     const editToggle = document.getElementById('date-edit-toggle');
     if (pickerRow) pickerRow.style.display = 'none';
     if (editToggle) editToggle.style.display = 'inline-block';
 
-    // Force clean screen state then navigate
     document.querySelectorAll('.screen').forEach(s => {
       s.classList.remove('active', 'exit');
       s.style.cssText = '';
@@ -1640,31 +1632,28 @@ function renderExercises(target = 'workout') {
 }
 
 function buildExCard(ex, ei, target) {
-  // Use session override if present, else library tags
+  const isCardio = !!ex.isCardio;
   const primary   = (ex.overridePrimary   || ex.primary   || []);
   const secondary = (ex.overrideSecondary || ex.secondary || []);
 
-  // Build muscle dot row
-  const primaryDots   = primary.map(m =>
-    `<span class="muscle-dot primary-dot" title="${m}">
-      <span class="dot-filled"></span><span class="dot-label">${m}</span>
-     </span>`).join('');
-  const secondaryDots = secondary.map(m =>
-    `<span class="muscle-dot secondary-dot" title="${m}">
-      <span class="dot-outline"></span><span class="dot-label">${m}</span>
-     </span>`).join('');
-  const hasOverride = ex.overridePrimary ? ' <span class="override-badge">session</span>' : '';
+  let dotsRow = '';
+  if (isCardio) {
+    dotsRow = `<span class="muscle-dot primary-dot"><span class="dot-filled"></span><span class="dot-label">Cardio</span></span>`;
+  } else {
+    const primaryDots   = primary.map(m => `<span class="muscle-dot primary-dot" title="${m}"><span class="dot-filled"></span><span class="dot-label">${m}</span></span>`).join('');
+    const secondaryDots = secondary.map(m => `<span class="muscle-dot secondary-dot" title="${m}"><span class="dot-outline"></span><span class="dot-label">${m}</span></span>`).join('');
+    dotsRow = primaryDots + secondaryDots;
+  }
+  const hasOverride = ex.overridePrimary && !isCardio ? ' <span class="override-badge">session</span>' : '';
 
   return `
   <div class="ex-card" id="ex-card-${target}-${ei}">
     <div class="ex-card-header">
       <div class="flex-1">
         <div class="ex-name">${ex.name}${hasOverride}</div>
-        <div class="muscle-dots-row">
-          ${primaryDots}${secondaryDots}
-        </div>
+        <div class="muscle-dots-row">${dotsRow}</div>
       </div>
-      ${target === 'workout' ? `
+      ${target === 'workout' && !isCardio ? `
       <button class="ex-edit-btn" onclick="openMuscleEditSheet(${ei})" title="Edit muscles">
         <svg viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
       </button>` : ''}
@@ -1728,9 +1717,15 @@ async function loadHistForEx(exName, ei) {
     }
     body.innerHTML = relevant.map(s => {
       const ex = s.exercises.find(e => e.name === exName);
+      const isCardio = !!ex.isCardio;
       const chips = ex.sets.map((st,si) => {
-        const wLabel = st.bw ? 'BW' : `${displayWeight(st.weight)}${weightUnit()}`;
-        return `<div class="hist-chip">S${si+1}: ${wLabel}×${st.reps}</div>`;
+        if (isCardio) {
+          const distDisp = fmt(displayDistance(st.distance || 0));
+          return `<div class="hist-chip">S${si+1}: ${distDisp}${APP_SETTINGS.cardioUnit} in ${st.time||0}m</div>`;
+        } else {
+          const wLabel = st.bw ? 'BW' : `${displayWeight(st.weight)}${weightUnit()}`;
+          return `<div class="hist-chip">S${si+1}: ${wLabel}×${st.reps}</div>`;
+        }
       }).join('');
       return `
         <div class="hist-sess-item">
@@ -1744,36 +1739,63 @@ async function loadHistForEx(exName, ei) {
 }
 
 function buildSetRow(s, ei, si, target) {
-  const step  = weightStep();
-  const isBW  = !!s.bw;
-  const dispW = isBW ? 'BW' : displayWeight(s.weight);
-  const unit  = weightUnit();
-  const weightArea = isBW
-    ? `<div class="stepper">
-        <div class="stp-btn stp-btn-ghost"></div>
-        <div class="stp-val stp-bw" onclick="openNumInput(${ei},${si},'weight','${target}')" id="sv-w-${target}-${ei}-${si}">BW</div>
-        <div class="stp-btn stp-btn-ghost"></div>
+  const ex = getSession(target).exercises[ei];
+  const isCardio = !!ex.isCardio;
+
+  let leftArea, rightArea;
+
+  if (isCardio) {
+    const distUnit = APP_SETTINGS.cardioUnit;
+    const distDisp = displayDistance(s.distance || 0);
+    const timeDisp = s.time || 0;
+
+    leftArea = `<div class="stepper">
+        <div class="stp-btn" onclick="stepVal(${ei},${si},'distance',-0.1,'${target}')"><svg viewBox="0 0 24 24"><path d="M5 12h14"/></svg></div>
+        <div class="stp-val" onclick="openNumInput(${ei},${si},'distance','${target}')" id="sv-d-${target}-${ei}-${si}">${distDisp}</div>
+        <div class="stp-btn" onclick="stepVal(${ei},${si},'distance',0.1,'${target}')"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></div>
       </div>
-      <div class="stp-unit">body</div>`
-    : `<div class="stepper">
-        <div class="stp-btn" onclick="stepVal(${ei},${si},'weight',${-step},'${target}')"><svg viewBox="0 0 24 24"><path d="M5 12h14"/></svg></div>
-        <div class="stp-val" onclick="openNumInput(${ei},${si},'weight','${target}')" id="sv-w-${target}-${ei}-${si}">${dispW}</div>
-        <div class="stp-btn" onclick="stepVal(${ei},${si},'weight',${step},'${target}')"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></div>
+      <div class="stp-unit">${distUnit}</div>`;
+      
+    rightArea = `<div class="stepper">
+        <div class="stp-btn" onclick="stepVal(${ei},${si},'time',-1,'${target}')"><svg viewBox="0 0 24 24"><path d="M5 12h14"/></svg></div>
+        <div class="stp-val" onclick="openNumInput(${ei},${si},'time','${target}')" id="sv-t-${target}-${ei}-${si}">${timeDisp}</div>
+        <div class="stp-btn" onclick="stepVal(${ei},${si},'time',1,'${target}')"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></div>
       </div>
-      <div class="stp-unit">${unit}</div>`;
-  return `
-  <div class="set-row${s.done?' done':''}" id="sr-${target}-${ei}-${si}">
-    <div class="set-num">${si+1}</div>
-    <div class="stp-wrap">${weightArea}</div>
-    <div class="set-sep"></div>
-    <div class="stp-wrap">
-      <div class="stepper">
+      <div class="stp-unit">mins</div>`;
+  } else {
+    const step  = weightStep();
+    const isBW  = !!s.bw;
+    const dispW = isBW ? 'BW' : displayWeight(s.weight);
+    const unit  = weightUnit();
+
+    leftArea = isBW
+      ? `<div class="stepper">
+          <div class="stp-btn stp-btn-ghost"></div>
+          <div class="stp-val stp-bw" onclick="openNumInput(${ei},${si},'weight','${target}')" id="sv-w-${target}-${ei}-${si}">BW</div>
+          <div class="stp-btn stp-btn-ghost"></div>
+        </div>
+        <div class="stp-unit">body</div>`
+      : `<div class="stepper">
+          <div class="stp-btn" onclick="stepVal(${ei},${si},'weight',${-step},'${target}')"><svg viewBox="0 0 24 24"><path d="M5 12h14"/></svg></div>
+          <div class="stp-val" onclick="openNumInput(${ei},${si},'weight','${target}')" id="sv-w-${target}-${ei}-${si}">${dispW}</div>
+          <div class="stp-btn" onclick="stepVal(${ei},${si},'weight',${step},'${target}')"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></div>
+        </div>
+        <div class="stp-unit">${unit}</div>`;
+
+    rightArea = `<div class="stepper">
         <div class="stp-btn" onclick="stepVal(${ei},${si},'reps',-1,'${target}')"><svg viewBox="0 0 24 24"><path d="M5 12h14"/></svg></div>
         <div class="stp-val" onclick="openNumInput(${ei},${si},'reps','${target}')" id="sv-r-${target}-${ei}-${si}">${s.reps}</div>
         <div class="stp-btn" onclick="stepVal(${ei},${si},'reps',1,'${target}')"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></div>
       </div>
-      <div class="stp-unit">reps</div>
-    </div>
+      <div class="stp-unit">reps</div>`;
+  }
+
+  return `
+  <div class="set-row${s.done?' done':''}" id="sr-${target}-${ei}-${si}">
+    <div class="set-num">${si+1}</div>
+    <div class="stp-wrap">${leftArea}</div>
+    <div class="set-sep"></div>
+    <div class="stp-wrap">${rightArea}</div>
     <button class="done-btn${s.done?' done':''}" onclick="toggleDone(${ei},${si},'${target}')" id="db-${target}-${ei}-${si}">
       <svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg>
     </button>
@@ -1791,9 +1813,16 @@ function stepVal(ei, si, field, delta, target) {
     const deltaKg = APP_SETTINGS.weightUnit === 'lbs' ? delta / KG_TO_LBS : delta;
     s.weight = Math.max(0, Math.round((s.weight + deltaKg) * 100) / 100);
     document.getElementById(`sv-w-${target}-${ei}-${si}`).textContent = displayWeight(s.weight);
-  } else {
+  } else if (field === 'reps') {
     s.reps = Math.max(0, s.reps + delta);
     document.getElementById(`sv-r-${target}-${ei}-${si}`).textContent = s.reps;
+  } else if (field === 'distance') {
+    const deltaKm = APP_SETTINGS.cardioUnit === 'mi' ? delta / 0.621371 : delta;
+    s.distance = Math.max(0, Math.round(((s.distance || 0) + deltaKm) * 100) / 100);
+    document.getElementById(`sv-d-${target}-${ei}-${si}`).textContent = fmt(displayDistance(s.distance));
+  } else if (field === 'time') {
+    s.time = Math.max(0, (s.time || 0) + delta);
+    document.getElementById(`sv-t-${target}-${ei}-${si}`).textContent = s.time;
   }
   if (target === 'workout') autosaveSession();
 }
@@ -1810,10 +1839,12 @@ function addSet(ei, target) {
   const ex   = getSession(target).exercises[ei];
   const last = ex.sets[ex.sets.length - 1];
   const newSet = {
-    weight: last ? last.weight : 0,
-    reps:   last ? last.reps   : 0,
-    done:   false,
-    bw:     last ? !!last.bw   : false
+    weight:   last ? last.weight   : 0,
+    reps:     last ? last.reps     : 0,
+    distance: last ? last.distance : 0,
+    time:     last ? last.time     : 0,
+    done:     false,
+    bw:       last ? !!last.bw     : false
   };
   ex.sets.push(newSet);
   const area = document.getElementById(`sets-area-${target}-${ei}`);
@@ -1858,6 +1889,7 @@ function editMuscleLibrary() {
   document.getElementById('setup-name').value = ex.name;
   document.getElementById('setup-modal-title').textContent = 'Edit Exercise';
   document.getElementById('setup-save-label').textContent = 'Save Changes';
+  setSetupType(ex.isCardio ? 'cardio' : 'strength');
   renderMuscleGrid();
   document.getElementById('setup-limit-msg').textContent = '';
   syncSeg('seg-bw', String(!!ex.bodyweight));
@@ -1868,10 +1900,8 @@ function editMuscleSessionOnly() {
   document.getElementById('muscle-edit-sheet').classList.remove('open');
   if (muscleEditIndex === null) return;
   const ex = activeSession.exercises[muscleEditIndex];
-  // Open setup modal pre-filled but in session-override mode
-  editingExistingName = null; // don't touch library
+  editingExistingName = null;
   muscleSelections = Object.fromEntries(MUSCLES.map(m => [m, null]));
-  // Start from current effective tags (override if exists, else library)
   const curPrimary   = ex.overridePrimary   || ex.primary   || [];
   const curSecondary = ex.overrideSecondary || ex.secondary || [];
   curPrimary.forEach(m   => { if (MUSCLES.includes(m)) muscleSelections[m] = 'primary'; });
@@ -1879,7 +1909,7 @@ function editMuscleSessionOnly() {
   document.getElementById('setup-name').value = ex.name;
   document.getElementById('setup-modal-title').textContent = 'Session Override';
   document.getElementById('setup-save-label').textContent = 'Apply to Session';
-  // Store index so saveNewExercise knows which card to update
+  setSetupType('strength');
   sessionOverrideIndex = muscleEditIndex;
   renderMuscleGrid();
   document.getElementById('setup-limit-msg').textContent = '';
@@ -1900,15 +1930,15 @@ async function finishWorkout() {
       date: activeSession.date.toISOString(),
       exercises: activeSession.exercises.map(ex => ({
         name: ex.name,
-        sets: ex.sets.map(s => ({ weight: s.weight, reps: s.reps }))
+        isCardio: !!ex.isCardio,
+        sets: ex.sets.map(s => ({ weight: s.weight, reps: s.reps, distance: s.distance, time: s.time, bw: !!s.bw }))
       }))
     };
     await dbPut('sessions', session);
     await pruneOldSessions();
     invalidateVolCache();
-    await clearAutosave(); // session is saved to DB — remove draft
+    await clearAutosave();
 
-    // Reset workout screen for next use
     activeSession = { date: new Date(), exercises: [] };
     document.getElementById('exercises-list').innerHTML = '';
     document.getElementById('finish-btn').style.display = 'none';
@@ -1932,7 +1962,6 @@ async function openEditSession(sessionId) {
     const s = await dbGet('sessions', sessionId);
     if (!s) { showToast('Session not found'); return; }
 
-    // Deep clone with done flags — muscle tags loaded directly from library below
     const exLib = await dbGetAll('exercises');
     const exMap = Object.fromEntries(exLib.map(e => [e.name, e]));
 
@@ -1943,6 +1972,7 @@ async function openEditSession(sessionId) {
         const lib = exMap[ex.name];
         return {
           ...ex,
+          isCardio:  lib ? !!lib.isCardio : !!ex.isCardio,
           primary:   lib ? lib.primary   : [],
           secondary: lib ? lib.secondary : [],
           sets: ex.sets.map(st => ({ ...st, done: false }))
@@ -1983,7 +2013,8 @@ async function saveEditSession() {
       date: newDate.toISOString(),
       exercises: editSession.exercises.map(ex => ({
         name: ex.name,
-        sets: ex.sets.map(s => ({ weight: s.weight, reps: s.reps }))
+        isCardio: !!ex.isCardio,
+        sets: ex.sets.map(s => ({ weight: s.weight, reps: s.reps, distance: s.distance, time: s.time, bw: !!s.bw }))
       }))
     };
     await dbPut('sessions', updated);
@@ -2020,10 +2051,7 @@ function openExPickerForEdit() {
 }
 
 // ══════════════════════════════════════════════
-// PRESET EXERCISE LIBRARY — 50 common exercises
-// Primary: up to 2 muscles (+1.0/set each)
-// Secondary: up to 2 muscles (+0.5/set each)
-// Aliases: alternate names / abbreviations for fuzzy search
+// PRESET EXERCISE LIBRARY
 // ══════════════════════════════════════════════
 const PRESETS = [
   // ── CHEST ──
@@ -2071,7 +2099,6 @@ const PRESETS = [
   { name:'Lunge',                  primary:['Quads'],              secondary:['Glutes','Hamstrings'],           aliases:['walking lunge','reverse lunge','dumbbell lunge'] },
 
   // ── ARMS ──
-  // Hi, if you are reading this, you have gone too far. Please go back to the gym. - Steph
   { name:'Barbell Curl',           primary:['Biceps'],             secondary:[],                                aliases:['bb curl','bicep curl','barbell bicep curl','ez bar curl'] },
   { name:'Dumbbell Curl',          primary:['Biceps'],             secondary:[],                                aliases:['db curl','hammer curl','alternating curl','incline curl'] },
   { name:'Cable Curl',             primary:['Biceps'],             secondary:[],                                aliases:['cable bicep curl','rope curl','low cable curl'] },
@@ -2089,22 +2116,26 @@ const PRESETS = [
   { name:'Leg Raise',              primary:['Abs'],                secondary:[],                                aliases:['hanging leg raise','lying leg raise','knee raise'] },
   { name:'Ab Wheel Rollout',       primary:['Abs'],                secondary:['Back'],                          aliases:['ab wheel','rollout','ab rollout'] },
   { name:'Cable Crunch',           primary:['Abs'],                secondary:[],                                aliases:['rope crunch','kneeling cable crunch'] },
+
+  // ── CARDIO ──
+  { name:'Treadmill',              isCardio:true, primary:[], secondary:[], aliases:['run','running','jog','walk','tread mill'] },
+  { name:'Stairmaster',            isCardio:true, primary:[], secondary:[], aliases:['stairs','stairclimber'] },
+  { name:'Rowing Machine',         isCardio:true, primary:[], secondary:[], aliases:['rower','erg'] },
+  { name:'Cycling',                isCardio:true, primary:[], secondary:[], aliases:['bike','spin','stationary bike','peloton'] },
+  { name:'Elliptical',             isCardio:true, primary:[], secondary:[], aliases:['cross trainer'] },
 ];
 
-// Build a lookup map by name for O(1) access
 const PRESET_MAP = Object.fromEntries(PRESETS.map(p => [p.name.toLowerCase(), p]));
 
-// Fuzzy match: returns preset score 0–3 (higher = better match)
 function presetScore(preset, tokens) {
   const haystack = [
     preset.name.toLowerCase(),
     ...(preset.aliases || [])
   ].join(' ');
   const matched = tokens.filter(t => haystack.includes(t)).length;
-  return matched === tokens.length ? matched : 0; // all tokens must match
+  return matched === tokens.length ? matched : 0;
 }
 
-// Similarity for naming nudge — Jaccard on word sets
 function nameSimilarity(a, b) {
   const wa = new Set(a.toLowerCase().split(/\s+/));
   const wb = new Set(b.toLowerCase().split(/\s+/));
@@ -2114,14 +2145,12 @@ function nameSimilarity(a, b) {
   return union === 0 ? 0 : inter / union;
 }
 
-// Find best preset match for naming nudge (threshold 0.5)
 function findPresetNudge(userInput) {
   if (!userInput || userInput.length < 3) return null;
   let best = null, bestScore = 0;
   for (const p of PRESETS) {
     const s = nameSimilarity(userInput, p.name);
     if (s > bestScore && s >= 0.5) { bestScore = s; best = p; }
-    // Also check aliases
     for (const alias of (p.aliases||[])) {
       const sa = nameSimilarity(userInput, alias);
       if (sa > bestScore && sa >= 0.5) { bestScore = sa; best = p; }
@@ -2133,7 +2162,7 @@ function findPresetNudge(userInput) {
 // ── EXERCISE PICKER STATE ──
 let editingExistingName = null;
 let allExercises = [];
-let nudgePreset = null; // currently shown nudge
+let nudgePreset = null;
 
 async function editExerciseFromPicker(name) {
   try {
@@ -2144,6 +2173,7 @@ async function editExerciseFromPicker(name) {
     (lib.primary||[]).forEach(m => { muscleSelections[m] = 'primary'; });
     (lib.secondary||[]).forEach(m => { muscleSelections[m] = 'secondary'; });
     document.getElementById('setup-name').value = lib.name;
+    setSetupType(lib.isCardio ? 'cardio' : 'strength');
     renderMuscleGrid();
     document.getElementById('setup-limit-msg').textContent = '';
     document.getElementById('setup-modal-title').textContent = 'Edit Exercise';
@@ -2157,9 +2187,7 @@ async function openExPicker() {
   allExercises = await dbGetAll('exercises');
   nudgePreset = null;
   document.getElementById('ex-search').value = '';
-  // Build recent exercises from session history
   const sessions = await dbGetAll('sessions');
-  // For each exercise, find its most recent session date
   const lastUsed = {};
   sessions.forEach(s => {
     const d = new Date(s.date);
@@ -2167,7 +2195,6 @@ async function openExPicker() {
       if (!lastUsed[ex.name] || d > lastUsed[ex.name]) lastUsed[ex.name] = d;
     });
   });
-  // Sort by recency, take top 5
   recentExercises = Object.entries(lastUsed)
     .sort((a,b) => b[1] - a[1])
     .slice(0,5)
@@ -2183,7 +2210,6 @@ function closeExPicker() {
   document.getElementById('ex-search').blur();
   exPickerTarget = 'workout';
   nudgePreset = null;
-  // Reset chips and browse state for next open
   PRESET_GROUPS.forEach(g => { _browseOpen[g.label] = false; });
   updateChipLabels(null);
 }
@@ -2192,7 +2218,6 @@ function closeExPickerOverlay(e) {
   if (e.target === document.getElementById('ex-picker-modal')) closeExPicker();
 }
 
-// Group labels for browse view — order and membership matches PRESETS array sections
 const PRESET_GROUPS = [
   { label: 'Chest',     names: ['Bench Press','Incline Bench Press','Decline Bench Press','Dumbbell Bench Press','Incline Dumbbell Press','Cable Fly','Dumbbell Fly','Push Up','Chest Dip'] },
   { label: 'Back',      names: ['Deadlift','Romanian Deadlift','Barbell Row','Dumbbell Row','Cable Row','Lat Pulldown','Pull Up','T-Bar Row','Face Pull','Straight Arm Pulldown'] },
@@ -2200,9 +2225,9 @@ const PRESET_GROUPS = [
   { label: 'Legs',      names: ['Squat','Front Squat','Leg Press','Hack Squat','Bulgarian Split Squat','Leg Extension','Leg Curl','Hip Thrust','Glute Bridge','Calf Raise','Lunge'] },
   { label: 'Arms',      names: ['Barbell Curl','Dumbbell Curl','Cable Curl','Preacher Curl','Tricep Pushdown','Skull Crusher','Overhead Tricep Extension','Tricep Dip','Wrist Curl','Reverse Wrist Curl'] },
   { label: 'Core',      names: ['Plank','Crunch','Leg Raise','Ab Wheel Rollout','Cable Crunch'] },
+  { label: 'Cardio',    names: ['Treadmill','Stairmaster','Rowing Machine','Cycling','Elliptical'] },
 ];
 
-// Track which browse groups are open
 const _browseOpen = {};
 
 function toggleBrowseGroup(label) {
@@ -2214,10 +2239,8 @@ function jumpToGroup(label) {
   const searchEl = document.getElementById('ex-search');
   if (searchEl && searchEl.value.trim()) searchEl.value = '';
 
-  // Check if this chip is already active — if so, clear the filter
   const isAlreadyActive = !!_browseOpen[label];
   if (isAlreadyActive) {
-    // Collapse all groups, clear active chip, scroll list to top
     PRESET_GROUPS.forEach(g => { _browseOpen[g.label] = false; });
     renderExPickerEmpty();
     updateChipLabels(null);
@@ -2226,12 +2249,10 @@ function jumpToGroup(label) {
     return;
   }
 
-  // Expand the target group, collapse others
   PRESET_GROUPS.forEach(g => { _browseOpen[g.label] = (g.label === label); });
   renderExPickerEmpty();
   updateChipLabels(label);
 
-  // Scroll list to the group header
   setTimeout(() => {
     const list = document.getElementById('ex-list');
     const groupEl = document.getElementById(`browse-group-${label}`);
@@ -2253,7 +2274,6 @@ function renderExPickerEmpty() {
   const libraryNames = new Set(allExercises.map(e => e.name));
   let html = '';
 
-  // ── Recently Used ──
   if (recentExercises.length > 0) {
     html += `<div class="modal-sec">Recently Used</div>
       <div class="recent-chips">
@@ -2264,13 +2284,12 @@ function renderExPickerEmpty() {
       </div>`;
   }
 
-  // ── Your Library ──
   if (allExercises.length > 0) {
     html += `<div class="modal-sec">Your Library</div>`;
     const sorted = [...allExercises].sort((a,b) => a.name.localeCompare(b.name));
     sorted.forEach(e => {
       const safe = e.name.replace(/'/g,"\\'");
-      const tagLabel = [...(e.primary||[]), ...(e.secondary||[]).map(s=>s+'*')].join(', ');
+      const tagLabel = e.isCardio ? 'Cardio' : [...(e.primary||[]), ...(e.secondary||[]).map(s=>s+'*')].join(', ');
       html += `<div class="ex-item">
         <div class="flex-1-click" onclick="pickExercise('${safe}')">
           <div class="ex-item-name">${e.name}</div>
@@ -2283,7 +2302,6 @@ function renderExPickerEmpty() {
     });
   }
 
-  // ── Browse Presets ──
   html += `<div class="modal-sec" style="margin-top:18px">Browse All Exercises</div>`;
   PRESET_GROUPS.forEach(group => {
     const isOpen = !!_browseOpen[group.label];
@@ -2299,7 +2317,7 @@ function renderExPickerEmpty() {
           const preset = PRESET_MAP[name.toLowerCase()];
           if (!preset) return '';
           const safe = name.replace(/'/g,"\\'");
-          const tagLabel = [...preset.primary, ...preset.secondary.map(s=>s+'*')].join(', ');
+          const tagLabel = preset.isCardio ? 'Cardio' : [...preset.primary, ...preset.secondary.map(s=>s+'*')].join(', ');
           const inLibrary = libraryNames.has(name);
           return `<div class="ex-item browse-ex-item" onclick="pickExercise('${safe}')">
             <div class="flex-1">
@@ -2321,11 +2339,8 @@ function renderExPickerEmpty() {
 function filterExList(q) {
   q = q.trim();
   const list = document.getElementById('ex-list');
-
-  // Show/hide chip row based on whether search is active
   const chipRow = document.getElementById('muscle-chips-row');
 
-  // Empty query — show browse view, restore chips
   if (!q) {
     if (chipRow) chipRow.style.display = '';
     updateChipLabels(null);
@@ -2333,18 +2348,15 @@ function filterExList(q) {
     return;
   }
 
-  // Searching — hide chip row to maximise results space
   if (chipRow) chipRow.style.display = 'none';
 
   const qLow = q.toLowerCase();
   const tokens = qLow.split(/\s+/).filter(Boolean);
 
-  // Your Library matches
   const userMatches = allExercises.filter(e =>
     tokens.every(t => e.name.toLowerCase().includes(t))
   );
 
-  // Preset matches not already in library
   const userNames = new Set(allExercises.map(e => e.name.toLowerCase()));
   const presetMatches = PRESETS
     .map(p => ({ p, score: presetScore(p, tokens) }))
@@ -2355,14 +2367,13 @@ function filterExList(q) {
 
   let html = '';
 
-  // Preset suggestions (top 5)
   if (presetMatches.length > 0) {
     html += `<div class="modal-sec">
       <span>Suggestions</span>
       <span class="modal-sec-hint">tap to review &amp; add</span>
     </div>`;
     presetMatches.slice(0,5).map(p => {
-      const tagLabel = [...p.primary, ...p.secondary.map(s=>s+'*')].join(', ');
+      const tagLabel = p.isCardio ? 'Cardio' : [...p.primary, ...p.secondary.map(s=>s+'*')].join(', ');
       const safeName = p.name.replace(/'/g,"\\'");
       html += `<div class="ex-item preset-item" onclick="pickPreset('${safeName}')">
         <div class="flex-1-click">
@@ -2377,11 +2388,10 @@ function filterExList(q) {
     }
   }
 
-  // Your Library matches
   if (userMatches.length > 0) {
     html += `<div class="modal-sec">Your Library</div>`;
     userMatches.slice(0,6).forEach(e => {
-      const tagLabel = [...(e.primary||[]), ...(e.secondary||[]).map(s=>s+'*')].join(', ');
+      const tagLabel = e.isCardio ? 'Cardio' : [...(e.primary||[]), ...(e.secondary||[]).map(s=>s+'*')].join(', ');
       const safeName = e.name.replace(/'/g,"\\'");
       html += `<div class="ex-item">
         <div class="flex-1-click" onclick="pickExercise('${safeName}')">
@@ -2398,7 +2408,6 @@ function filterExList(q) {
     }
   }
 
-  // Naming nudge
   const nudge = q.length >= 3 ? findPresetNudge(q) : null;
   const nudgeAlreadyShown = presetMatches.slice(0,5).find(p => p.name === nudge?.name);
   if (nudge && !nudgeAlreadyShown) {
@@ -2407,7 +2416,7 @@ function filterExList(q) {
       <div class="nudge-item">
         <div class="flex-1">
           <div class="nudge-name">${nudge.name}</div>
-          <div class="tag-sub">${[...nudge.primary,...nudge.secondary.map(s=>s+'*')].join(', ')}</div>
+          <div class="tag-sub">${nudge.isCardio ? 'Cardio' : [...nudge.primary,...nudge.secondary.map(s=>s+'*')].join(', ')}</div>
         </div>
         <button class="nudge-yes" onclick="pickPreset('${nudge.name.replace(/'/g,"\\'")}')">Use this</button>
         <button class="nudge-no" onclick="dismissNudge()">No</button>
@@ -2416,7 +2425,6 @@ function filterExList(q) {
     nudgePreset = null;
   }
 
-  // Create custom
   const displayQ = q.charAt(0).toUpperCase() + q.slice(1);
   const safeQ = displayQ.replace(/'/g,"\\'");
   html += `<div class="modal-sec">${(userMatches.length||presetMatches.length) ? 'Custom' : 'Not found'}</div>
@@ -2430,32 +2438,32 @@ function filterExList(q) {
 
 function dismissNudge() {
   nudgePreset = null;
-  // Remove nudge from DOM without re-rendering everything
   const nudgeEl = document.querySelector('.nudge-item');
   const nudgeLabel = nudgeEl?.previousElementSibling;
   if (nudgeEl) nudgeEl.remove();
   if (nudgeLabel && nudgeLabel.classList.contains('modal-sec')) nudgeLabel.remove();
 }
 
-// Pick a preset — saves to library then adds to session
 async function pickPreset(name) {
   const preset = PRESET_MAP[name.toLowerCase()];
   if (!preset) { showToast('Preset not found'); return; }
 
-  // Check if user has already customised this exercise
   let existing = null;
   try { existing = await dbGet('exercises', name); } catch(e) {}
   const source = existing || preset;
 
-  // Open setup modal pre-filled — user reviews before confirming
   editingExistingName = existing ? name : null;
   muscleSelections = Object.fromEntries(MUSCLES.map(m => [m, null]));
   (source.primary||[]).forEach(m => { if (MUSCLES.includes(m)) muscleSelections[m] = 'primary'; });
   (source.secondary||[]).forEach(m => { if (MUSCLES.includes(m)) muscleSelections[m] = 'secondary'; });
+  
   document.getElementById('setup-name').value = source.name;
   document.getElementById('setup-modal-title').textContent = 'Confirm Exercise';
   document.getElementById('setup-save-label').textContent = 'Add to Session';
+  
+  setSetupType(source.isCardio ? 'cardio' : 'strength');
   renderMuscleGrid();
+  
   document.getElementById('setup-limit-msg').textContent = '';
   document.getElementById('setup-modal').classList.add('open');
 }
@@ -2465,11 +2473,10 @@ async function pickExercise(name) {
   try {
     let lib = await dbGet('exercises', name);
 
-    // Fallback: check PRESET_MAP in case library entry is missing
     if (!lib) {
       const preset = PRESET_MAP[name.toLowerCase()];
       if (preset) {
-        lib = { name: preset.name, primary: preset.primary, secondary: preset.secondary };
+        lib = { name: preset.name, isCardio: !!preset.isCardio, primary: preset.primary, secondary: preset.secondary };
         await dbPut('exercises', lib);
       } else {
         openSetupModal(name); return;
@@ -2484,24 +2491,23 @@ async function pickExercise(name) {
     let prefillSets;
     if (lastSess) {
       const lastEx = lastSess.exercises.find(e => e.name === name);
-      // Carry bw flag from previous session sets
-      prefillSets = lastEx.sets.map(s => ({ weight: s.weight, reps: s.reps, done: false, bw: !!s.bw }));
+      prefillSets = lastEx.sets.map(s => ({ weight: s.weight, reps: s.reps, distance: s.distance, time: s.time, done: false, bw: !!s.bw }));
     } else {
-      // First time using this exercise — start with 1 empty set, not 3
-      // Users add sets as needed rather than deleting unwanted defaults
-      const defaultBW = !!lib.bodyweight;
-      prefillSets = [
-        { weight:0, reps:0, done:false, bw:defaultBW }
-      ];
+      prefillSets = [{ weight:0, reps:0, distance:0, time:0, done:false, bw: !!lib.bodyweight }];
     }
 
     const target = exPickerTarget;
     const session = getSession(target);
-    session.exercises.push({ name: lib.name, primary: lib.primary, secondary: lib.secondary, bodyweight: !!lib.bodyweight, sets: prefillSets });
+    session.exercises.push({ 
+      name: lib.name, 
+      isCardio: !!lib.isCardio, 
+      primary: lib.primary, 
+      secondary: lib.secondary, 
+      bodyweight: !!lib.bodyweight, 
+      sets: prefillSets 
+    });
     renderExercises(target);
 
-    // Scroll new card into view within the scroll container — never use scrollIntoView
-    // as it scrolls the document body on Android Chrome instead of the scroll div
     setTimeout(() => {
       const scrollEl = document.getElementById(target === 'edit' ? 'edit-scroll' : 'workout-scroll');
       const card = document.getElementById(`ex-card-${target}-${session.exercises.length - 1}`);
@@ -2519,6 +2525,11 @@ async function pickExercise(name) {
 // ══════════════════════════════════════════════
 // SETUP MODAL
 // ══════════════════════════════════════════════
+function setSetupType(type) {
+  syncSeg('seg-ex-type', type);
+  document.getElementById('strength-setup-zone').style.display = type === 'strength' ? 'block' : 'none';
+}
+
 function openSetupModal(prefillName = '') {
   document.getElementById('ex-picker-modal').classList.remove('open');
   document.getElementById('ex-search').blur();
@@ -2527,9 +2538,9 @@ function openSetupModal(prefillName = '') {
   document.getElementById('setup-name').value = prefillName;
   document.getElementById('setup-modal-title').textContent = 'New Exercise';
   document.getElementById('setup-save-label').textContent = 'Save Exercise';
+  setSetupType('strength');
   renderMuscleGrid();
   document.getElementById('setup-limit-msg').textContent = '';
-  // Reset BW toggle to No
   syncSeg('seg-bw', 'false');
   document.getElementById('setup-modal').classList.add('open');
   setTimeout(() => document.getElementById('setup-name').focus(), 300);
@@ -2548,11 +2559,9 @@ function cancelSetupModal() {
   closeSetupModal();
   sessionOverrideIndex = null;
   editingExistingName  = null;
-  // Only re-open picker if we came from it (new exercise or preset confirm)
   if (saveLabel === 'Save Exercise' || saveLabel === 'Add to Session' || saveLabel === 'Confirm Exercise') {
     openExPicker();
   } else {
-    // Library edit from card or session override — scroll workout back to top
     const scroll = document.getElementById('workout-scroll');
     if (scroll) scroll.scrollTop = 0;
   }
@@ -2614,15 +2623,18 @@ function setMuscleType(e, m, type) {
 async function saveNewExercise() {
   const name = document.getElementById('setup-name').value.trim();
   if (!name) { showToast('Enter exercise name'); return; }
+  
+  const isCardio = document.querySelector('#seg-ex-type .seg-opt.active').dataset.val === 'cardio';
   const primary   = MUSCLES.filter(m=>muscleSelections[m]==='primary');
   const secondary = MUSCLES.filter(m=>muscleSelections[m]==='secondary');
-  if (!primary.length) { showToast('Select at least one primary muscle'); return; }
+  
+  if (!isCardio && !primary.length) { showToast('Select at least one primary muscle'); return; }
+  
   const saveLabel = document.getElementById('setup-save-label').textContent;
   const isAddToSession   = saveLabel === 'Add to Session';
   const isSessionOverride = saveLabel === 'Apply to Session';
   const isEdit = editingExistingName !== null;
 
-  // ── Session override path — don't touch library ──
   if (isSessionOverride) {
     if (sessionOverrideIndex !== null) {
       const ex = activeSession.exercises[sessionOverrideIndex];
@@ -2630,7 +2642,6 @@ async function saveNewExercise() {
       ex.overrideSecondary = secondary;
       closeSetupModal();
       sessionOverrideIndex = null;
-      // Rebuild just this card
       renderExercises('workout');
       showToast('Session override applied');
     }
@@ -2638,24 +2649,32 @@ async function saveNewExercise() {
   }
 
   try {
-    // Rename: delete old key if name changed
     if (isEdit && editingExistingName !== name) {
       await dbDelete('exercises', editingExistingName);
     }
-    await dbPut('exercises', { name, primary, secondary, bodyweight: document.querySelector('#seg-bw .seg-opt.active')?.dataset.val === 'true' });
+    
+    await dbPut('exercises', { 
+      name, 
+      isCardio, 
+      primary: isCardio ? [] : primary, 
+      secondary: isCardio ? [] : secondary, 
+      bodyweight: isCardio ? false : document.querySelector('#seg-bw .seg-opt.active')?.dataset.val === 'true' 
+    });
+    
     invalidateVolCache();
     closeSetupModal();
     document.getElementById('ex-picker-modal').classList.remove('open');
     exPickerTarget = exPickerTarget || 'workout';
 
     if (isEdit && !isAddToSession) {
-      // Library edit from card ✏️ — refresh in-memory tags and done
       [activeSession, editSession].forEach(sess => {
         if (!sess) return;
         sess.exercises.forEach(ex => {
           if (ex.name === editingExistingName || ex.name === name) {
-            ex.name = name; ex.primary = primary; ex.secondary = secondary;
-            // Clear any override since library is now updated
+            ex.name = name; 
+            ex.isCardio = isCardio;
+            ex.primary = isCardio ? [] : primary; 
+            ex.secondary = isCardio ? [] : secondary;
             delete ex.overridePrimary; delete ex.overrideSecondary;
           }
         });
@@ -2663,7 +2682,6 @@ async function saveNewExercise() {
       renderExercises(exPickerTarget);
       showToast('Exercise updated ✓');
     } else {
-      // New exercise or preset confirm — add to session
       await pickExercise(name);
     }
     editingExistingName = null;
@@ -2676,57 +2694,73 @@ async function saveNewExercise() {
 // NUM INPUT
 // ══════════════════════════════════════════════
 function openNumInput(ei, si, field, target) {
-  const s    = getSession(target).exercises[ei].sets[si];
-  const unit = weightUnit();
-
-  // If currently BW and tapping the weight area — show input to switch to weighted
-  // Label makes intent clear
-  const isBW = field === 'weight' && !!s.bw;
-  const displayVal = field === 'weight'
-    ? (isBW ? '' : displayWeight(s.weight))
-    : s.reps;
-
-  document.getElementById('num-label').textContent = field === 'weight'
-    ? (isBW ? `Enter weight to switch from BW (${unit})` : `Enter Weight (${unit})`)
-    : 'Enter Reps';
+  const ex   = getSession(target).exercises[ei];
+  const s    = ex.sets[si];
+  const isCardio = !!ex.isCardio;
 
   const inp = document.getElementById('num-field');
-  inp.value = displayVal;
-  inp.step  = field === 'weight' ? (APP_SETTINGS.weightUnit === 'lbs' ? '2.5' : '0.5') : '1';
-
-  // Show/hide BW button — only on weight field
   const bwBtn = document.getElementById('num-bw-btn');
-  if (bwBtn) {
-    if (field === 'weight') {
-      bwBtn.style.display = 'block';
-      bwBtn.textContent   = isBW ? 'Currently BW — tap to keep' : 'Set as Bodyweight';
-      bwBtn.className     = isBW ? 'num-bw-btn num-bw-active' : 'num-bw-btn';
+
+  if (isCardio) {
+    if (field === 'distance') {
+      document.getElementById('num-label').textContent = `Enter Distance (${APP_SETTINGS.cardioUnit})`;
+      inp.value = displayDistance(s.distance || 0);
+      inp.step = '0.1';
     } else {
-      bwBtn.style.display = 'none';
+      document.getElementById('num-label').textContent = 'Enter Time (mins)';
+      inp.value = s.time || 0;
+      inp.step = '1';
+    }
+    if (bwBtn) bwBtn.style.display = 'none';
+  } else {
+    const unit = weightUnit();
+    const isBW = field === 'weight' && !!s.bw;
+    const displayVal = field === 'weight' ? (isBW ? '' : displayWeight(s.weight)) : s.reps;
+
+    document.getElementById('num-label').textContent = field === 'weight'
+      ? (isBW ? `Enter weight to switch from BW (${unit})` : `Enter Weight (${unit})`)
+      : 'Enter Reps';
+
+    inp.value = displayVal;
+    inp.step  = field === 'weight' ? (APP_SETTINGS.weightUnit === 'lbs' ? '2.5' : '0.5') : '1';
+
+    if (bwBtn) {
+      if (field === 'weight') {
+        bwBtn.style.display = 'block';
+        bwBtn.textContent   = isBW ? 'Currently BW — tap to keep' : 'Set as Bodyweight';
+        bwBtn.className     = isBW ? 'num-bw-btn num-bw-active' : 'num-bw-btn';
+      } else {
+        bwBtn.style.display = 'none';
+      }
     }
   }
 
-  // Focus input synchronously — must happen within the gesture call stack
-  // for iOS Safari to trigger the keyboard automatically.
-  // Opening the overlay on the next frame keeps the transition intact on Android.
   inp.focus();
-  if (!isBW) inp.select();
+  if (!(field === 'weight' && !!s.bw)) inp.select();
   requestAnimationFrame(() => {
     document.getElementById('num-overlay').classList.add('open');
   });
 
   numInputCallback = val => {
-    if (field === 'weight') {
-      s.bw     = false;
-      s.weight = Math.max(0, toKg(val));
+    if (isCardio) {
+      if (field === 'distance') {
+        s.distance = Math.max(0, toKm(val));
+      } else {
+        s.time = Math.max(0, Math.round(val));
+      }
       renderExercises(target);
     } else {
-      s.reps = Math.max(0, Math.round(val));
-      document.getElementById(`sv-r-${target}-${ei}-${si}`).textContent = s.reps;
+      if (field === 'weight') {
+        s.bw     = false;
+        s.weight = Math.max(0, toKg(val));
+        renderExercises(target);
+      } else {
+        s.reps = Math.max(0, Math.round(val));
+        document.getElementById(`sv-r-${target}-${ei}-${si}`).textContent = s.reps;
+      }
     }
   };
 
-  // BW button callback — stored so num-bw-btn can call it
   numBWCallback = () => {
     s.bw     = true;
     s.weight = 0;
@@ -2776,12 +2810,14 @@ async function renderSummary() {
     nb.style.opacity       = weekOffset >= 0 ? '0.3' : '1';
     nb.style.pointerEvents = weekOffset >= 0 ? 'none' : 'auto';
 
-    const [vol, volPrev] = await Promise.all([calcVol(ws), calcVol(wsPrev)]);
+    const [volData, volPrevData] = await Promise.all([calcVol(ws), calcVol(wsPrev)]);
+    const vol = volData.muscles;
+    const volPrev = volPrevData.muscles;
     const total     = Object.values(vol).reduce((a,b) => a+b, 0);
     const totalPrev = Object.values(volPrev).reduce((a,b) => a+b, 0);
 
     // ── Empty state ──
-    if (total === 0) {
+    if (total === 0 && volData.cardioTime === 0 && volData.cardioDist === 0) {
       card.innerHTML = `
         <div class="sum-empty">
           <div class="sum-skeleton-bars">
@@ -2800,21 +2836,35 @@ async function renderSummary() {
       return;
     }
 
-    // ── Sort muscles: active first (by volume desc), zeros at bottom ──
+    // ── Sort muscles ──
     const active = MUSCLES.filter(m => vol[m] > 0).sort((a,b) => vol[b] - vol[a]);
     const zeros  = MUSCLES.filter(m => vol[m] === 0);
     const sorted = [...active, ...zeros];
     const max    = Math.max(...active.map(m => vol[m]), 1);
 
-    // Total delta badge
+    // Total deltas
     const totalDelta = total - totalPrev;
     const totalDeltaHtml = totalPrev > 0
       ? `<span class="sum-delta ${totalDelta >= 0 ? 'up' : 'down'}">${totalDelta >= 0 ? '+' : ''}${fmt(totalDelta)}</span>`
       : '';
 
-    card.innerHTML = `
+    let html = '';
+
+    // Main Cardio Aggregate Row at the top
+    if (volData.cardioTime > 0 || volData.cardioDist > 0) {
+        html += `<div class="sum-total" style="background:var(--cyan-dim); border-bottom:1px dashed var(--cyan-border);">
+          <span class="sum-total-lbl" style="color:var(--cyan)">Total Cardio</span>
+          <span class="sum-total-right">
+            <span><span class="sum-total-val" style="color:var(--white)">${volData.cardioTime}</span><span class="sum-total-unit">mins</span></span>
+            <span style="color:var(--border-hi)">|</span>
+            <span><span class="sum-total-val" style="color:var(--white)">${fmt(displayDistance(volData.cardioDist))}</span><span class="sum-total-unit">${APP_SETTINGS.cardioUnit}</span></span>
+          </span>
+        </div>`;
+    }
+
+    html += `
       <div class="sum-total">
-        <span class="sum-total-lbl">Total Volume</span>
+        <span class="sum-total-lbl">Lifting Volume</span>
       <span class="sum-total-right">
           ${totalDeltaHtml}
           <span><span class="sum-total-val">${fmt(total)}</span><span class="sum-total-unit">sets</span></span>
@@ -2825,10 +2875,9 @@ async function renderSummary() {
           const v  = vol[m];
           const vp = volPrev[m];
           const isZero = v === 0;
-          const barPct = isZero ? 0 : (v / max * 85).toFixed(1); // max 85% width leaves room for label
+          const barPct = isZero ? 0 : (v / max * 85).toFixed(1);
           const prevPct = vp > 0 ? (vp / max * 85).toFixed(1) : 0;
 
-          // Delta badge
           let deltaBadge = '';
           if (!isZero) {
             if (vp === 0) deltaBadge = `<span class="sum-delta new">new</span>`;
@@ -2856,6 +2905,8 @@ async function renderSummary() {
         <span class="sum-legend-item"><span class="sum-legend-dot cyan"></span>This week</span>
         ${totalPrev > 0 ? `<span class="sum-legend-item"><span class="sum-legend-dot ghost"></span>Last week</span>` : ''}
       </div>`;
+      
+      card.innerHTML = html;
   } catch(e) {
     card.innerHTML = '<div class="loading-state" style="padding:30px 0">Could not load summary</div>';
   }
@@ -2942,11 +2993,14 @@ function validateSession(s) {
   return s && typeof s.id === 'string' && typeof s.date === 'string' &&
     !isNaN(new Date(s.date)) && Array.isArray(s.exercises) &&
     s.exercises.every(ex => typeof ex.name === 'string' && Array.isArray(ex.sets) &&
-      ex.sets.every(st => typeof st.weight === 'number' && typeof st.reps === 'number'));
+      ex.sets.every(st => 
+        (typeof st.weight === 'number' && typeof st.reps === 'number') || 
+        (typeof st.distance === 'number' || typeof st.time === 'number')
+      ));
 }
 
 function validateExercise(e) {
-  return e && typeof e.name === 'string' && Array.isArray(e.primary) && Array.isArray(e.secondary);
+  return e && typeof e.name === 'string' && (e.isCardio || (Array.isArray(e.primary) && Array.isArray(e.secondary)));
 }
 
 async function importData(input) {
@@ -2957,13 +3011,11 @@ async function importData(input) {
     const data = JSON.parse(text);
     if (!data || typeof data !== 'object') throw new Error('Invalid format');
 
-    // Fix 3 — show export date and session count before confirming
     const exportDateStr = data.exportDate
       ? new Date(data.exportDate).toLocaleDateString('en-GB', { day:'numeric', month:'short', year:'numeric' })
       : 'Unknown date';
     const incomingCount = Array.isArray(data.sessions) ? data.sessions.length : 0;
 
-    // Fix 4 — check for duplicates before writing
     const existing = await dbGetAll('sessions');
     const existingIds = new Set(existing.map(s => s.id));
     const duplicates = Array.isArray(data.sessions)
@@ -2993,7 +3045,6 @@ async function importData(input) {
             else skipped++;
           }
         }
-        // Fix 2 — restore settings from backup if present
         if (data.settings && typeof data.settings === 'object') {
           APP_SETTINGS = { ...SETTING_DEFAULTS, ...data.settings };
           saveSettings();
@@ -3031,7 +3082,6 @@ function resolveConfirm(confirmed) {
   if (confirmed && confirmResolve) {
     confirmResolve();
   } else if (!confirmed && window._recoveryCleanup) {
-    // User dismissed the recovery prompt — discard the saved session
     window._recoveryCleanup();
   }
   confirmResolve = null;
@@ -3043,23 +3093,23 @@ function resolveConfirm(confirmed) {
 // ══════════════════════════════════════════════
 function fmt(v) { return Number.isInteger(v) ? v : parseFloat(v.toFixed(1)); }
 
-// ── Weight unit helpers ──
+// ── Unit helpers ──
 const KG_TO_LBS = 2.20462;
+const KM_TO_MI  = 0.621371;
+
 function displayWeight(kg) {
-  if (APP_SETTINGS.weightUnit === 'lbs') {
-    const lbs = kg * KG_TO_LBS;
-    // Round to nearest 0.5 lbs for clean display
-    return Math.round(lbs * 2) / 2;
-  }
+  if (APP_SETTINGS.weightUnit === 'lbs') return Math.round((kg * KG_TO_LBS) * 2) / 2;
   return kg;
 }
 function weightUnit() { return APP_SETTINGS.weightUnit; }
 function weightStep() { return APP_SETTINGS.weightUnit === 'lbs' ? 2.5 : 1.25; }
-// Convert user input back to kg for storage
-function toKg(val) {
-  if (APP_SETTINGS.weightUnit === 'lbs') return Math.round((val / KG_TO_LBS) * 100) / 100;
-  return val;
+function toKg(val) { return APP_SETTINGS.weightUnit === 'lbs' ? Math.round((val / KG_TO_LBS) * 100) / 100 : val; }
+
+function displayDistance(km) {
+  if (APP_SETTINGS.cardioUnit === 'mi') return Math.round((km * KM_TO_MI) * 100) / 100;
+  return km;
 }
+function toKm(val) { return APP_SETTINGS.cardioUnit === 'mi' ? Math.round((val / KM_TO_MI) * 100) / 100 : val; }
 
 let toastTimer;
 function showToast(msg) {
@@ -3075,7 +3125,6 @@ function showToast(msg) {
 initDB().then(async () => {
   await pruneOldSessions();
   renderHomeBars();
-  // Check for an unfinished session saved before app was closed
   await checkSessionRecovery();
 }).catch(() => {
   showToast('Storage unavailable — data will not persist');
