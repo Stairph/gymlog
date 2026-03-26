@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- GymLog v1.2 — Designed & built by Steph, 2026 -->
+<!-- GymLog v1.3 — Designed & built by Steph, 2026 -->
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -98,7 +98,7 @@ button,input,select{font-family:var(--font-b)}
   transition:opacity .22s ease,transform .22s ease;
   visibility:hidden;
   overflow:hidden;
-  background:var(--black); /* FIX: Prevents visual bleed-through */
+  background:var(--black); 
 }
 .screen.active{opacity:1;pointer-events:all;transform:translateX(0);visibility:visible}
 .screen.exit{opacity:0;transform:translateX(-28px);transition:opacity .18s ease,transform .18s ease;visibility:visible}
@@ -143,8 +143,19 @@ button,input,select{font-family:var(--font-b)}
 .cta-icon{width:46px;height:46px;background:rgba(0,0,0,.12);border-radius:var(--pill);display:flex;align-items:center;justify-content:center;flex-shrink:0}
 .cta-icon svg{width:20px;height:20px;stroke:var(--black);fill:none;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round}
 
+/* Presets Row */
+.presets-container { display:none; flex-direction:column; margin-top:12px; }
+.presets-label { font-size:10px; color:var(--grey-mid); text-transform:uppercase; letter-spacing:.09em; font-weight:600; padding:0 var(--pad); }
+.presets-scroll-row { display:flex; gap:8px; overflow-x:auto; padding:8px var(--pad) 4px; scrollbar-width:none; -webkit-overflow-scrolling:touch; }
+.presets-scroll-row::-webkit-scrollbar { display:none; }
+.preset-chip { padding:8px 14px; border-radius:var(--pill); background:var(--card); border:1px solid var(--border-hi); font-size:13px; font-weight:600; color:var(--white); white-space:nowrap; flex-shrink:0; cursor:pointer; transition:all .12s; display:flex; align-items:center; gap:6px; }
+.preset-chip:active { transform:scale(0.97); border-color:var(--cyan); color:var(--cyan); }
+.preset-chip-sub { font-size:11px; color:var(--grey-mid); font-weight:500; }
+.save-preset-btn { display:flex; align-items:center; justify-content:center; gap:8px; margin:4px var(--pad) 0; padding:12px; border-radius:var(--pill); background:transparent; color:var(--grey-hi); border:1px solid var(--border-hi); font-size:14px; font-weight:600; cursor:pointer; width:calc(100% - var(--pad) * 2); transition:background .12s, color .12s; }
+.save-preset-btn:active { background:var(--card); color:var(--white); border-color:var(--cyan-border); }
+
 /* Volume strip */
-.home-week{margin:12px var(--pad) 0;background:var(--card);border:1px solid var(--border);border-radius:var(--cr);padding:20px 18px}
+.home-week{margin:16px var(--pad) 0;background:var(--card);border:1px solid var(--border);border-radius:var(--cr);padding:20px 18px}
 .sec-label{font-size:10px;color:var(--grey-mid);text-transform:uppercase;letter-spacing:.09em;font-weight:600;margin-bottom:14px}
 .vol-row{display:flex;align-items:center;gap:10px;margin-bottom:10px}
 .vol-row:last-child{margin-bottom:0}
@@ -176,7 +187,7 @@ button,input,select{font-family:var(--font-b)}
 .date-edit-toggle:active{background:var(--card)}
 .date-done-btn{padding:3px 10px;border-radius:var(--pill);border:none;background:var(--cyan);color:var(--black);font-size:11px;font-weight:600;cursor:pointer;transition:opacity .12s}
 .date-done-btn:active{opacity:.8}
-.date-sel{background:var(--card);border:1px solid var(--border-hi);border-radius:6px;color:var(--white);font-size:12px;padding:4px 6px;cursor:pointer;appearance:none;-webkit-appearance:none;outline:none}.date-sel:focus{border-color:var(--cyan-border)}
+.date-sel{background:var(--card);border:1px solid var(--border-hi);border-radius:6px;color:var(--white);font-size:12px;padding:4px 6px;cursor:pointer;appearance:none;-webkit-appearance:none;outline:none}
 .date-sel:focus{border-color:var(--cyan-border)}
 .ex-card{margin:0 var(--pad) 10px;background:var(--card);border:1px solid var(--border);border-radius:var(--cr);transition:border-color .2s}
 .ex-card-header{display:flex;align-items:center;gap:10px;padding:12px 14px;border-bottom:1px solid var(--border);border-radius:var(--cr) var(--cr) 0 0;background:var(--card);}
@@ -313,7 +324,6 @@ button,input,select{font-family:var(--font-b)}
 .modal-overlay.open{opacity:1;pointer-events:all}
 .modal-sheet{background:var(--surface);border-radius:20px 20px 0 0;border-top:1px solid var(--border-hi);max-height:85%;display:flex;flex-direction:column;transform:translateY(100%);transition:transform .25s cubic-bezier(.32,1,.28,1)}
 .modal-overlay.open .modal-sheet{transform:translateY(0)}
-/* FIX: Lock the exercise picker height so the search bar doesn't jump while filtering */
 #ex-picker-modal .modal-sheet { height: 85%; } 
 
 .modal-handle{width:36px;height:4px;background:var(--border-hi);border-radius:2px;margin:10px auto 0;flex-shrink:0}
@@ -554,9 +564,16 @@ button,input,select{font-family:var(--font-b)}
       <div><div class="cta-label">Start Workout</div><div class="cta-sub">Tap to begin a new session</div></div>
       <div class="cta-icon"><svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>
     </div>
+    
     <div class="home-repeat-btn" id="home-repeat-btn" onclick="repeatLastSession()" style="display:none">
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M17 1l4 4-4 4"/><path d="M3 11V9a4 4 0 014-4h14"/><path d="M7 23l-4-4 4-4"/><path d="M21 13v2a4 4 0 01-4 4H3"/></svg>
       Repeat last session
+    </div>
+
+    <!-- Presets Row -->
+    <div class="presets-container" id="presets-container">
+      <div class="presets-label">Workout Presets</div>
+      <div class="presets-scroll-row" id="presets-scroll-row"></div>
     </div>
 
     <!-- Volume strip -->
@@ -615,6 +632,11 @@ button,input,select{font-family:var(--font-b)}
     <button class="add-ex-btn" onclick="openExPicker()">
       <svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>
       Add Exercise
+    </button>
+    
+    <button class="save-preset-btn" id="save-preset-btn" style="display:none" onclick="openSavePresetSheet()">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline></svg>
+      Save as Preset
     </button>
     <button class="finish-btn" id="finish-btn" style="display:none" onclick="finishWorkout()">
       <svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg>
@@ -783,7 +805,7 @@ button,input,select{font-family:var(--font-b)}
         <p>Everything is stored directly on your device — nothing is sent to a server or third party. GymLog has no account, no login, and no internet connection required after the first load.</p>
         <p>Your exercise library and sessions are stored in an on-device database (IndexedDB). If you edit a muscle tag on an exercise, your full history recalculates automatically. Sessions older than 6 months are removed automatically to keep storage lean.</p>
         <p>Unfinished sessions are automatically saved as a draft in the same database as your sessions. If the app closes mid-workout, you'll be offered the option to resume when it reopens. The draft is cleared automatically as soon as you finish or discard the workout.</p>
-        <p>Your settings (week start day, weight unit) are stored separately in your browser's localStorage.</p>
+        <p>Your settings (week start day, weight unit, presets) are stored separately in your browser's localStorage.</p>
         <p><strong>iPhone:</strong> tapping <strong>Clear History and Website Data</strong> in Safari settings will permanently erase all GymLog data. <strong>Android:</strong> only <strong>Clear Site Data</strong> affects GymLog — clearing the cache alone does not. Export a backup regularly to protect against accidental data loss.</p>
       </div>
     </div>
@@ -816,7 +838,7 @@ button,input,select{font-family:var(--font-b)}
         <svg class="help-chevron" id="hc-performance" viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg>
       </div>
       <div class="help-section-body" id="h-performance">
-        <p>GymLog is a single file — roughly 130KB, smaller than most webpage images. It runs entirely in your browser with no background processes. It will not drain your battery or slow your phone. A full year of training data is under 130KB of storage.</p>
+        <p>GymLog is a single HTML file. It runs entirely in your browser with no background processes. It will not drain your battery or slow your phone.</p>
       </div>
     </div>
 
@@ -913,7 +935,7 @@ button,input,select{font-family:var(--font-b)}
           <div class="settings-row-label">GymLog</div>
           <div class="settings-row-sub">Designed &amp; built by Steph · 2026 · All data stored on this device only</div>
         </div>
-        <span class="settings-version">v1.2</span>
+        <span class="settings-version">v1.3</span>
       </div>
     </div>
 
@@ -988,7 +1010,7 @@ button,input,select{font-family:var(--font-b)}
   </div>
 </div>
 
-<!-- ══ NUM INPUT ══════════════════════════════════════════ -->
+<!-- ══ NUM INPUT OVERLAY ══════════════════════════════════ -->
 <div class="num-overlay" id="num-overlay" onclick="closeNumInput(event)">
   <div class="num-box">
     <div class="num-lbl" id="num-label">Enter value</div>
@@ -997,6 +1019,18 @@ button,input,select{font-family:var(--font-b)}
     <div class="num-actions">
       <button class="num-cancel" onclick="closeNumInput()">Cancel</button>
       <button class="num-confirm" onclick="confirmNumInput()">OK</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ TEXT INPUT OVERLAY (PRESETS) ═══════════════════════ -->
+<div class="num-overlay" id="text-overlay" onclick="closeTextInput(event)">
+  <div class="num-box">
+    <div class="num-lbl" id="text-label">Enter name</div>
+    <input class="num-field" id="text-field" type="text" autocomplete="off" enterkeyhint="done" style="font-family:var(--font-b); font-size:18px;" onkeydown="if(event.key === 'Enter') { event.preventDefault(); confirmTextInput(); }">
+    <div class="num-actions">
+      <button class="num-cancel" onclick="closeTextInput()">Cancel</button>
+      <button class="num-confirm" onclick="confirmTextInput()">OK</button>
     </div>
   </div>
 </div>
@@ -1041,6 +1075,23 @@ button,input,select{font-family:var(--font-b)}
   </div>
 </div>
 
+<!-- ══ SAVE PRESET ACTION SHEET ════════════════════════════ -->
+<div class="modal-overlay" id="save-preset-sheet" onclick="closeSavePresetSheet(event)">
+  <div class="modal-sheet" style="border-radius:20px 20px 0 0">
+    <div class="modal-handle"></div>
+    <div class="sheet-header">
+      <div class="sheet-title">Save as Preset</div>
+      <div class="sheet-sub">Choose a slot to save this workout routine</div>
+    </div>
+    <div class="sheet-actions" id="preset-sheet-options">
+      <!-- Dynamically populated -->
+    </div>
+    <div class="sheet-actions" style="padding-top:0">
+      <button onclick="closeSavePresetSheet()" style="padding:13px;border-radius:var(--pill);border:1px solid var(--border-hi);background:transparent;color:var(--grey-mid);font-family:var(--font-d);font-size:16px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;cursor:pointer;width:100%">Cancel</button>
+    </div>
+  </div>
+</div>
+
 <div id="toast"></div>
 </div><!-- .frame -->
 </div><!-- #app -->
@@ -1066,8 +1117,16 @@ const RETENTION_DAYS = 183;
 
 // ── APP SETTINGS — loaded from localStorage, defaults applied ──
 const SETTINGS_KEY     = 'gymlog_settings';
-const SETTING_DEFAULTS = { weekStartDay: 1, weightUnit: 'kg', theme: 'cyan', cardioUnit: 'km', cardioDisplay: 'time' };
+const SETTING_DEFAULTS = { 
+  weekStartDay: 1, weightUnit: 'kg', theme: 'cyan', cardioUnit: 'km', cardioDisplay: 'time',
+  presets: [null, null, null, null] // v1.3 addition
+};
 let APP_SETTINGS = { ...SETTING_DEFAULTS, ...JSON.parse(localStorage.getItem(SETTINGS_KEY) || '{}') };
+
+// Safely ensure presets exists and is an array of exactly 4 (backwards compatibility for existing users)
+if (!Array.isArray(APP_SETTINGS.presets) || APP_SETTINGS.presets.length !== 4) {
+  APP_SETTINGS.presets = [null, null, null, null];
+}
 
 function applyTheme(theme) {
   if (theme === 'purple') {
@@ -1232,6 +1291,7 @@ let editSession = null;
 
 let numInputCallback = null;
 let numBWCallback    = null;
+let textInputCallback = null;
 let muscleSelections = {};
 let exPickerTarget = 'workout';
 let recentExercises = [];
@@ -1352,7 +1412,7 @@ function onEnter(id) {
   if (id === 's-summary')  renderSummary();
   if (id === 's-history')  renderHistory();
   if (id === 's-export')   renderExport();
-  if (id === 's-home')     renderHomeBars();
+  if (id === 's-home')     { renderHomeBars(); renderHomePresets(); }
   if (id === 's-settings') renderSettings();
 }
 
@@ -1402,7 +1462,8 @@ async function calcVol(weekStart) {
             res.cardioDist += (Number(st.distance) || 0); // Stored in KM
           }
         } else {
-          const n = ex.sets.length;
+          const n = ex.sets.filter(s => s.reps > 0).length;
+          if (n === 0) continue;
           (lib.primary||[]).forEach(m   => { const mapped = mMap(m); if (mapped in res.muscles) res.muscles[mapped] += n; });
           (lib.secondary||[]).forEach(m => { const mapped = mMap(m); if (mapped in res.muscles) res.muscles[mapped] += n * 0.5; });
         }
@@ -1417,8 +1478,80 @@ async function calcVol(weekStart) {
 }
 
 // ══════════════════════════════════════════════
-// HOME
+// HOME / PRESETS
 // ══════════════════════════════════════════════
+
+function renderHomePresets() {
+  const container = document.getElementById('presets-container');
+  const scrollRow = document.getElementById('presets-scroll-row');
+  if (!container || !scrollRow) return;
+
+  const activePresets = APP_SETTINGS.presets.map((p, i) => ({ p, i })).filter(x => x.p !== null);
+
+  if (activePresets.length === 0) {
+    container.style.display = 'none';
+    return;
+  }
+
+  container.style.display = 'flex';
+  
+  scrollRow.innerHTML = activePresets.map(({ p, i }) => `
+    <div class="preset-chip" onclick="startPreset(${i})">
+      <span>${p.name}</span>
+      <span class="preset-chip-sub">${p.exercises.length} ex</span>
+    </div>
+  `).join('');
+}
+
+async function startPreset(index) {
+  const preset = APP_SETTINGS.presets[index];
+  if (!preset) return;
+
+  activeSession = { date: new Date(), exercises: [] };
+  buildDateSelectors('w-day','w-month','w-year', activeSession.date);
+  updateWorkoutDateDisplay();
+
+  const pickerRow = document.getElementById('date-picker-row');
+  const editToggle = document.getElementById('date-edit-toggle');
+  if (pickerRow) pickerRow.style.display = 'none';
+  if (editToggle) editToggle.style.display = 'inline-block';
+
+  document.querySelectorAll('.screen').forEach(s => { s.classList.remove('active','exit'); s.style.cssText = ''; });
+  document.getElementById('s-workout').classList.add('active');
+  currentScreen = 's-workout';
+
+  const [exLib, sessions] = await Promise.all([dbGetAll('exercises'), dbGetAll('sessions')]);
+  const exMap = Object.fromEntries(exLib.map(e => [e.name, e]));
+
+  // Load exercises sequentially to preserve order
+  for (const exName of preset.exercises) {
+    let lib = exMap[exName];
+    if (!lib) continue; // Skip if exercise was deleted from the library
+
+    const lastSess = sessions
+      .filter(s => s.exercises.some(e => e.name === exName))
+      .sort((a,b) => new Date(b.date) - new Date(a.date))[0];
+
+    let prefillSets;
+    if (lastSess) {
+      const lastEx = lastSess.exercises.find(e => e.name === exName);
+      prefillSets = lastEx.sets.map(s => ({ ...s, done: false }));
+    } else {
+      prefillSets = [{ weight:0, reps:0, distance:0, time:0, done:false, bw: !!lib.bodyweight }];
+    }
+
+    activeSession.exercises.push({ 
+      name: lib.name, isCardio: !!lib.isCardio, 
+      primary: lib.primary, secondary: lib.secondary, 
+      bodyweight: !!lib.bodyweight, sets: prefillSets 
+    });
+  }
+
+  document.getElementById('exercises-list').innerHTML = '';
+  setTimeout(() => renderExercises('workout'), 200);
+  showToast(`Loaded ${preset.name}`);
+}
+
 async function renderHomeBars() {
   const el = document.getElementById('home-bars');
   try {
@@ -1497,6 +1630,8 @@ async function repeatLastSession() {
     workoutScreen.style.cssText = '';
     document.getElementById('exercises-list').innerHTML = '';
     document.getElementById('finish-btn').style.display = 'none';
+    document.getElementById('save-preset-btn').style.display = 'none';
+    
     const counter = document.getElementById('workout-counter');
     if (counter) counter.style.display = 'none';
     const scroll = document.getElementById('workout-scroll');
@@ -1562,6 +1697,7 @@ function startWorkout() {
   if (editToggle) editToggle.style.display = 'inline-block';
   document.getElementById('exercises-list').innerHTML = '';
   document.getElementById('finish-btn').style.display = 'none';
+  document.getElementById('save-preset-btn').style.display = 'none';
   const counter = document.getElementById('workout-counter');
   if (counter) counter.style.display = 'none';
 
@@ -1603,15 +1739,24 @@ function onWorkoutDateChange() {
 }
 
 function updateWorkoutCounter() {
-  const exCount  = activeSession.exercises.length;
-  const setCount = activeSession.exercises.reduce((a, ex) => a + ex.sets.length, 0);
+  let validExCount = 0;
+  let validSetCount = 0;
+  
+  activeSession.exercises.forEach(ex => {
+    const validSets = ex.sets.filter(s => ex.isCardio ? (s.time > 0 || s.distance > 0) : s.reps > 0);
+    if (validSets.length > 0) {
+      validExCount++;
+      validSetCount += validSets.length;
+    }
+  });
+
   const counter  = document.getElementById('workout-counter');
   if (!counter) return;
-  if (exCount === 0) {
+  if (validExCount === 0) {
     counter.style.display = 'none';
   } else {
     counter.style.display = 'inline-block';
-    counter.textContent = `${exCount} ex · ${setCount} set${setCount !== 1 ? 's' : ''}`;
+    counter.textContent = `${validExCount} ex · ${validSetCount} set${validSetCount !== 1 ? 's' : ''}`;
   }
 }
 
@@ -1625,11 +1770,12 @@ function cancelWorkout() {
     nudgePreset = null;
     exPickerTarget = 'workout';
 
-    ['ex-picker-modal','setup-modal','num-overlay','confirm-overlay','muscle-edit-sheet']
+    ['ex-picker-modal','setup-modal','num-overlay','text-overlay','confirm-overlay','muscle-edit-sheet','save-preset-sheet']
       .forEach(id => document.getElementById(id)?.classList.remove('open'));
 
     document.getElementById('exercises-list').innerHTML = '';
     document.getElementById('finish-btn').style.display = 'none';
+    document.getElementById('save-preset-btn').style.display = 'none';
     const counter = document.getElementById('workout-counter');
     if (counter) counter.style.display = 'none';
 
@@ -1673,7 +1819,9 @@ function renderExercises(target = 'workout') {
   list.innerHTML = session.exercises.map((ex, ei) => buildExCard(ex, ei, target)).join('');
 
   if (!isEdit) {
-    document.getElementById('finish-btn').style.display = session.exercises.length > 0 ? 'flex' : 'none';
+    const hasEx = session.exercises.length > 0;
+    document.getElementById('finish-btn').style.display = hasEx ? 'flex' : 'none';
+    document.getElementById('save-preset-btn').style.display = hasEx ? 'flex' : 'none';
     updateWorkoutCounter();
     autosaveSession();
   }
@@ -1969,18 +2117,81 @@ function removeExercise(ei, target) {
   renderExercises(target);
 }
 
+// ── Save Preset Action Sheet ──
+function openSavePresetSheet() {
+  if (activeSession.exercises.length === 0) {
+    showToast("Add exercises first"); return;
+  }
+  
+  const sheetOptions = document.getElementById('preset-sheet-options');
+  sheetOptions.innerHTML = APP_SETTINGS.presets.map((p, i) => `
+    <div class="sheet-option" onclick="promptSavePreset(${i})">
+      <div>
+        <div class="sheet-option-label">${p ? p.name : `Slot ${i+1}`}</div>
+        <div class="sheet-option-sub">${p ? 'Overwrite existing preset' : 'Empty slot'}</div>
+      </div>
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--grey-lo)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
+    </div>
+  `).join('');
+  
+  document.getElementById('save-preset-sheet').classList.add('open');
+}
+
+function closeSavePresetSheet(e) {
+  if (!e || e.target === document.getElementById('save-preset-sheet')) {
+    document.getElementById('save-preset-sheet').classList.remove('open');
+  }
+}
+
+function promptSavePreset(index) {
+  document.getElementById('save-preset-sheet').classList.remove('open');
+  const existing = APP_SETTINGS.presets[index];
+  
+  if (existing) {
+    showConfirm('Overwrite Preset?', `Replace "${existing.name}" with the current exercises?`, 'Overwrite', true, () => {
+      openTextPrompt(`Rename ${existing.name} (optional)`, existing.name, (newName) => {
+        doSavePreset(index, newName || existing.name);
+      });
+    });
+  } else {
+    openTextPrompt('Name your preset', 'My Workout', (name) => {
+      if(name) doSavePreset(index, name);
+    });
+  }
+}
+
+function doSavePreset(index, name) {
+  APP_SETTINGS.presets[index] = {
+    name: name.trim() || `Preset ${index + 1}`,
+    exercises: activeSession.exercises.map(ex => ex.name)
+  };
+  saveSettings();
+  renderHomePresets(); // Update UI in background
+  showToast('Preset saved ✓');
+}
+
 // ── Finish new workout ──
 async function finishWorkout() {
-  if (activeSession.exercises.length === 0) { showToast('Add at least one exercise'); return; }
+  const cleanExercises = activeSession.exercises
+    .map(ex => ({
+      name: ex.name,
+      isCardio: !!ex.isCardio,
+      sets: ex.sets
+        .map(s => ({ weight: s.weight, reps: s.reps, distance: s.distance, time: s.time, bw: !!s.bw }))
+        .filter(s => ex.isCardio ? (s.time > 0 || s.distance > 0) : s.reps > 0)
+    }))
+    .filter(ex => ex.sets.length > 0);
+
+  if (cleanExercises.length === 0) { 
+    showToast('Workout must contain at least one valid set'); 
+    return; 
+  }
+
   try {
     const session = {
       id: `${Date.now()}-${Math.random().toString(36).slice(2, 7)}`,
       date: activeSession.date.toISOString(),
-      exercises: activeSession.exercises.map(ex => ({
-        name: ex.name,
-        isCardio: !!ex.isCardio,
-        sets: ex.sets.map(s => ({ weight: s.weight, reps: s.reps, distance: s.distance, time: s.time, bw: !!s.bw }))
-      }))
+      exercises: cleanExercises
     };
     await dbPut('sessions', session);
     await pruneOldSessions();
@@ -1990,6 +2201,7 @@ async function finishWorkout() {
     activeSession = { date: new Date(), exercises: [] };
     document.getElementById('exercises-list').innerHTML = '';
     document.getElementById('finish-btn').style.display = 'none';
+    document.getElementById('save-preset-btn').style.display = 'none';
     const counter = document.getElementById('workout-counter');
     if (counter) counter.style.display = 'none';
     const scroll = document.getElementById('workout-scroll');
@@ -2056,14 +2268,25 @@ function closeEditSession() {
 async function saveEditSession() {
   try {
     const newDate = readDateSelectors('edit-day','edit-month','edit-year');
+    const cleanExercises = editSession.exercises
+      .map(ex => ({
+        name: ex.name,
+        isCardio: !!ex.isCardio,
+        sets: ex.sets
+          .map(s => ({ weight: s.weight, reps: s.reps, distance: s.distance, time: s.time, bw: !!s.bw }))
+          .filter(s => ex.isCardio ? (s.time > 0 || s.distance > 0) : s.reps > 0)
+      }))
+      .filter(ex => ex.sets.length > 0);
+
+    if (cleanExercises.length === 0) {
+      showToast('Session must contain at least one valid set');
+      return;
+    }
+
     const updated = {
       id: editSession.id,
       date: newDate.toISOString(),
-      exercises: editSession.exercises.map(ex => ({
-        name: ex.name,
-        isCardio: !!ex.isCardio,
-        sets: ex.sets.map(s => ({ weight: s.weight, reps: s.reps, distance: s.distance, time: s.time, bw: !!s.bw }))
-      }))
+      exercises: cleanExercises
     };
     await dbPut('sessions', updated);
     invalidateVolCache();
@@ -2716,6 +2939,20 @@ async function saveNewExercise() {
     });
     
     invalidateVolCache();
+    
+    // --- V1.3 PATCH: RENAME INSIDE PRESETS ---
+    if (isEdit && !isAddToSession && editingExistingName !== name) {
+      let settingsChanged = false;
+      APP_SETTINGS.presets.forEach(p => {
+        if (p && p.exercises.includes(editingExistingName)) {
+          p.exercises = p.exercises.map(e => e === editingExistingName ? name : e);
+          settingsChanged = true;
+        }
+      });
+      if (settingsChanged) saveSettings();
+    }
+    // ------------------------------------------
+
     closeSetupModal();
     document.getElementById('ex-picker-modal').classList.remove('open');
     exPickerTarget = exPickerTarget || 'workout';
@@ -2745,7 +2982,7 @@ async function saveNewExercise() {
 }
 
 // ══════════════════════════════════════════════
-// NUM INPUT
+// NUM INPUT OVERLAY
 // ══════════════════════════════════════════════
 function openNumInput(ei, si, field, target) {
   const ex   = getSession(target).exercises[ei];
@@ -2843,6 +3080,32 @@ function confirmNumInput() {
 
 function confirmBWInput() {
   if (numBWCallback) numBWCallback();
+}
+
+// ══════════════════════════════════════════════
+// TEXT INPUT OVERLAY
+// ══════════════════════════════════════════════
+function openTextPrompt(label, defaultValue, callback) {
+  document.getElementById('text-label').textContent = label;
+  const field = document.getElementById('text-field');
+  field.value = defaultValue || '';
+  textInputCallback = callback;
+  document.getElementById('text-overlay').classList.add('open');
+  setTimeout(() => field.focus(), 50);
+}
+
+function closeTextInput(e) {
+  if (!e || e.target === document.getElementById('text-overlay')) {
+    document.getElementById('text-overlay').classList.remove('open');
+    textInputCallback = null;
+  }
+}
+
+function confirmTextInput() {
+  const val = document.getElementById('text-field').value.trim();
+  if (textInputCallback) textInputCallback(val);
+  document.getElementById('text-overlay').classList.remove('open');
+  textInputCallback = null;
 }
 
 // ══════════════════════════════════════════════
@@ -3101,6 +3364,10 @@ async function importData(input) {
         }
         if (data.settings && typeof data.settings === 'object') {
           APP_SETTINGS = { ...SETTING_DEFAULTS, ...data.settings };
+          // V1.3 backward compatibility check during import
+          if (!Array.isArray(APP_SETTINGS.presets) || APP_SETTINGS.presets.length !== 4) {
+            APP_SETTINGS.presets = [null, null, null, null];
+          }
           saveSettings();
           renderSettings();
         }
@@ -3110,6 +3377,7 @@ async function importData(input) {
           : `Imported ${sessImported} sessions ✓`;
         showToast(msg);
         renderExport();
+        renderHomePresets(); // Update presets grid
       }
     );
   } catch(e) {
@@ -3179,10 +3447,12 @@ function showToast(msg) {
 initDB().then(async () => {
   await pruneOldSessions();
   renderHomeBars();
+  renderHomePresets(); // V1.3 init
   await checkSessionRecovery();
 }).catch(() => {
   showToast('Storage unavailable — data will not persist');
   renderHomeBars();
+  renderHomePresets();
 });
 </script>
 </body>
