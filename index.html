@@ -324,24 +324,35 @@ button,input,select{font-family:var(--font-b)}
 .hist-load-more:active{background:var(--card);color:var(--grey-hi)}
 
 /* v1.3.1 — Section headers */
-.sum-section-hdr{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:0 var(--pad);margin:14px 0 6px}
-.sum-section-lbl{font-size:10px;color:var(--grey-lo);text-transform:uppercase;letter-spacing:.09em;font-weight:600;flex-shrink:0}
-
-/* v1.3.1 — Inline trend filter (dropdown-style pill group) */
-.sum-trend-filter{display:flex;background:var(--card2);border:1px solid var(--border-hi);border-radius:var(--pill);padding:2px;gap:2px;flex-shrink:0}
-.stf-btn{padding:5px 11px;border-radius:var(--pill);font-size:11px;font-weight:600;color:var(--grey-mid);cursor:pointer;transition:all .15s;white-space:nowrap;-webkit-user-select:none;user-select:none}
-.stf-btn.active{background:var(--card);color:var(--white);box-shadow:0 1px 3px rgba(0,0,0,.4)}
-.stf-btn:not(.active):active{background:var(--border)}
+.sum-section-hdr{display:flex;align-items:center;padding:0 var(--pad);margin:14px 0 6px}
+.sum-section-lbl{font-size:10px;color:var(--grey-lo);text-transform:uppercase;letter-spacing:.09em;font-weight:600}
 
 /* v1.3.1 — Trend card container */
 .sum-trend-card{margin:0 var(--pad);background:var(--card);border:1px solid var(--border);border-radius:var(--cr);overflow:hidden}
 
-/* v1.3.1 — Muscle selector chips for trend view */
-.sum-muscle-row{overflow-x:auto;display:flex;gap:6px;padding:6px var(--pad) 2px;scrollbar-width:none;-webkit-overflow-scrolling:touch;flex-shrink:0}
-.sum-muscle-row::-webkit-scrollbar{display:none}
-.sum-muscle-chip{padding:6px 12px;border-radius:var(--pill);border:1px solid var(--border-hi);background:var(--card);color:var(--grey-mid);font-size:12px;font-weight:600;white-space:nowrap;cursor:pointer;flex-shrink:0;transition:all .15s;-webkit-user-select:none;user-select:none}
-.sum-muscle-chip.active{background:var(--cyan-dim);color:var(--cyan);border-color:var(--cyan-border)}
-.sum-muscle-chip:not(.active):active{border-color:var(--border-hi);background:var(--card2)}
+/* v1.3.1 — In-card filter selector row */
+.trend-filter-row{display:flex;align-items:center;justify-content:space-between;padding:11px 16px 10px;border-bottom:1px solid var(--border);cursor:pointer;transition:background .12s;-webkit-user-select:none;user-select:none}
+.trend-filter-row:active{background:var(--card2)}
+.trend-filter-label{font-size:11px;color:var(--grey-mid);text-transform:uppercase;letter-spacing:.07em;font-weight:600}
+.trend-filter-value{display:flex;align-items:center;gap:6px}
+.trend-filter-current{font-size:12px;font-weight:600;color:var(--white)}
+.trend-filter-chev{width:14px;height:14px;stroke:var(--grey-lo);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;transition:transform .2s}
+.trend-filter-chev.open{transform:rotate(180deg)}
+
+/* In-card filter picker (expands inline) */
+.trend-filter-picker{border-bottom:1px solid var(--border);overflow:hidden;max-height:0;transition:max-height .22s cubic-bezier(.4,0,.2,1)}
+.trend-filter-picker.open{max-height:400px}
+.trend-filter-option{display:flex;align-items:center;justify-content:space-between;padding:10px 16px;cursor:pointer;transition:background .12s;-webkit-user-select:none;user-select:none}
+.trend-filter-option:active{background:var(--card2)}
+.trend-filter-option-lbl{font-size:13px;font-weight:500;color:var(--grey-hi)}
+.trend-filter-option.active .trend-filter-option-lbl{color:var(--cyan);font-weight:600}
+.trend-filter-tick{width:14px;height:14px;stroke:var(--cyan);fill:none;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round;opacity:0}
+.trend-filter-option.active .trend-filter-tick{opacity:1}
+
+/* Muscle sub-list inside picker */
+.trend-muscle-grid{display:flex;flex-wrap:wrap;gap:6px;padding:8px 16px 12px;border-top:1px solid var(--border)}
+.trend-muscle-chip{padding:5px 11px;border-radius:var(--pill);border:1px solid var(--border-hi);background:var(--card2);color:var(--grey-mid);font-size:11px;font-weight:600;white-space:nowrap;cursor:pointer;transition:all .15s;-webkit-user-select:none;user-select:none}
+.trend-muscle-chip.active{background:var(--cyan-dim);color:var(--cyan);border-color:var(--cyan-border)}
 
 /* v1.3.1 — Trend chart (horizontal scroll, week columns) */
 .trend-outer{overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;padding:0 var(--pad) 6px}
@@ -736,22 +747,15 @@ button,input,select{font-family:var(--font-b)}
     <div class="tb-titles"><div class="tb-title">Progress</div><div class="tb-sub">Trends & weekly breakdown</div></div>
   </div>
   <div class="scroll">
-    <!-- ── TREND SECTION (always visible, 12-week rolling) ── -->
+    <!-- ── TREND SECTION ── -->
     <div class="sum-section-hdr">
       <span class="sum-section-lbl">Trend</span>
-      <div class="sum-trend-filter" id="sum-trend-filter">
-        <div class="stf-btn active" id="stf-volume" onclick="setTrendFilter('volume')">Total Volume</div>
-        <div class="stf-btn" id="stf-muscle" onclick="setTrendFilter('muscle')">Muscle</div>
-        <div class="stf-btn" id="stf-cardio" onclick="setTrendFilter('cardio')">Cardio</div>
-      </div>
     </div>
-    <!-- Muscle chip row — only shown when muscle filter active -->
-    <div class="sum-muscle-row" id="sum-muscle-row" style="display:none"></div>
     <div class="sum-trend-card" id="sum-trend-card">
       <div class="loading-state" style="padding:30px 0"><div class="spinner"></div>Loading…</div>
     </div>
 
-    <!-- ── THIS WEEK SECTION (week-nav controlled snapshot) ── -->
+    <!-- ── WEEKLY BREAKDOWN SECTION ── -->
     <div class="sum-section-hdr" style="margin-top:18px">
       <span class="sum-section-lbl">Weekly Breakdown</span>
     </div>
@@ -1359,6 +1363,7 @@ let weekOffset = 0;
 let volCache = new Map();
 let trendFilter = 'volume';     // v1.3.1: 'volume' | 'muscle' | 'cardio'
 let sumMuscle = 'Chest';        // v1.3.1: selected muscle for trend view
+let trendPickerOpen = false;    // v1.3.1: in-card filter picker expanded state
 
 
 let activeSession = { date: new Date(), exercises: [] };
@@ -1477,16 +1482,7 @@ function nav(id) {
 
 function onEnter(id) {
   if (id === 's-summary') {
-    // Sync trend filter tab UI on entry
-    ['volume','muscle','cardio'].forEach(x => {
-      const el = document.getElementById(`stf-${x}`);
-      if (el) el.classList.toggle('active', x === trendFilter);
-    });
-    const muscleRow = document.getElementById('sum-muscle-row');
-    if (muscleRow) {
-      muscleRow.style.display = trendFilter === 'muscle' ? 'flex' : 'none';
-      if (trendFilter === 'muscle') renderMusclePills();
-    }
+    trendPickerOpen = false; // always start collapsed
     renderSummary();
   }
   if (id === 's-history')  renderHistory();
@@ -3194,36 +3190,58 @@ function confirmTextInput() {
 // These are fully independent — trendFilter never affects weekOffset
 // ══════════════════════════════════════════════
 
-function setTrendFilter(f) {
-  trendFilter = f;
-  ['volume','muscle','cardio'].forEach(x => {
-    document.getElementById(`stf-${x}`).classList.toggle('active', x === f);
-  });
-  const muscleRow = document.getElementById('sum-muscle-row');
-  if (f === 'muscle') {
-    muscleRow.style.display = 'flex';
-    renderMusclePills();
-  } else {
-    muscleRow.style.display = 'none';
+function buildTrendFilterRow() {
+  const labels = { volume: 'Total Volume', muscle: `Muscle · ${sumMuscle}`, cardio: 'Cardio' };
+  const current = labels[trendFilter];
+  return `
+    <div class="trend-filter-row" onclick="toggleTrendPicker()">
+      <span class="trend-filter-label">Viewing</span>
+      <div class="trend-filter-value">
+        <span class="trend-filter-current" id="trend-filter-current">${current}</span>
+        <svg class="trend-filter-chev${trendPickerOpen ? ' open' : ''}" id="trend-filter-chev" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
+      </div>
+    </div>
+    <div class="trend-filter-picker${trendPickerOpen ? ' open' : ''}" id="trend-filter-picker">
+      ${['volume','muscle','cardio'].map(f => `
+        <div class="trend-filter-option${trendFilter === f ? ' active' : ''}" onclick="selectTrendFilter('${f}')">
+          <span class="trend-filter-option-lbl">${f === 'volume' ? 'Total Volume' : f === 'muscle' ? 'Muscle' : 'Cardio'}</span>
+          <svg class="trend-filter-tick" viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg>
+        </div>
+        ${f === 'muscle' && trendFilter === 'muscle' ? buildMuscleGrid() : ''}`
+      ).join('')}
+    </div>`;
+}
+
+function buildMuscleGrid() {
+  return `<div class="trend-muscle-grid">${MUSCLES.map(m =>
+    `<div class="trend-muscle-chip${m === sumMuscle ? ' active' : ''}" onclick="selectSumMuscle(event,'${m}')">${m}</div>`
+  ).join('')}</div>`;
+}
+
+function toggleTrendPicker() {
+  trendPickerOpen = !trendPickerOpen;
+  const picker = document.getElementById('trend-filter-picker');
+  const chev   = document.getElementById('trend-filter-chev');
+  if (picker) picker.classList.toggle('open', trendPickerOpen);
+  if (chev)   chev.classList.toggle('open', trendPickerOpen);
+}
+
+function selectTrendFilter(f) {
+  if (trendFilter === f && f !== 'muscle') {
+    trendPickerOpen = false;
+    renderTrend();
+    return;
   }
+  trendFilter = f;
+  // Keep picker open when switching to muscle so user can pick the muscle immediately
+  if (f !== 'muscle') trendPickerOpen = false;
   renderTrend();
 }
 
-function renderMusclePills() {
-  const row = document.getElementById('sum-muscle-row');
-  row.innerHTML = MUSCLES.map(m =>
-    `<div class="sum-muscle-chip${m === sumMuscle ? ' active' : ''}" onclick="selectSumMuscle('${m}')">${m}</div>`
-  ).join('');
-  // Auto-scroll active chip into view
-  setTimeout(() => {
-    const active = row.querySelector('.sum-muscle-chip.active');
-    if (active) active.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
-  }, 50);
-}
-
-function selectSumMuscle(m) {
+function selectSumMuscle(e, m) {
+  e.stopPropagation();
   sumMuscle = m;
-  renderMusclePills();
+  trendPickerOpen = false;
   renderTrend();
 }
 
@@ -3246,13 +3264,21 @@ async function renderTrend() {
   }
 }
 
-function buildTrendCols(vals, labels) {
+function buildTrendCols(vals, weekDates) {
   const n = vals.length;
   const maxVal = Math.max(...vals, 1);
+  const MONTHS = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
   return vals.map((v, i) => {
     const isCurrent = i === n - 1;
     const pct = v === 0 ? 0 : Math.max(6, (v / maxVal * 100));
-    const wkLabel = labels[i].split(' ');
+    const d = weekDates[i];
+    const day = d.getDate();
+    const month = d.getMonth();
+    // Show month only on first column or when month changes
+    const showMonth = i === 0 || weekDates[i-1].getMonth() !== month;
+    const axisLabel = showMonth
+      ? `${day}<br><span style="color:var(--grey-hi);font-weight:600">${MONTHS[month]}</span>`
+      : `${day}`;
     return `
       <div class="trend-col${isCurrent ? ' current' : ''}">
         <div class="trend-val${v === 0 ? ' zero' : ''}">${v > 0 ? fmt(v) : ''}</div>
@@ -3260,7 +3286,7 @@ function buildTrendCols(vals, labels) {
           <div class="trend-bar-bg"></div>
           <div class="trend-bar-fill${isCurrent ? ' highlight' : ''}" style="height:${pct}%"></div>
         </div>
-        <div class="trend-wk${isCurrent ? ' current' : ''}">${wkLabel[0]}<br>${wkLabel[1]||''}</div>
+        <div class="trend-wk${isCurrent ? ' current' : ''}">${axisLabel}</div>
       </div>`;
   }).join('');
 }
@@ -3289,13 +3315,14 @@ async function fetchFullWeekRange() {
   let numWeeks = Math.round((today - firstWeek) / msPerWeek) + 1;
   numWeeks = Math.min(Math.max(numWeeks, 4), 52);
   const promises = [];
-  for (let i = numWeeks - 1; i >= 0; i--) promises.push(calcVol(getWeekStart(new Date(), -i)));
+  const weekDates = [];
+  for (let i = numWeeks - 1; i >= 0; i--) {
+    const ws = getWeekStart(new Date(), -i);
+    weekDates.push(ws);
+    promises.push(calcVol(ws));
+  }
   const results = await Promise.all(promises);
-  const labels = results.map((_, i) =>
-    getWeekStart(new Date(), -(numWeeks - 1 - i))
-      .toLocaleDateString('en-GB', { day:'numeric', month:'short' })
-  );
-  return { results, labels, numWeeks };
+  return { results, weekDates, numWeeks };
 }
 
 function buildStatsRow(vals) {
@@ -3312,61 +3339,58 @@ function buildStatsRow(vals) {
     </div>`;
 }
 
+// Returns a delta badge — suppressed when delta is zero or no prior data
+function buildDeltaHtml(delta, lastWk) {
+  if (lastWk === 0 || delta === 0) return '';
+  return `<span class="sum-delta ${delta > 0 ? 'up':'down'}" style="font-size:11px">${delta > 0 ? '+':''}${fmt(delta)}</span>`;
+}
+
 async function renderTrendVolume(card) {
-  const { results, labels, numWeeks } = await fetchFullWeekRange();
+  const { results, weekDates, numWeeks } = await fetchFullWeekRange();
   const vals = results.map(r => r.totalSets || 0);
   const thisWk = vals[numWeeks-1];
   const lastWk = vals[numWeeks-2] || 0;
-  const delta = thisWk - lastWk;
-  const deltaHtml = lastWk > 0
-    ? `<span class="sum-delta ${delta >= 0 ? 'up':'down'}" style="font-size:11px">${delta >= 0 ? '+':''}${fmt(delta)}</span>`
-    : '';
   card.innerHTML = `
+    ${buildTrendFilterRow()}
     <div class="trend-header-row">
-      <div><span class="trend-hdr-val">${thisWk > 0 ? thisWk : '—'}</span><span class="trend-hdr-unit"> sets this wk</span>${deltaHtml}</div>
-      <div class="trend-hdr-sub">vs last wk</div>
+      <div><span class="trend-hdr-val">${thisWk > 0 ? thisWk : '—'}</span><span class="trend-hdr-unit"> sets this week</span>${buildDeltaHtml(thisWk - lastWk, lastWk)}</div>
+      <div class="trend-hdr-sub">vs last week</div>
     </div>
-    <div class="trend-outer"><div class="trend-chart">${buildTrendCols(vals, labels)}</div></div>
+    <div class="trend-outer"><div class="trend-chart">${buildTrendCols(vals, weekDates)}</div></div>
     ${buildStatsRow(vals)}`;
   scrollTrendToNow();
 }
 
 async function renderTrendMuscle(card) {
-  const { results, labels, numWeeks } = await fetchFullWeekRange();
+  const { results, weekDates, numWeeks } = await fetchFullWeekRange();
   const vals = results.map(r => r.muscles[sumMuscle] || 0);
   const thisWk = vals[numWeeks-1];
   const lastWk = vals[numWeeks-2] || 0;
-  const delta = thisWk - lastWk;
-  const deltaHtml = lastWk > 0
-    ? `<span class="sum-delta ${delta >= 0 ? 'up':'down'}" style="font-size:11px">${delta >= 0 ? '+':''}${fmt(delta)}</span>`
-    : '';
   card.innerHTML = `
+    ${buildTrendFilterRow()}
     <div class="trend-header-row">
-      <div><span class="trend-hdr-val">${thisWk > 0 ? fmt(thisWk) : '—'}</span><span class="trend-hdr-unit"> ${sumMuscle} sets</span>${deltaHtml}</div>
-      <div class="trend-hdr-sub">vs last wk</div>
+      <div><span class="trend-hdr-val">${thisWk > 0 ? fmt(thisWk) : '—'}</span><span class="trend-hdr-unit"> ${sumMuscle} sets</span>${buildDeltaHtml(thisWk - lastWk, lastWk)}</div>
+      <div class="trend-hdr-sub">vs last week</div>
     </div>
-    <div class="trend-outer"><div class="trend-chart">${buildTrendCols(vals, labels)}</div></div>
+    <div class="trend-outer"><div class="trend-chart">${buildTrendCols(vals, weekDates)}</div></div>
     ${buildStatsRow(vals)}`;
   scrollTrendToNow();
 }
 
 async function renderTrendCardio(card) {
-  const { results, labels, numWeeks } = await fetchFullWeekRange();
+  const { results, weekDates, numWeeks } = await fetchFullWeekRange();
   const useTime = APP_SETTINGS.cardioDisplay !== 'distance';
   const vals = results.map(r => useTime ? (r.cardioTime||0) : fmt(displayDistance(r.cardioDist||0)));
   const unit = useTime ? 'min' : APP_SETTINGS.cardioUnit;
   const thisWk = vals[numWeeks-1];
   const lastWk = vals[numWeeks-2] || 0;
-  const delta = thisWk - lastWk;
-  const deltaHtml = lastWk > 0
-    ? `<span class="sum-delta ${delta >= 0 ? 'up':'down'}" style="font-size:11px">${delta >= 0 ? '+':''}${fmt(delta)}</span>`
-    : '';
   card.innerHTML = `
+    ${buildTrendFilterRow()}
     <div class="trend-header-row">
-      <div><span class="trend-hdr-val">${thisWk > 0 ? thisWk : '—'}</span><span class="trend-hdr-unit"> ${unit} this wk</span>${deltaHtml}</div>
-      <div class="trend-hdr-sub">vs last wk</div>
+      <div><span class="trend-hdr-val">${thisWk > 0 ? thisWk : '—'}</span><span class="trend-hdr-unit"> ${unit} this week</span>${buildDeltaHtml(thisWk - lastWk, lastWk)}</div>
+      <div class="trend-hdr-sub">vs last week</div>
     </div>
-    <div class="trend-outer"><div class="trend-chart">${buildTrendCols(vals, labels)}</div></div>
+    <div class="trend-outer"><div class="trend-chart">${buildTrendCols(vals, weekDates)}</div></div>
     ${buildStatsRow(vals)}`;
   scrollTrendToNow();
 }
@@ -3404,8 +3428,8 @@ async function renderWeeklyBreakdown() {
     const max    = Math.max(...active.map(m => vol[m]), 1);
 
     const totalDelta = total - totalPrev;
-    const totalDeltaHtml = totalPrev > 0
-      ? `<span class="sum-delta ${totalDelta >= 0 ? 'up':'down'}">${totalDelta >= 0 ? '+' : ''}${fmt(totalDelta)}</span>`
+    const totalDeltaHtml = (totalPrev > 0 && totalDelta !== 0)
+      ? `<span class="sum-delta ${totalDelta > 0 ? 'up':'down'}">${totalDelta > 0 ? '+' : ''}${fmt(totalDelta)}</span>`
       : '';
 
     let html = '';
@@ -3731,6 +3755,7 @@ function showToast(msg) {
 // ══════════════════════════════════════════════
 initDB().then(async () => {
   await pruneOldSessions();
+  await seedDemoData();
   renderHomeBars();
   renderHomePresets(); // V1.3 init
   await checkSessionRecovery();
@@ -3739,6 +3764,196 @@ initDB().then(async () => {
   renderHomeBars();
   renderHomePresets();
 });
+
+// ══════════════════════════════════════════════
+// DEMO SEED DATA — injects 3 weeks of realistic
+// training if the DB is empty. Safe to re-run:
+// exits immediately if sessions already exist.
+// ══════════════════════════════════════════════
+async function seedDemoData() {
+  const existing = await dbGetAll('sessions');
+  if (existing.length > 0) return; // don't overwrite real data
+
+  const today = new Date();
+  today.setHours(12, 0, 0, 0);
+
+  // Helper: date N days ago
+  const daysAgo = n => {
+    const d = new Date(today);
+    d.setDate(d.getDate() - n);
+    return d.toISOString();
+  };
+
+  // Helper: build a set with slight week-on-week progression
+  const sets = (weight, reps, count, wkBonus = 0) =>
+    Array.from({ length: count }, () => ({
+      weight: weight + wkBonus, reps, distance: 0, time: 0, bw: false
+    }));
+
+  const bwSets = (reps, count) =>
+    Array.from({ length: count }, () => ({
+      weight: 0, reps, distance: 0, time: 0, bw: true
+    }));
+
+  // Seed exercise library entries so volume calc works
+  const exLib = [
+    { name:'Bench Press',            isCardio:false, primary:['Chest'],       secondary:['Front Delt','Triceps'],   bodyweight:false },
+    { name:'Incline Dumbbell Press', isCardio:false, primary:['Chest'],       secondary:['Front Delt'],             bodyweight:false },
+    { name:'Cable Fly',              isCardio:false, primary:['Chest'],       secondary:[],                         bodyweight:false },
+    { name:'Pull Up',                isCardio:false, primary:['Upper Back'],  secondary:['Biceps'],                 bodyweight:true  },
+    { name:'Cable Row',              isCardio:false, primary:['Upper Back'],  secondary:['Biceps','Rear Delt'],     bodyweight:false },
+    { name:'Lat Pulldown',           isCardio:false, primary:['Upper Back'],  secondary:['Biceps'],                 bodyweight:false },
+    { name:'Face Pull',              isCardio:false, primary:['Rear Delt'],   secondary:['Upper Back'],             bodyweight:false },
+    { name:'Overhead Press',         isCardio:false, primary:['Front Delt'],  secondary:['Side Delt','Triceps'],    bodyweight:false },
+    { name:'Lateral Raise',          isCardio:false, primary:['Side Delt'],   secondary:[],                         bodyweight:false },
+    { name:'Squat',                  isCardio:false, primary:['Quads'],       secondary:['Glutes','Hamstrings'],    bodyweight:false },
+    { name:'Romanian Deadlift',      isCardio:false, primary:['Hamstrings'],  secondary:['Lower Back','Glutes'],    bodyweight:false },
+    { name:'Leg Press',              isCardio:false, primary:['Quads'],       secondary:['Glutes','Hamstrings'],    bodyweight:false },
+    { name:'Leg Curl',               isCardio:false, primary:['Hamstrings'],  secondary:[],                         bodyweight:false },
+    { name:'Hip Thrust',             isCardio:false, primary:['Glutes'],      secondary:['Hamstrings'],             bodyweight:false },
+    { name:'Barbell Curl',           isCardio:false, primary:['Biceps'],      secondary:[],                         bodyweight:false },
+    { name:'Tricep Pushdown',        isCardio:false, primary:['Triceps'],     secondary:[],                         bodyweight:false },
+    { name:'Skull Crusher',          isCardio:false, primary:['Triceps'],     secondary:[],                         bodyweight:false },
+    { name:'Treadmill',              isCardio:true,  primary:[],              secondary:[],                         bodyweight:false },
+  ];
+  for (const ex of exLib) await dbPut('exercises', ex);
+
+  // 3 weeks × 4 sessions/week = 12 sessions
+  // Week 3 = most recent (this week), Week 1 = 3 weeks ago
+  // Pattern: Push / Pull / Legs / Upper (repeat with small weight jumps)
+
+  const sessions = [
+
+    // ── WEEK 1 (18–20 days ago) ──────────────────────────────
+    {
+      id: 'demo-w1-push', date: daysAgo(20),
+      exercises: [
+        { name:'Bench Press',            isCardio:false, sets: sets(80,  8, 4)    },
+        { name:'Incline Dumbbell Press', isCardio:false, sets: sets(28,  10, 3)   },
+        { name:'Overhead Press',         isCardio:false, sets: sets(50,  8, 3)    },
+        { name:'Lateral Raise',          isCardio:false, sets: sets(12,  15, 3)   },
+        { name:'Tricep Pushdown',        isCardio:false, sets: sets(35,  12, 3)   },
+      ]
+    },
+    {
+      id: 'demo-w1-pull', date: daysAgo(18),
+      exercises: [
+        { name:'Pull Up',                isCardio:false, sets: bwSets(8, 4)       },
+        { name:'Cable Row',              isCardio:false, sets: sets(65,  10, 4)   },
+        { name:'Lat Pulldown',           isCardio:false, sets: sets(60,  10, 3)   },
+        { name:'Face Pull',              isCardio:false, sets: sets(30,  15, 3)   },
+        { name:'Barbell Curl',           isCardio:false, sets: sets(30,  10, 3)   },
+      ]
+    },
+    {
+      id: 'demo-w1-legs', date: daysAgo(17),
+      exercises: [
+        { name:'Squat',                  isCardio:false, sets: sets(100, 6, 4)    },
+        { name:'Romanian Deadlift',      isCardio:false, sets: sets(80,  8, 3)    },
+        { name:'Leg Press',              isCardio:false, sets: sets(160, 10, 3)   },
+        { name:'Leg Curl',               isCardio:false, sets: sets(50,  12, 3)   },
+        { name:'Hip Thrust',             isCardio:false, sets: sets(90,  10, 3)   },
+      ]
+    },
+    {
+      id: 'demo-w1-cardio', date: daysAgo(16),
+      exercises: [
+        { name:'Treadmill', isCardio:true, sets:[
+          { weight:0, reps:0, distance:5, time:28, bw:false },
+        ]},
+      ]
+    },
+
+    // ── WEEK 2 (11–13 days ago) ──────────────────────────────
+    {
+      id: 'demo-w2-push', date: daysAgo(13),
+      exercises: [
+        { name:'Bench Press',            isCardio:false, sets: sets(82.5, 8, 4)   },
+        { name:'Incline Dumbbell Press', isCardio:false, sets: sets(30,   10, 3)  },
+        { name:'Overhead Press',         isCardio:false, sets: sets(52.5, 8, 3)   },
+        { name:'Lateral Raise',          isCardio:false, sets: sets(12,   15, 4)  },
+        { name:'Tricep Pushdown',        isCardio:false, sets: sets(37.5, 12, 3)  },
+        { name:'Skull Crusher',          isCardio:false, sets: sets(30,   10, 3)  },
+      ]
+    },
+    {
+      id: 'demo-w2-pull', date: daysAgo(11),
+      exercises: [
+        { name:'Pull Up',                isCardio:false, sets: bwSets(9, 4)       },
+        { name:'Cable Row',              isCardio:false, sets: sets(67.5, 10, 4)  },
+        { name:'Lat Pulldown',           isCardio:false, sets: sets(62.5, 10, 3)  },
+        { name:'Face Pull',              isCardio:false, sets: sets(32.5, 15, 3)  },
+        { name:'Barbell Curl',           isCardio:false, sets: sets(32.5, 10, 3)  },
+      ]
+    },
+    {
+      id: 'demo-w2-legs', date: daysAgo(10),
+      exercises: [
+        { name:'Squat',                  isCardio:false, sets: sets(102.5, 6, 4)  },
+        { name:'Romanian Deadlift',      isCardio:false, sets: sets(82.5,  8, 3)  },
+        { name:'Leg Press',              isCardio:false, sets: sets(165,   10, 3) },
+        { name:'Leg Curl',               isCardio:false, sets: sets(52.5,  12, 3) },
+        { name:'Hip Thrust',             isCardio:false, sets: sets(92.5,  10, 3) },
+      ]
+    },
+    {
+      id: 'demo-w2-upper', date: daysAgo(9),
+      exercises: [
+        { name:'Bench Press',            isCardio:false, sets: sets(80,  5, 3)    },
+        { name:'Cable Row',              isCardio:false, sets: sets(65,  8, 3)    },
+        { name:'Overhead Press',         isCardio:false, sets: sets(50,  6, 3)    },
+        { name:'Lateral Raise',          isCardio:false, sets: sets(12,  12, 3)   },
+        { name:'Barbell Curl',           isCardio:false, sets: sets(30,  10, 2)   },
+        { name:'Tricep Pushdown',        isCardio:false, sets: sets(35,  12, 2)   },
+      ]
+    },
+
+    // ── WEEK 3 (this week — 3–5 days ago) ───────────────────
+    {
+      id: 'demo-w3-push', date: daysAgo(5),
+      exercises: [
+        { name:'Bench Press',            isCardio:false, sets: sets(85,  8, 4)    },
+        { name:'Incline Dumbbell Press', isCardio:false, sets: sets(30,  10, 3)   },
+        { name:'Cable Fly',              isCardio:false, sets: sets(20,  15, 3)   },
+        { name:'Overhead Press',         isCardio:false, sets: sets(55,  8, 3)    },
+        { name:'Lateral Raise',          isCardio:false, sets: sets(14,  15, 4)   },
+        { name:'Tricep Pushdown',        isCardio:false, sets: sets(40,  12, 3)   },
+        { name:'Skull Crusher',          isCardio:false, sets: sets(32.5,10, 3)   },
+      ]
+    },
+    {
+      id: 'demo-w3-pull', date: daysAgo(4),
+      exercises: [
+        { name:'Pull Up',                isCardio:false, sets: bwSets(10, 4)      },
+        { name:'Cable Row',              isCardio:false, sets: sets(70,  10, 4)   },
+        { name:'Lat Pulldown',           isCardio:false, sets: sets(65,  10, 3)   },
+        { name:'Face Pull',              isCardio:false, sets: sets(35,  15, 3)   },
+        { name:'Barbell Curl',           isCardio:false, sets: sets(35,  10, 3)   },
+      ]
+    },
+    {
+      id: 'demo-w3-legs', date: daysAgo(3),
+      exercises: [
+        { name:'Squat',                  isCardio:false, sets: sets(105, 6, 4)    },
+        { name:'Romanian Deadlift',      isCardio:false, sets: sets(85,  8, 4)    },
+        { name:'Leg Press',              isCardio:false, sets: sets(170, 10, 3)   },
+        { name:'Leg Curl',               isCardio:false, sets: sets(55,  12, 3)   },
+        { name:'Hip Thrust',             isCardio:false, sets: sets(95,  10, 3)   },
+      ]
+    },
+    {
+      id: 'demo-w3-cardio', date: daysAgo(1),
+      exercises: [
+        { name:'Treadmill', isCardio:true, sets:[
+          { weight:0, reps:0, distance:6, time:32, bw:false },
+        ]},
+      ]
+    },
+  ];
+
+  for (const s of sessions) await dbPut('sessions', s);
+  invalidateVolCache();
+}
 </script>
 </body>
 </html>
