@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- GymLog v1.3 — Designed & built by Steph, 2026 -->
+<!-- GymLog v1.3.1 — Designed & built by Steph, 2026 -->
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -319,6 +319,57 @@ button,input,select{font-family:var(--font-b)}
 .hist-sets{font-family:var(--font-m);font-size:11px;color:var(--cyan);flex-shrink:0;margin-right:3px}
 .hist-chev svg{width:14px;height:14px;stroke:var(--grey-lo);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
 
+/* v1.3.1 — Load More button */
+.hist-load-more{display:flex;align-items:center;justify-content:center;gap:6px;margin:4px var(--pad) 0;padding:12px;border-radius:var(--cr);border:1px dashed var(--border-hi);background:transparent;color:var(--grey-mid);font-size:13px;font-weight:500;cursor:pointer;width:calc(100% - var(--pad)*2);transition:background .12s,color .12s}
+.hist-load-more:active{background:var(--card);color:var(--grey-hi)}
+
+/* v1.3.1 — Section headers */
+.sum-section-hdr{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:0 var(--pad);margin:14px 0 6px}
+.sum-section-lbl{font-size:10px;color:var(--grey-lo);text-transform:uppercase;letter-spacing:.09em;font-weight:600;flex-shrink:0}
+
+/* v1.3.1 — Inline trend filter (dropdown-style pill group) */
+.sum-trend-filter{display:flex;background:var(--card2);border:1px solid var(--border-hi);border-radius:var(--pill);padding:2px;gap:2px;flex-shrink:0}
+.stf-btn{padding:5px 11px;border-radius:var(--pill);font-size:11px;font-weight:600;color:var(--grey-mid);cursor:pointer;transition:all .15s;white-space:nowrap;-webkit-user-select:none;user-select:none}
+.stf-btn.active{background:var(--card);color:var(--white);box-shadow:0 1px 3px rgba(0,0,0,.4)}
+.stf-btn:not(.active):active{background:var(--border)}
+
+/* v1.3.1 — Trend card container */
+.sum-trend-card{margin:0 var(--pad);background:var(--card);border:1px solid var(--border);border-radius:var(--cr);overflow:hidden}
+
+/* v1.3.1 — Muscle selector chips for trend view */
+.sum-muscle-row{overflow-x:auto;display:flex;gap:6px;padding:6px var(--pad) 2px;scrollbar-width:none;-webkit-overflow-scrolling:touch;flex-shrink:0}
+.sum-muscle-row::-webkit-scrollbar{display:none}
+.sum-muscle-chip{padding:6px 12px;border-radius:var(--pill);border:1px solid var(--border-hi);background:var(--card);color:var(--grey-mid);font-size:12px;font-weight:600;white-space:nowrap;cursor:pointer;flex-shrink:0;transition:all .15s;-webkit-user-select:none;user-select:none}
+.sum-muscle-chip.active{background:var(--cyan-dim);color:var(--cyan);border-color:var(--cyan-border)}
+.sum-muscle-chip:not(.active):active{border-color:var(--border-hi);background:var(--card2)}
+
+/* v1.3.1 — Trend chart (horizontal scroll, week columns) */
+.trend-outer{overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;padding:0 var(--pad) 6px}
+.trend-outer::-webkit-scrollbar{display:none}
+.trend-chart{display:flex;gap:0;min-width:max-content}
+.trend-col{display:flex;flex-direction:column;align-items:center;width:46px;flex-shrink:0}
+.trend-col.current .trend-bar-wrap::after{content:'';position:absolute;inset:-3px;border-radius:6px;outline:1.5px solid var(--cyan-border);pointer-events:none}
+.trend-bar-wrap{position:relative;width:24px;height:58px;display:flex;align-items:flex-end;justify-content:center;margin-bottom:3px}
+.trend-bar-bg{position:absolute;bottom:0;left:50%;transform:translateX(-50%);width:8px;height:100%;background:var(--border);border-radius:4px}
+.trend-bar-fill{position:absolute;bottom:0;left:50%;transform:translateX(-50%);width:8px;background:linear-gradient(180deg,var(--cyan),rgba(91,191,181,.35));border-radius:4px;transition:height .4s cubic-bezier(.4,0,.2,1)}
+.trend-bar-fill.highlight{width:12px;background:linear-gradient(180deg,var(--cyan),var(--cyan-dim))}
+.trend-val{font-family:var(--font-m);font-size:8px;color:var(--cyan);margin-bottom:1px;min-height:11px;text-align:center}
+.trend-val.zero{color:var(--grey-lo)}
+.trend-wk{font-size:8px;color:var(--grey-lo);text-align:center;line-height:1.3}
+.trend-wk.current{color:var(--grey-hi);font-weight:600}
+/* Inline stats strip — compact single row */
+.trend-stat-row{display:flex;gap:0;padding:8px 16px 10px;border-top:1px solid var(--border);margin-top:2px}
+.trend-stat{flex:1;display:flex;align-items:baseline;justify-content:center;gap:4px}
+.trend-stat-val{font-family:var(--font-m);font-size:14px;font-weight:600;color:var(--cyan)}
+.trend-stat-lbl{font-size:9px;color:var(--grey-lo);text-transform:uppercase;letter-spacing:.05em}
+.trend-stat-div{width:1px;background:var(--border);align-self:stretch;margin:0 2px}
+/* Trend card header row */
+.trend-header-row{display:flex;align-items:baseline;justify-content:space-between;padding:11px 16px 8px}
+.trend-hdr-val{font-family:var(--font-m);font-size:20px;font-weight:600;color:var(--cyan)}
+.trend-hdr-unit{font-size:11px;color:var(--grey-mid);margin-right:5px}
+.trend-hdr-right{display:flex;align-items:center;gap:6px}
+.trend-hdr-sub{font-size:10px;color:var(--grey-lo);text-transform:uppercase;letter-spacing:.06em}
+
 /* ── EXERCISE PICKER MODAL ── */
 .modal-overlay{position:absolute;inset:0;background:rgba(0,0,0,.75);z-index:200;display:flex;flex-direction:column;justify-content:flex-end;opacity:0;pointer-events:none;transition:opacity .2s}
 .modal-overlay.open{opacity:1;pointer-events:all}
@@ -584,7 +635,7 @@ button,input,select{font-family:var(--font-b)}
 
     <!-- Weekly Summary -->
     <div class="home-summary-row" onclick="nav('s-summary')">
-      <span class="home-summary-label">Weekly Summary</span>
+      <span class="home-summary-label">Progress</span>
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
     </div>
 
@@ -682,9 +733,28 @@ button,input,select{font-family:var(--font-b)}
 <div class="screen" id="s-summary">
   <div class="topbar">
     <div class="tb-back" onclick="nav('s-home')"><svg viewBox="0 0 24 24"><path d="M19 12H5M12 19l-7-7 7-7"/></svg></div>
-    <div class="tb-titles"><div class="tb-title">Weekly Volume</div><div class="tb-sub">Sets per muscle group</div></div>
+    <div class="tb-titles"><div class="tb-title">Progress</div><div class="tb-sub">Trends & weekly breakdown</div></div>
   </div>
   <div class="scroll">
+    <!-- ── TREND SECTION (always visible, 12-week rolling) ── -->
+    <div class="sum-section-hdr">
+      <span class="sum-section-lbl">Trend</span>
+      <div class="sum-trend-filter" id="sum-trend-filter">
+        <div class="stf-btn active" id="stf-volume" onclick="setTrendFilter('volume')">Total Volume</div>
+        <div class="stf-btn" id="stf-muscle" onclick="setTrendFilter('muscle')">Muscle</div>
+        <div class="stf-btn" id="stf-cardio" onclick="setTrendFilter('cardio')">Cardio</div>
+      </div>
+    </div>
+    <!-- Muscle chip row — only shown when muscle filter active -->
+    <div class="sum-muscle-row" id="sum-muscle-row" style="display:none"></div>
+    <div class="sum-trend-card" id="sum-trend-card">
+      <div class="loading-state" style="padding:30px 0"><div class="spinner"></div>Loading…</div>
+    </div>
+
+    <!-- ── THIS WEEK SECTION (week-nav controlled snapshot) ── -->
+    <div class="sum-section-hdr" style="margin-top:18px">
+      <span class="sum-section-lbl">Weekly Breakdown</span>
+    </div>
     <div class="week-nav">
       <div class="wn-btn" onclick="shiftW(-1)"><svg viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg></div>
       <div class="wn-label" id="wn-label"></div>
@@ -699,7 +769,7 @@ button,input,select{font-family:var(--font-b)}
 <div class="screen" id="s-history">
   <div class="topbar">
     <div class="tb-back" onclick="nav('s-home')"><svg viewBox="0 0 24 24"><path d="M19 12H5M12 19l-7-7 7-7"/></svg></div>
-    <div class="tb-titles"><div class="tb-title">History</div><div class="tb-sub">Last 6 months · tap to edit</div></div>
+    <div class="tb-titles"><div class="tb-title">History</div><div class="tb-sub">All sessions · tap to edit</div></div>
   </div>
   <div class="scroll" id="hist-list"><div class="loading-state" style="padding:40px 0"><div class="spinner"></div>Loading…</div></div>
 </div>
@@ -715,7 +785,7 @@ button,input,select{font-family:var(--font-b)}
     <div class="exp-card">
       <div class="exp-row"><span class="exp-lbl">Total sessions</span><span class="exp-val" id="exp-sessions">—</span></div>
       <div class="exp-row"><span class="exp-lbl">Exercises in library</span><span class="exp-val" id="exp-exercises">—</span></div>
-      <div class="exp-row"><span class="exp-lbl">History window</span><span class="exp-val">6 months</span></div>
+      <div class="exp-row"><span class="exp-lbl">History window</span><span class="exp-val">Unlimited</span></div>
       <div class="exp-row"><span class="exp-lbl">Storage</span><span class="exp-val">On-device</span></div>
     </div>
 
@@ -782,7 +852,9 @@ button,input,select{font-family:var(--font-b)}
         <svg class="help-chevron" id="hc-progress" viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg>
       </div>
       <div class="help-section-body" id="h-progress">
-        <p>Previous weights and reps auto-fill from your last session for each exercise. Tap <strong>▸ Previous 3 sessions</strong> on any exercise to see your recent history. The <strong>Weekly Summary</strong> shows how many sets you did per muscle group this week vs last week.</p>
+        <p>Previous weights and reps auto-fill from your last session for each exercise. Tap <strong>▸ Previous 3 sessions</strong> on any exercise to see your recent history.</p>
+        <p>The <strong>Progress</strong> screen (tap the button on the home screen) has two sections. At the top, a <strong>Trend chart</strong> shows your full training history from your first session to today — scroll left to look back in time. Use the <strong>Total Volume · Muscle · Cardio</strong> filter to switch what the chart is tracking. Below that, the <strong>Weekly Breakdown</strong> shows sets per muscle group for any individual week, with arrows to step back through past weeks and a comparison against the week prior.</p>
+        <p>Total Volume counts the actual number of sets completed. Per-muscle figures use a weighted breakdown — primary muscles count in full, secondary muscles at half — so individual muscle numbers won't add up to the total, and that's intentional.</p>
       </div>
     </div>
 
@@ -803,7 +875,7 @@ button,input,select{font-family:var(--font-b)}
       </div>
       <div class="help-section-body" id="h-data">
         <p>Everything is stored directly on your device — nothing is sent to a server or third party. GymLog has no account, no login, and no internet connection required after the first load.</p>
-        <p>Your exercise library and sessions are stored in an on-device database (IndexedDB). If you edit a muscle tag on an exercise, your full history recalculates automatically. Sessions older than 6 months are removed automatically to keep storage lean.</p>
+        <p>Your exercise library and sessions are stored in an on-device database (IndexedDB). If you edit a muscle tag on an exercise, your full history recalculates automatically. Sessions are kept indefinitely — your full history is always available.</p>
         <p>Unfinished sessions are automatically saved as a draft in the same database as your sessions. If the app closes mid-workout, you'll be offered the option to resume when it reopens. The draft is cleared automatically as soon as you finish or discard the workout.</p>
         <p>Your settings (week start day, weight unit, presets) are stored separately in your browser's localStorage.</p>
         <p><strong>iPhone:</strong> tapping <strong>Clear History and Website Data</strong> in Safari settings will permanently erase all GymLog data. <strong>Android:</strong> only <strong>Clear Site Data</strong> affects GymLog — clearing the cache alone does not. Export a backup regularly to protect against accidental data loss.</p>
@@ -935,7 +1007,7 @@ button,input,select{font-family:var(--font-b)}
           <div class="settings-row-label">GymLog</div>
           <div class="settings-row-sub">Designed &amp; built by Steph · 2026 · All data stored on this device only</div>
         </div>
-        <span class="settings-version">v1.3</span>
+        <span class="settings-version">v1.3.1</span>
       </div>
     </div>
 
@@ -1113,7 +1185,7 @@ const mMap = m => MUSCLE_ALIASES[m] || m;
 
 const MONTHS = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
 const DB_NAME = 'gymlog_v1';
-const RETENTION_DAYS = 183;
+const RETENTION_DAYS = Infinity; // v1.3.1 — pruning disabled; all sessions kept indefinitely
 
 // ── APP SETTINGS — loaded from localStorage, defaults applied ──
 const SETTINGS_KEY     = 'gymlog_settings';
@@ -1285,6 +1357,9 @@ let db = null;
 let currentScreen = 's-home';
 let weekOffset = 0;
 let volCache = new Map();
+let trendFilter = 'volume';     // v1.3.1: 'volume' | 'muscle' | 'cardio'
+let sumMuscle = 'Chest';        // v1.3.1: selected muscle for trend view
+
 
 let activeSession = { date: new Date(), exercises: [] };
 let editSession = null; 
@@ -1367,17 +1442,9 @@ function dbDelete(store, key) {
 }
 
 async function pruneOldSessions() {
-  try {
-    const cutoff = new Date();
-    cutoff.setDate(cutoff.getDate() - RETENTION_DAYS);
-    const all = await dbGetAll('sessions');
-    const toDelete = all.filter(s => new Date(s.date) < cutoff);
-    if (!toDelete.length) return;
-    const tx = db.transaction('sessions', 'readwrite');
-    const store = tx.objectStore('sessions');
-    toDelete.forEach(s => store.delete(s.id));
-    await new Promise((res, rej) => { tx.oncomplete = res; tx.onerror = () => rej(tx.error); });
-  } catch(e) { console.warn('Prune failed:', e); }
+  // v1.3.1: pruning disabled — all sessions are kept indefinitely.
+  // The 6-month cap has been removed. Data stays until the user clears browser storage.
+  return;
 }
 
 function invalidateVolCache() { volCache.clear(); }
@@ -1409,7 +1476,19 @@ function nav(id) {
 }
 
 function onEnter(id) {
-  if (id === 's-summary')  renderSummary();
+  if (id === 's-summary') {
+    // Sync trend filter tab UI on entry
+    ['volume','muscle','cardio'].forEach(x => {
+      const el = document.getElementById(`stf-${x}`);
+      if (el) el.classList.toggle('active', x === trendFilter);
+    });
+    const muscleRow = document.getElementById('sum-muscle-row');
+    if (muscleRow) {
+      muscleRow.style.display = trendFilter === 'muscle' ? 'flex' : 'none';
+      if (trendFilter === 'muscle') renderMusclePills();
+    }
+    renderSummary();
+  }
   if (id === 's-history')  renderHistory();
   if (id === 's-export')   renderExport();
   if (id === 's-home')     { renderHomeBars(); renderHomePresets(); }
@@ -1447,7 +1526,7 @@ async function calcVol(weekStart) {
     const [sessions, exercises] = await Promise.all([dbGetAll('sessions'), dbGetAll('exercises')]);
     const exMap = Object.fromEntries(exercises.map(e => [e.name, e]));
     
-    const res = { muscles: Object.fromEntries(MUSCLES.map(m => [m, 0])), cardioTime: 0, cardioDist: 0 };
+    const res = { muscles: Object.fromEntries(MUSCLES.map(m => [m, 0])), cardioTime: 0, cardioDist: 0, totalSets: 0 };
 
     for (const s of sessions) {
       const d = new Date(s.date);
@@ -1464,6 +1543,7 @@ async function calcVol(weekStart) {
         } else {
           const n = ex.sets.filter(s => s.reps > 0).length;
           if (n === 0) continue;
+          res.totalSets += n; // raw set count — no muscle weighting
           (lib.primary||[]).forEach(m   => { const mapped = mMap(m); if (mapped in res.muscles) res.muscles[mapped] += n; });
           (lib.secondary||[]).forEach(m => { const mapped = mMap(m); if (mapped in res.muscles) res.muscles[mapped] += n * 0.5; });
         }
@@ -1473,7 +1553,7 @@ async function calcVol(weekStart) {
     return res;
   } catch(e) {
     showToast('Could not load volume data');
-    return { muscles: Object.fromEntries(MUSCLES.map(m => [m, 0])), cardioTime: 0, cardioDist: 0 };
+    return { muscles: Object.fromEntries(MUSCLES.map(m => [m, 0])), cardioTime: 0, cardioDist: 0, totalSets: 0 };
   }
 }
 
@@ -2323,6 +2403,7 @@ function openExPickerForEdit() {
 
 // ══════════════════════════════════════════════
 // PRESET EXERCISE LIBRARY
+// If you are reading this, you have gone too far. Pls go back to the gym.
 // ══════════════════════════════════════════════
 const PRESETS = [
   // ── CHEST ──
@@ -2611,7 +2692,6 @@ function renderExPickerEmpty() {
   list.innerHTML = html;
 }
 
-// If you are reading this, you have gone too far. Pls go back to the gym.
 function filterExList(q) {
   q = q.trim();
   const list = document.getElementById('ex-list');
@@ -3109,111 +3189,266 @@ function confirmTextInput() {
 }
 
 // ══════════════════════════════════════════════
-// SUMMARY — with week comparison
+// SUMMARY — v1.3.2 dual-section layout
+// Trend chart (12-week, top) + Weekly breakdown (bottom)
+// These are fully independent — trendFilter never affects weekOffset
 // ══════════════════════════════════════════════
+
+function setTrendFilter(f) {
+  trendFilter = f;
+  ['volume','muscle','cardio'].forEach(x => {
+    document.getElementById(`stf-${x}`).classList.toggle('active', x === f);
+  });
+  const muscleRow = document.getElementById('sum-muscle-row');
+  if (f === 'muscle') {
+    muscleRow.style.display = 'flex';
+    renderMusclePills();
+  } else {
+    muscleRow.style.display = 'none';
+  }
+  renderTrend();
+}
+
+function renderMusclePills() {
+  const row = document.getElementById('sum-muscle-row');
+  row.innerHTML = MUSCLES.map(m =>
+    `<div class="sum-muscle-chip${m === sumMuscle ? ' active' : ''}" onclick="selectSumMuscle('${m}')">${m}</div>`
+  ).join('');
+  // Auto-scroll active chip into view
+  setTimeout(() => {
+    const active = row.querySelector('.sum-muscle-chip.active');
+    if (active) active.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+  }, 50);
+}
+
+function selectSumMuscle(m) {
+  sumMuscle = m;
+  renderMusclePills();
+  renderTrend();
+}
+
+// ── Render both sections (called on screen enter) ──────
 async function renderSummary() {
+  renderTrend();
+  renderWeeklyBreakdown();
+}
+
+// ── TREND SECTION — always 12 weeks ending at today ────
+async function renderTrend() {
+  const card = document.getElementById('sum-trend-card');
+  card.innerHTML = '<div class="loading-state" style="padding:28px 0"><div class="spinner"></div></div>';
+  try {
+    if (trendFilter === 'volume')  await renderTrendVolume(card);
+    else if (trendFilter === 'muscle') await renderTrendMuscle(card);
+    else await renderTrendCardio(card);
+  } catch(e) {
+    card.innerHTML = '<div class="loading-state" style="padding:28px 0">Could not load trend</div>';
+  }
+}
+
+function buildTrendCols(vals, labels) {
+  const n = vals.length;
+  const maxVal = Math.max(...vals, 1);
+  return vals.map((v, i) => {
+    const isCurrent = i === n - 1;
+    const pct = v === 0 ? 0 : Math.max(6, (v / maxVal * 100));
+    const wkLabel = labels[i].split(' ');
+    return `
+      <div class="trend-col${isCurrent ? ' current' : ''}">
+        <div class="trend-val${v === 0 ? ' zero' : ''}">${v > 0 ? fmt(v) : ''}</div>
+        <div class="trend-bar-wrap">
+          <div class="trend-bar-bg"></div>
+          <div class="trend-bar-fill${isCurrent ? ' highlight' : ''}" style="height:${pct}%"></div>
+        </div>
+        <div class="trend-wk${isCurrent ? ' current' : ''}">${wkLabel[0]}<br>${wkLabel[1]||''}</div>
+      </div>`;
+  }).join('');
+}
+
+// Auto-scroll trend chart so current week (rightmost) is visible on open
+function scrollTrendToNow() {
+  requestAnimationFrame(() => {
+    const outer = document.querySelector('#sum-trend-card .trend-outer');
+    if (outer) outer.scrollLeft = outer.scrollWidth;
+  });
+}
+
+// Build week range from first-ever session up to today, capped at 52 weeks
+async function fetchFullWeekRange() {
+  const sessions = await dbGetAll('sessions');
+  const today = getWeekStart(new Date(), 0);
+  let firstWeek;
+  if (sessions.length) {
+    const earliest = sessions.reduce((min, s) =>
+      new Date(s.date) < new Date(min.date) ? s : min, sessions[0]);
+    firstWeek = getWeekStart(new Date(earliest.date), 0);
+  } else {
+    firstWeek = getWeekStart(new Date(), -11);
+  }
+  const msPerWeek = 7 * 24 * 60 * 60 * 1000;
+  let numWeeks = Math.round((today - firstWeek) / msPerWeek) + 1;
+  numWeeks = Math.min(Math.max(numWeeks, 4), 52);
+  const promises = [];
+  for (let i = numWeeks - 1; i >= 0; i--) promises.push(calcVol(getWeekStart(new Date(), -i)));
+  const results = await Promise.all(promises);
+  const labels = results.map((_, i) =>
+    getWeekStart(new Date(), -(numWeeks - 1 - i))
+      .toLocaleDateString('en-GB', { day:'numeric', month:'short' })
+  );
+  return { results, labels, numWeeks };
+}
+
+function buildStatsRow(vals) {
+  const active = vals.filter(v => v > 0);
+  const peak = active.length ? Math.max(...active) : 0;
+  const avg  = active.length ? fmt(active.reduce((a,b) => a+b,0) / active.length) : '—';
+  return `
+    <div class="trend-stat-row">
+      <div class="trend-stat"><span class="trend-stat-val">${peak > 0 ? fmt(peak) : '—'}</span><span class="trend-stat-lbl">Peak</span></div>
+      <div class="trend-stat-div"></div>
+      <div class="trend-stat"><span class="trend-stat-val">${avg}</span><span class="trend-stat-lbl">Avg&nbsp;/&nbsp;wk</span></div>
+      <div class="trend-stat-div"></div>
+      <div class="trend-stat"><span class="trend-stat-val">${active.length}</span><span class="trend-stat-lbl">Active&nbsp;wks</span></div>
+    </div>`;
+}
+
+async function renderTrendVolume(card) {
+  const { results, labels, numWeeks } = await fetchFullWeekRange();
+  const vals = results.map(r => r.totalSets || 0);
+  const thisWk = vals[numWeeks-1];
+  const lastWk = vals[numWeeks-2] || 0;
+  const delta = thisWk - lastWk;
+  const deltaHtml = lastWk > 0
+    ? `<span class="sum-delta ${delta >= 0 ? 'up':'down'}" style="font-size:11px">${delta >= 0 ? '+':''}${fmt(delta)}</span>`
+    : '';
+  card.innerHTML = `
+    <div class="trend-header-row">
+      <div><span class="trend-hdr-val">${thisWk > 0 ? thisWk : '—'}</span><span class="trend-hdr-unit"> sets this wk</span>${deltaHtml}</div>
+      <div class="trend-hdr-sub">vs last wk</div>
+    </div>
+    <div class="trend-outer"><div class="trend-chart">${buildTrendCols(vals, labels)}</div></div>
+    ${buildStatsRow(vals)}`;
+  scrollTrendToNow();
+}
+
+async function renderTrendMuscle(card) {
+  const { results, labels, numWeeks } = await fetchFullWeekRange();
+  const vals = results.map(r => r.muscles[sumMuscle] || 0);
+  const thisWk = vals[numWeeks-1];
+  const lastWk = vals[numWeeks-2] || 0;
+  const delta = thisWk - lastWk;
+  const deltaHtml = lastWk > 0
+    ? `<span class="sum-delta ${delta >= 0 ? 'up':'down'}" style="font-size:11px">${delta >= 0 ? '+':''}${fmt(delta)}</span>`
+    : '';
+  card.innerHTML = `
+    <div class="trend-header-row">
+      <div><span class="trend-hdr-val">${thisWk > 0 ? fmt(thisWk) : '—'}</span><span class="trend-hdr-unit"> ${sumMuscle} sets</span>${deltaHtml}</div>
+      <div class="trend-hdr-sub">vs last wk</div>
+    </div>
+    <div class="trend-outer"><div class="trend-chart">${buildTrendCols(vals, labels)}</div></div>
+    ${buildStatsRow(vals)}`;
+  scrollTrendToNow();
+}
+
+async function renderTrendCardio(card) {
+  const { results, labels, numWeeks } = await fetchFullWeekRange();
+  const useTime = APP_SETTINGS.cardioDisplay !== 'distance';
+  const vals = results.map(r => useTime ? (r.cardioTime||0) : fmt(displayDistance(r.cardioDist||0)));
+  const unit = useTime ? 'min' : APP_SETTINGS.cardioUnit;
+  const thisWk = vals[numWeeks-1];
+  const lastWk = vals[numWeeks-2] || 0;
+  const delta = thisWk - lastWk;
+  const deltaHtml = lastWk > 0
+    ? `<span class="sum-delta ${delta >= 0 ? 'up':'down'}" style="font-size:11px">${delta >= 0 ? '+':''}${fmt(delta)}</span>`
+    : '';
+  card.innerHTML = `
+    <div class="trend-header-row">
+      <div><span class="trend-hdr-val">${thisWk > 0 ? thisWk : '—'}</span><span class="trend-hdr-unit"> ${unit} this wk</span>${deltaHtml}</div>
+      <div class="trend-hdr-sub">vs last wk</div>
+    </div>
+    <div class="trend-outer"><div class="trend-chart">${buildTrendCols(vals, labels)}</div></div>
+    ${buildStatsRow(vals)}`;
+  scrollTrendToNow();
+}
+
+// ── WEEKLY BREAKDOWN SECTION — week-nav controlled ─────
+async function renderWeeklyBreakdown() {
   const card = document.getElementById('sum-card');
   card.innerHTML = '<div class="loading-state" style="padding:30px 0"><div class="spinner"></div>Loading…</div>';
 
+  const ws  = getWeekStart(new Date(), weekOffset);
+  const we  = new Date(ws); we.setDate(we.getDate() + 6);
+  const fmtD = d => d.toLocaleDateString('en-GB', { day:'numeric', month:'short' });
+  document.getElementById('wn-label').textContent =
+    weekOffset === 0 ? `This week · ${fmtD(ws)} – ${fmtD(we)}` : `${fmtD(ws)} – ${fmtD(we)}`;
+  const nb = document.getElementById('wn-next');
+  nb.style.opacity       = weekOffset >= 0 ? '0.3' : '1';
+  nb.style.pointerEvents = weekOffset >= 0 ? 'none' : 'auto';
+
   try {
-    const ws     = getWeekStart(new Date(), weekOffset);
     const wsPrev = getWeekStart(new Date(), weekOffset - 1);
-    const we     = new Date(ws); we.setDate(we.getDate() + 6);
-    const fmtD   = d => d.toLocaleDateString('en-GB', { day:'numeric', month:'short' });
-
-    document.getElementById('wn-label').textContent =
-      weekOffset === 0 ? `This week · ${fmtD(ws)} – ${fmtD(we)}` : `${fmtD(ws)} – ${fmtD(we)}`;
-    const nb = document.getElementById('wn-next');
-    nb.style.opacity       = weekOffset >= 0 ? '0.3' : '1';
-    nb.style.pointerEvents = weekOffset >= 0 ? 'none' : 'auto';
-
     const [volData, volPrevData] = await Promise.all([calcVol(ws), calcVol(wsPrev)]);
     const vol = volData.muscles;
     const volPrev = volPrevData.muscles;
-    const total     = Object.values(vol).reduce((a,b) => a+b, 0);
-    const totalPrev = Object.values(volPrev).reduce((a,b) => a+b, 0);
+    const total     = volData.totalSets;
+    const totalPrev = volPrevData.totalSets;
 
-    // ── Empty state ──
     if (total === 0 && volData.cardioTime === 0 && volData.cardioDist === 0) {
-      card.innerHTML = `
-        <div class="sum-empty">
-          <div class="sum-skeleton-bars">
-            ${[85,62,48,34,20].map(w => `
-              <div class="sum-skel-row">
-                <div class="sum-skel-label"></div>
-                <div class="sum-skel-bar-track">
-                  <div class="sum-skel-bar" style="width:${w}%"></div>
-                </div>
-              </div>`).join('')}
-          </div>
-          <div class="sum-empty-msg">No workouts logged ${weekOffset === 0 ? 'this week' : 'that week'}</div>
-          <div class="sum-empty-sub">${weekOffset === 0 ? 'Start a session to see your volume breakdown' : 'Navigate to a week with sessions'}</div>
-          ${weekOffset === 0 ? `<div class="sum-empty-cta" onclick="startWorkout()">Start Workout →</div>` : ''}
-        </div>`;
+      card.innerHTML = buildSumEmpty(weekOffset);
       return;
     }
 
-    // ── Sort muscles ──
     const active = MUSCLES.filter(m => vol[m] > 0).sort((a,b) => vol[b] - vol[a]);
     const zeros  = MUSCLES.filter(m => vol[m] === 0);
     const sorted = [...active, ...zeros];
     const max    = Math.max(...active.map(m => vol[m]), 1);
 
-    // Total deltas
     const totalDelta = total - totalPrev;
     const totalDeltaHtml = totalPrev > 0
-      ? `<span class="sum-delta ${totalDelta >= 0 ? 'up' : 'down'}">${totalDelta >= 0 ? '+' : ''}${fmt(totalDelta)}</span>`
+      ? `<span class="sum-delta ${totalDelta >= 0 ? 'up':'down'}">${totalDelta >= 0 ? '+' : ''}${fmt(totalDelta)}</span>`
       : '';
 
     let html = '';
-
-    // Main Cardio Aggregate Row at the top
     if (volData.cardioTime > 0 || volData.cardioDist > 0) {
-        html += `<div class="sum-total" style="background:var(--cyan-dim); border-bottom:1px dashed var(--cyan-border);">
-          <span class="sum-total-lbl" style="color:var(--cyan)">Total Cardio</span>
-          <span class="sum-total-right">
-            <span><span class="sum-total-val" style="color:var(--white)">${volData.cardioTime}</span><span class="sum-total-unit">mins</span></span>
-            <span style="color:var(--border-hi)">|</span>
-            <span><span class="sum-total-val" style="color:var(--white)">${fmt(displayDistance(volData.cardioDist))}</span><span class="sum-total-unit">${APP_SETTINGS.cardioUnit}</span></span>
-          </span>
-        </div>`;
+      html += `<div class="sum-total" style="background:var(--cyan-dim);border-bottom:1px dashed var(--cyan-border)">
+        <span class="sum-total-lbl" style="color:var(--cyan)">Total Cardio</span>
+        <span class="sum-total-right">
+          <span><span class="sum-total-val" style="color:var(--white)">${volData.cardioTime}</span><span class="sum-total-unit">mins</span></span>
+          <span style="color:var(--border-hi)">|</span>
+          <span><span class="sum-total-val" style="color:var(--white)">${fmt(displayDistance(volData.cardioDist))}</span><span class="sum-total-unit">${APP_SETTINGS.cardioUnit}</span></span>
+        </span>
+      </div>`;
     }
-
     html += `
       <div class="sum-total">
         <span class="sum-total-lbl">Lifting Volume</span>
-      <span class="sum-total-right">
+        <span class="sum-total-right">
           ${totalDeltaHtml}
           <span><span class="sum-total-val">${fmt(total)}</span><span class="sum-total-unit">sets</span></span>
         </span>
       </div>
       <div class="sum-chart-area">
         ${sorted.map(m => {
-          const v  = vol[m];
-          const vp = volPrev[m];
+          const v = vol[m], vp = volPrev[m];
           const isZero = v === 0;
-          const barPct = isZero ? 0 : (v / max * 85).toFixed(1);
+          const barPct  = isZero ? 0 : (v / max * 85).toFixed(1);
           const prevPct = vp > 0 ? (vp / max * 85).toFixed(1) : 0;
-
           let deltaBadge = '';
           if (!isZero) {
             if (vp === 0) deltaBadge = `<span class="sum-delta new">new</span>`;
             else if (v > vp) deltaBadge = `<span class="sum-delta up">+${fmt(v-vp)}</span>`;
             else if (v < vp) deltaBadge = `<span class="sum-delta down">${fmt(v-vp)}</span>`;
           }
-
           return `
-            <div class="sum-bar-row ${isZero ? 'sum-bar-row-zero' : ''}">
+            <div class="sum-bar-row ${isZero ? 'sum-bar-row-zero':''}">
               <div class="sum-bar-label">${m}</div>
-              <div class="sum-bar-track-outer">
-                <div class="sum-bar-track">
-                  ${vp > 0 ? `<div class="sum-bar-prev" style="width:${prevPct}%"></div>` : ''}
-                  <div class="sum-bar-fill-h" style="width:${barPct}%"></div>
-                </div>
-              </div>
+              <div class="sum-bar-track-outer"><div class="sum-bar-track">
+                ${vp > 0 ? `<div class="sum-bar-prev" style="width:${prevPct}%"></div>` : ''}
+                <div class="sum-bar-fill-h" style="width:${barPct}%"></div>
+              </div></div>
               <div class="sum-bar-right">
                 ${deltaBadge}
-                <span class="sum-bar-val ${isZero ? 'sum-bar-val-zero' : ''}">${isZero ? '—' : fmt(v)}</span>
+                <span class="sum-bar-val ${isZero ? 'sum-bar-val-zero':''}">${isZero ? '—' : fmt(v)}</span>
               </div>
             </div>`;
         }).join('')}
@@ -3222,27 +3457,49 @@ async function renderSummary() {
         <span class="sum-legend-item"><span class="sum-legend-dot cyan"></span>This week</span>
         ${totalPrev > 0 ? `<span class="sum-legend-item"><span class="sum-legend-dot ghost"></span>Last week</span>` : ''}
       </div>`;
-      
-      card.innerHTML = html;
+    card.innerHTML = html;
   } catch(e) {
     card.innerHTML = '<div class="loading-state" style="padding:30px 0">Could not load summary</div>';
   }
 }
 
+function buildSumEmpty(offset) {
+  return `
+    <div class="sum-empty">
+      <div class="sum-skeleton-bars">
+        ${[85,62,48,34,20].map(w => `
+          <div class="sum-skel-row">
+            <div class="sum-skel-label"></div>
+            <div class="sum-skel-bar-track"><div class="sum-skel-bar" style="width:${w}%"></div></div>
+          </div>`).join('')}
+      </div>
+      <div class="sum-empty-msg">No workouts logged ${offset === 0 ? 'this week' : 'that week'}</div>
+      <div class="sum-empty-sub">${offset === 0 ? 'Start a session to see your volume breakdown' : 'Navigate to a week with sessions'}</div>
+      ${offset === 0 ? `<div class="sum-empty-cta" onclick="startWorkout()">Start Workout →</div>` : ''}
+    </div>`;
+}
+
 function shiftW(d) {
-  if (weekOffset>=0 && d>0) return;
+  if (weekOffset >= 0 && d > 0) return;
   weekOffset += d;
-  renderSummary();
+  renderWeeklyBreakdown();
 }
 
 // ══════════════════════════════════════════════
-// HISTORY
+// HISTORY — v1.3.1 with lazy month loading
 // ══════════════════════════════════════════════
+let _histAllSessions = null;
+let _histMonthKeys = [];
+let _histAllMonths = {};
+let _histShown = 3;
+
 async function renderHistory() {
   const el = document.getElementById('hist-list');
   el.innerHTML = '<div class="loading-state" style="padding:40px 0"><div class="spinner"></div>Loading…</div>';
+  _histShown = 3;
   try {
     const sessions = await dbGetAll('sessions');
+    _histAllSessions = sessions;
     if (!sessions.length) {
       el.innerHTML = '<div style="text-align:center;padding:60px 40px;color:var(--grey-lo);font-size:14px">No sessions yet.<br>Start your first workout!</div>';
       return;
@@ -3253,7 +3510,20 @@ async function renderHistory() {
       const k = new Date(s.date).toLocaleDateString('en-GB',{month:'long',year:'numeric'});
       (months[k]=months[k]||[]).push(s);
     });
-    el.innerHTML = Object.entries(months).map(([month,ss])=>`
+    _histMonthKeys = Object.keys(months);
+    _histAllMonths = months;
+    renderHistoryPage(el);
+  } catch(e) {
+    el.innerHTML = '<div style="text-align:center;padding:40px;color:var(--grey-lo);font-size:13px">Could not load history</div>';
+  }
+}
+
+function renderHistoryPage(el) {
+  const visible = _histMonthKeys.slice(0, _histShown);
+  const hasMore = _histMonthKeys.length > _histShown;
+  let html = visible.map(month => {
+    const ss = _histAllMonths[month];
+    return `
       <div class="hist-month">${month}</div>
       ${ss.map(s=>{
         const total = s.exercises.reduce((a,e)=>a+e.sets.length,0);
@@ -3266,10 +3536,25 @@ async function renderHistory() {
           <div class="hist-sets">${total} sets</div>
           <div class="hist-chev"><svg viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg></div>
         </div>`;
-      }).join('')}`).join('') + '<div style="height:24px"></div>';
-  } catch(e) {
-    el.innerHTML = '<div style="text-align:center;padding:40px;color:var(--grey-lo);font-size:13px">Could not load history</div>';
+      }).join('')}`;
+  }).join('');
+
+  if (hasMore) {
+    const remaining = _histMonthKeys.length - _histShown;
+    html += `<button class="hist-load-more" onclick="loadMoreHistory()">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg>
+      Load ${Math.min(remaining, 3)} more month${Math.min(remaining, 3) !== 1 ? 's' : ''} · ${remaining} remaining
+    </button>`;
   }
+  html += '<div style="height:24px"></div>';
+  el.innerHTML = html;
+}
+
+function loadMoreHistory() {
+  _histShown += 3;
+  const el = document.getElementById('hist-list');
+  renderHistoryPage(el);
+  // Scroll to keep position
 }
 
 // ══════════════════════════════════════════════
