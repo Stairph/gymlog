@@ -2822,6 +2822,7 @@ async function pickPreset(name) {
 }
 
 async function pickExercise(name) {
+  const target = exPickerTarget;
   closeExPicker();
   try {
     let lib = await dbGet('exercises', name);
@@ -2849,7 +2850,6 @@ async function pickExercise(name) {
       prefillSets = [{ weight:0, reps:0, distance:0, time:0, done:false, bw: !!lib.bodyweight }];
     }
 
-    const target = exPickerTarget;
     const session = getSession(target);
     session.exercises.push({ 
       name: lib.name, 
