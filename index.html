@@ -2719,6 +2719,26 @@ function filterExList(q) {
 
   let html = '';
 
+  if (userMatches.length > 0) {
+    html += `<div class="modal-sec">Your Library</div>`;
+    userMatches.slice(0,6).forEach(e => {
+      const tagLabel = e.isCardio ? 'Cardio' : [...(e.primary||[]).map(mMap), ...(e.secondary||[]).map(m=>mMap(m)+'*')].join(', ');
+      const safeName = e.name.replace(/'/g,"\\'");
+      html += `<div class="ex-item">
+        <div class="flex-1-click" onclick="pickExercise('${safeName}')">
+          <div class="ex-item-name">${e.name}</div>
+          <div class="tag-sub">${tagLabel}</div>
+        </div>
+        <button class="ex-edit-inline" onclick="editExerciseFromPicker('${safeName}')" title="Edit" onmousedown="event.stopPropagation()">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="var(--grey-mid)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+        </button>
+      </div>`;
+    });
+    if (userMatches.length > 6) {
+      html += `<div class="list-overflow-hint">+${userMatches.length-6} more</div>`;
+    }
+  }
+
   if (presetMatches.length > 0) {
     html += `<div class="modal-sec">
       <span>Suggestions</span>
@@ -2737,26 +2757,6 @@ function filterExList(q) {
     });
     if (presetMatches.length > 5) {
       html += `<div class="list-overflow-hint">+${presetMatches.length-5} more — keep typing</div>`;
-    }
-  }
-
-  if (userMatches.length > 0) {
-    html += `<div class="modal-sec">Your Library</div>`;
-    userMatches.slice(0,6).forEach(e => {
-      const tagLabel = e.isCardio ? 'Cardio' : [...(e.primary||[]).map(mMap), ...(e.secondary||[]).map(m=>mMap(m)+'*')].join(', ');
-      const safeName = e.name.replace(/'/g,"\\'");
-      html += `<div class="ex-item">
-        <div class="flex-1-click" onclick="pickExercise('${safeName}')">
-          <div class="ex-item-name">${e.name}</div>
-          <div class="tag-sub">${tagLabel}</div>
-        </div>
-        <button class="ex-edit-inline" onclick="editExerciseFromPicker('${safeName}')" title="Edit" onmousedown="event.stopPropagation()">
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="var(--grey-mid)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
-        </button>
-      </div>`;
-    });
-    if (userMatches.length > 6) {
-      html += `<div class="list-overflow-hint">+${userMatches.length-6} more</div>`;
     }
   }
 
